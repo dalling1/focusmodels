@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<head>
+ <title>Tools</title>
+ <!--
+   Written in 2019-2020 by David Allingham  //  David.Allingham[at]newcastle.edu.au
+   Various javascript libraries written by various authors:
+     MIT	FileSaver.js by Eli Grey, http://eligrey.com, https://github.com/eligrey/FileSaver.js
+     MIT	jspdf.min.js by James Hall et al., https://github.com/MrRio/jsPDF
+     MIT	saveSvgAsPng.js by Eric Shull, https://github.com/exupero/saveSvgAsPng
+     MIT	spectrum.js and spectrum.css by Brian Grinstead, https://github.com/bgrins/spectrum
+     MIT	svg2pdf.js by Vitaly Puzrin/yWorks GmbH, https://github.com/yWorks/svg2pdf.js
+     "just use it"	rgbcolor.js by Stoyan Stefanov and Piyush Soni, http://www.phpied.com/rgb-color-parser-in-javascript/, https://github.com/piyushsoni/rgbcolor.js [required by svg2pdf.js]
+
+     MIT	automorphism.js by David Allingham
+     MIT	focusmodel.js by David Allingham
+     MIT	theaxismodel.js by David Allingham
+     MIT	theedgemodel.js by David Allingham
+     MIT	thevertexmodel.js by David Allingham
+ -->
+ <link href="https://fonts.googleapis.com/css?family=Montserrat|Patua+One&display=swap" rel="stylesheet">
+ <style>
+  * {
+   padding: 0;
+   margin: 0;
+  }
+  body {
+   background: #fcfcfc;
+   font-family: "Montserrat", sans-serif;
+  }
+  .banner {
+   width: 100vw;
+   height: 10vh;
+   overflow: hidden;
+   text-align: center;
+  }
+  .banner h1 {
+   margin-top: 30px;
+   font-family: "Patua One", cursive;
+  }
+  .content {
+   width: calc(90vw + 60px);
+   min-height: calc(90vh - 51px);
+   position: relative;
+   margin: 0 auto;
+  }
+  .content a {
+   text-decoration: none;
+   color: #444;
+  }
+  .onetool {
+   width: 30vw;
+   height: 60vh;
+   float: left;
+   box-shadow: 1px 1px 2px #777;
+   background: #fff;
+   margin: 0 10px;
+   text-align: center;
+  }
+  .onetool:hover {
+   box-shadow: 3px 3px 2px #777;
+  }
+  .onetool h2 {
+   margin-top: 10px;
+   text-align: center;
+   font-family: "Patua One", cursive;
+  }
+  .onetool p {
+   width: 80%;
+   margin: 20px auto;
+   text-align: left;
+  }
+  .onetool .imagebox {
+   height: 60%;
+  }
+  .onetool img {
+   width: 250px;
+   margin: 50px auto;
+   vertical-align: middle;
+  }
+
+  .credits {
+   box-sizing: border-box;
+   border-top: 1px solid #792a26;
+   color: #aaa;
+   padding: 10px;
+   margin-top: 15px;
+   height: 36px;
+   overflow: hidden;
+   background: #ddd;
+   width: 100vw;
+   bottom: 0;
+  }
+  .credits a {
+   color: inherit;
+  }
+
+ @media only screen and ( max-width: 1000px ){
+  .onetool {
+   float: none;
+   width: 80vw;
+   margin: 0 auto;
+  }
+ }
+
+ .dev {
+  font-family: "Patua One", cursive;
+  width: 50%;
+  padding: 0;
+  margin: 0 auto;
+  font-size: 40px;
+  color: red;
+  text-align: center;
+ }
+ </style>
+</head>
+<body>
+ <div class="banner" id="focusmodels">
+  <h1>Focus Models for Drawing Infinite Trees</h1>
+ </div>
+ <div class="content">
+
+  <div class="onetool">
+   <h2><a href="vertexfocused.html">vertex-focused</a></h2>
+   <div class="imagebox"><a href="vertexfocused.html"><img src="graph-vertex.png" alt="vertex-focused graph" /></a></div>
+   <p>The graph is drawn with an vertex at the centre.  This corresponds to rotational automorphisms.</p>
+  </div>
+
+  <div class="onetool">
+   <h2><a href="edgefocused.html">Edge-focused</a></h2>
+   <div class="imagebox"><a href="edgefocused.html"><img src="graph-edge.png" alt="edge-focused graph" /></a></div>
+   <p>The graph is drawn with an edge at the centre.  This corresponds to reflection automorphisms.</p>
+  </div>
+
+  <div class="onetool">
+   <h2><a href="axisfocused.html">Axis-focused</a></h2>
+   <div class="imagebox"><a href="axisfocused.html"><img src="graph-axis.png" alt="axis-focused graph" /></a></div>
+   <p>The graph is drawn with vertices hanging from an axis.  This corresponds to translational automorphisms.</p>
+  </div>
+
+ </div>
+
+ <div class="credits">
+  <a href="https://zerodimensional.group">&copy; 2020</a>
+ </div>
+
+</body>
+</html>

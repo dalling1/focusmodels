@@ -1,0 +1,29 @@
+body {background-color: #ddd; padding-right: 150px;}
+button {font-size: 18px; background-color: #0003; margin: 2px 0;}
+hr {margin: 10px 0;}
+.mybutton {font-size: 24px; background-color: #0003; padding: 2px; box-shadow:1px 1px 1px #0007, -1px -1px 1px #000f;}
+
+.thecontrols {position: absolute; right: 10px; text-align: right; top: 10px; font-size: 14px; color:#900;}
+.thecontrols .somebuttons {text-align: center;}
+.thecontrols p {position: initial; width: 200px; text-align: left;}
+.error {font-size: 0.9em; text-transform: uppercase; color: #f55;}
+.todo {color:black; font-size:10px; cursor:default; margin-top:100px;}
+svg {cursor: pointer;}
+
+#info {width: 90%; height: 20vh; margin: 0 auto; overflow-y: auto; padding: 10px; box-sizing: border-box; box-shadow: 2px 3px 9px #666; font-size: 10px;}
+.showinfo {background-color: #ffd; padding: 0;}
+.showinfo p {padding: 0; margin: 0;}
+.showinfo .debug {color:#b00; font-size: 0.7em; padding-left: 20px;}
+.showinfo {display: none;}
+
+#theframe {width: 90%; height: 90vh; margin: 10px auto; box-shadow: inset 5px 5px 23px #666;}
+.showgraph {background-color: #fff;}
+input, output {display: inline-block; vertical-align: middle;}
+
+.invalid {color: red;}
+.clickentry {border: 2px solid orange;}
+
+.littlenote {color: black; font-weight: bold; padding: 2px; cursor: help; padding-left: 5px; padding-right: 5px; margin-right: 5px; font-size: 0.7em; width: 30px; height: 30px; border-radius: 30px; border: 1px solid #444;}
+
+#ctrlnote {padding: 2px;}
+.redbg {background-color: red; color: white; border-radius: 3px;}

@@ -1,0 +1,197 @@
+/* ********************************************************************************************* */
+/* ********************************************************************************************* */
+/* ********************************************************************************************* */
+function edgemodel(initialEdge){
+ var pi = Math.PI;
+ var debug = 0;
+ var valency = 5; // later we can get these from the user controls
+ var Nlevels = 2; // default
+ var Nroots = 1;
+ var edgelength = 2; // base edge length
+ var edgescaling = 1; // base edge scaling (from one level to another)
+ var gamma1 = pi; // branch spread angle
+ var gamma2 = 0;
+ var printinfo = 1;
+ offsetX = 0;
+ offsetY = 0;
+ var colournames = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
+
+ if (initialEdge===undefined){
+  initialEdge = Array(2);
+  initialEdge[0] = '';
+  initialEdge[1] = colournames[0];
+ }
+
+ // set the default edge to focus on
+// var initialEdge = Array(2);
+// initialEdge[0] = '';
+// initialEdge[1] = colournames[0];
+
+ // GET INPUTS FROM THE WEB PAGE:
+// var tmpvalency = eval($("#valencyfield").val());
+// var tmpNlevels = eval($("#depthfield").val());
+ var tmpvalency = eval($("#thevalency").val());
+ var tmpNlevels = eval($("#thelevels").val());
+ var tmpoffsetX = eval($("#theoffsetX").val());
+ var tmpoffsetY = eval($("#theoffsetY").val());
+ var tmpgamma1 = eval($("#gamma1field").val());
+ var tmpedgelength = eval($("#thelength").val());
+ var tmpedgescaling = eval($("#thescaling").val());
+ var tmpbranchspread = eval($("#thespread").val());
+ printinfo = $("#infobutton").prop('checked');
+
+ // VALIDATE THE INPUT:
+ var afraction = RegExp('[0-9]+/[0-9]+');
+ if (Number.isInteger(tmpvalency)) valency = tmpvalency;
+ if (Number.isInteger(tmpNlevels)) Nlevels = tmpNlevels;
+ if (Number.isInteger(tmpoffsetX)) offsetX = tmpoffsetX;
+ if (Number.isInteger(tmpoffsetY)) offsetY = tmpoffsetY;
+console.log('Nlevels = '+Nlevels);
+ if (isFinite(tmpgamma1)){
+  gamma1 = tmpgamma1*pi;
+ } else if (afraction.test(tmpgamma1)){
+  gamma1 = eval(tmpgamma1)*pi;
+ }
+ if (isFinite(tmpedgelength)){
+  edgelength = tmpedgelength;
+ } else if (afraction.test(tmpedgelength)){
+  edgelength = eval(tmpedgelength);
+ }
+ if (isFinite(tmpedgescaling)){
+  edgescaling = tmpedgescaling;
+ } else if (afraction.test(tmpedgescaling)){
+  edgescaling = eval(tmpedgescaling);
+ }
+ if (isFinite(tmpbranchspread)){
+  gamma1 = tmpbranchspread*pi;
+ } else if (afraction.test(tmpbranchspread)){
+  gamma1 = eval(tmpbranchspread)*pi;
+ }
+ if (valency>colournames.length){
+  $('#info').append('<p class="error">Valency must be less than 27 (or add new colour names in the code!)</p>');
+  return 0;
+ }
+
+ // angle between branches
+//works alpha = 2*pi/(valency);
+ alpha = gamma1/(valency);
+ gamma2 = pi/2-gamma1/2;      // offset to centre the branch edges (use different values to tilt the whole tree)
+ // angles affecting the overall layout:
+ var branch0 = 0; // this is the index of the "second root node" (which is the first element of the colour name list, hence this is always 0)
+
+ var longestname = '';
+ var tmp = ''
+ inverselongestname = '';
+
+ for (var i=0;i<valency;i++) longestname+=colournames[i];
+ for (i=0;i<Math.ceil(Nlevels/valency);i++) tmp+=longestname;
+ longestname = tmp;
+ for (i=longestname.length;i>0;i--) inverselongestname+=longestname[i-1];
+//console.log(' longestname is '+longestname);
+
+ if (valency>2){
+  Ntotal = Nroots*(valency*Math.pow(valency-1,Nlevels)-2)/(valency-2);
+ } else {
+  Ntotal = Nroots*(Nlevels*valency+1); // check
+ }
+ if (debug) console.log('Number of nodes is be '+Ntotal);
+ if (printinfo & $('#info').html().length>0) $('#info').append('<hr width="88%"/>'); // after the first RUN, separate output with a line
+ if (printinfo) $('#info').append('<p>Number of nodes is '+Ntotal+'</p>');
+
+ // initialise arrays:
+ nodePosition = new Array(Nroots);
+ nodeScreenPosition = new Array(Nroots);
+ nodeAddress = new Array(Nroots);
+ nodeParent = new Array(Nroots);
+ nodeAngle = new Array(Nroots);
+ nodeIndex = new Array(Nroots);
+ var nodeK = new Array(Nroots);
+ var nodeLevel = new Array(Nroots);
+ nodeIgnore = new Array(Nroots); // used to stop drawing particular branches (create no child nodes of ignored nodes)
+
+ // set values for FIRST root nodes:
+ for (i=0;i<Nroots;i++){
+//old  nodePosition[i] = [-0.5+5*i, 0]; // positions of root nodes  0,5,10,15... offset by -0.5
+  nodePosition[i] = [-edgelength/2 + 5*i, 0]; // positions of root nodes  0,5,10,15... offset by -0.5
+  nodeIndex[i] = i;         // "labels" of root nodes
+  nodeAddress[i] = collapseAddress(initialEdge[0]);
+  nodeParent[i] = -1;
+  nodeK[i] = 0;
+  nodeLevel[i] = 0;
+  nodeAngle[i] = 0;
+  nodeIgnore[i] = false;
+ }
+ // set values for SECOND root nodes:
+ for (i=0;i<Nroots;i++){
+//old  nodePosition[Nroots+i] = [0.5+5*i, 0]; // positions of root nodes  0,5,10,15... offset by -0.5
+  nodePosition[Nroots+i] = [edgelength/2 + 5*i, 0]; // positions of root nodes  0,5,10,15... offset by -0.5
+  nodeIndex[Nroots+i] = Nroots+i;         // "labels" of root nodes
+  nodeAddress[Nroots+i] = collapseAddress(initialEdge[1]);
+  nodeParent[Nroots+i] = i; // ?? set the parent to the "first" root node
+  nodeK[Nroots+i] = 0;
+  nodeLevel[Nroots+i] = 0;
+  nodeAngle[Nroots+i] = pi;
+ }
+
+ //
+ // Iteratively add nodes outward from the "root node" above:
+ //
+ for (L=0;L<Nlevels;L++){
+  if (debug) console.log('Running level '+L);
+  if (printinfo) $('#info').append('<p style="text-indent:10px;">Making level '+L+' children</p>');
+  // nodes to attach edges to:
+  indx = new Array(0);
+  for (n=0;n<nodeLevel.length;n++){
+   if (nodeLevel[n]==L){
+    indx[indx.length] = n;
+   }
+  }
+
+  for (ii=0;ii<indx.length;ii++){
+//   if (debug) console.log('DEBUG: Making children of node '+indx[ii]);
+   var thisnode = indx[ii]; // get the label for convenience
+   for (var k=0;k<valency;k++){ // loop through valency
+    if (k>0){ // don't add the parent again
+     nodeIndex[nodeIndex.length] = nodeIndex[nodeIndex.length-1]+1; // label the new node incrementally
+     newnode = nodeIndex[nodeIndex.length-1]; // ... and grab that label for convenience
+     // from here on, "thisnode" is the parent and "newnode" is the leaf:
+     nodeParent[newnode] = nodeIndex[thisnode];
+//     nodeK[newnode] = k;
+     nodeK[newnode] = (k+nodeK[nodeParent[newnode]]) % valency; // need to do it this way if we persist in using the "k>0" condition above.
+     nodeAddress[newnode] = collapseAddress(nodeAddress[nodeParent[newnode]] + colournames[nodeK[newnode]]);
+     nodeLevel[newnode] = nodeLevel[nodeParent[newnode]]+1; // "normal" (ie. non-root) vertex
+//almost     nodeAngle[newnode] = nodeAngle[nodeParent[newnode]] + pi/2 + k*alpha; // was (k-1)*alpha in the MATLAB code (1-indexed)
+     if (nodeLevel[newnode]==1){
+//works      nodeAngle[newnode] = nodeAngle[nodeParent[newnode]] + pi + k*(alpha); // was (k-1)*alpha in the MATLAB code (1-indexed)
+      nodeAngle[newnode] = nodeAngle[nodeParent[newnode]] + pi + gamma2 + k*(alpha); // was (k-1)*alpha in the MATLAB code (1-indexed)
+     } else {
+//works      nodeAngle[newnode] = nodeAngle[nodeParent[newnode]] - pi/2 + k*(alpha); // was (k-1)*alpha in the MATLAB code (1-indexed)
+      nodeAngle[newnode] = nodeAngle[nodeParent[newnode]] + pi/2 + pi + gamma2 + k*(alpha); // was (k-1)*alpha in the MATLAB code (1-indexed)
+     }
+     nodeIgnore[newnode] = false; // default
+
+     nodePosition[newnode]=new Array(2); // initialise
+     nodePosition[newnode][0] = nodePosition[thisnode][0] + calcEdgeLength(1+nodeLevel[newnode],valency,edgelength,edgescaling)*Math.sin(nodeAngle[newnode])
+     nodePosition[newnode][1] = nodePosition[thisnode][1] + calcEdgeLength(1+nodeLevel[newnode],valency,edgelength,edgescaling)*Math.cos(nodeAngle[newnode])
+
+//     if (debug) console.log('DEBUG: made a child with address *'+nodeAddress[newnode]+'* (kk='+kk+',k='+k+') with parent '+nodeParent[newnode]);
+//     if (debug) $('#info').append('<p class="debug">made a child with address *'+nodeAddress[newnode]+'* (kk='+kk+',k='+k+') with parent '+nodeParent[newnode]);
+//     console.log('  The position for node '+nodeAddress[newnode]+' is ('+nodePosition[newnode][0]+', '+nodePosition[newnode][1]+')')
+    } else {
+     if (debug) console.log('Not creating "duplicate" parent node');
+    } // if k>0
+   } // loop over valency (ie. k)
+  } // loop over nodes at each level
+//  fprintf(' Level = %g: %g nodes\n',L,length(nodeIndex));
+ } // loop over Nlevels
+
+ // do some reporting for debugging:
+// for (var vv=0;vv<nodeAngle.length;vv++){
+//  $('#info').append('<p class="debug">'+vv+'] angle '+nodeAngle[vv].toFixed(3)+'   parent '+nodeParent[vv]+'</p>');
+//  console.log(vv+'] angle '+nodeAngle[vv].toFixed(3)+'   parent '+nodeParent[vv]);
+// }
+
+// return nodePosition;
+
+ return 1; // success
+} // end edgemodel function
