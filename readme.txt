@@ -8,3 +8,5 @@ Three focus model layouts for drawing tree graphs:
 
 In each case, the relevant object (vertex, edge or axis) is the element around
 which the rest of the graph is drawn.
+
+Live version is at <a href="https://dalling1.github.io/focusmodels/">https://dalling1.github.io/focusmodels/</a>.
