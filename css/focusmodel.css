@@ -27,3 +27,9 @@ input, output {display: inline-block; vertical-align: middle;}
 
 #ctrlnote {padding: 2px;}
 .redbg {background-color: red; color: white; border-radius: 3px;}
+
+.navigation {position:fixed; margin:0; padding:5px; background-color:#444; border-radius:3px; top:5px; left:5px;}
+.navigation a {color:orange;}
+.navigation a:hover {color:white;}
+.navigation ul {margin:0; padding:0;}
+.navigation ul li {float:left; list-style-type:none; margin:2px 5px; text-transform:uppercase; font-size: 11px;}

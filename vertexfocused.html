@@ -13,8 +13,8 @@
  <script src="js/jspdf.min.js"></script>
  <script src="js/spectrum.js"></script>
  <script src="js/rgbcolor.js"></script>
- <script src="js/svg2pdf.js"></script>
- <script src="js/FileSaver.js"></script>
+ <script src="js/svg2pdf.min.js"></script>
+ <script src="js/FileSaver.min.js"></script>
  <script src="js/saveSvgAsPng.js"></script>
  <script src="js/automorphism.js"></script>
  <script>
@@ -23,6 +23,15 @@
  </script>
 </head>
 <body onload="setup('vertex');">
+ <div class="navigation">
+  <ul>
+   <li><a href="./">home</a></li>
+   <li><a href="vertexfocused.html">vertex</a></li>
+   <li><a href="edgefocused.html">edge</a></li>
+   <li><a href="axisfocused.html">axis</a></li>
+  </ul>
+ </div>
+
  <div class="thecontrols">
   <span title="Click to reset" style="cursor:pointer;" onclick="thevalency.value=5; thevalencyOutput.value = thevalency.value; if (vertexmodel(V0)) drawgraph();">Valency:</span>
   <input type="range" style="width:80px;" min="2" max="16" step="1" value="5" id="thevalency" oninput="thevalencyOutput.value = thevalency.value; if (vertexmodel(V0)) drawgraph();" />
