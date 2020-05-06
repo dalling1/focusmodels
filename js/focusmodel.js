@@ -7,6 +7,7 @@ function setup(graphtype){
  // make sure the control displays are the same as the controls' values:
  thevalencyOutput.value = thevalency.value;
  thelevelsOutput.value = thelevels.value;
+ if (graphtype=="newaxis") thewidthOutput.value = thewidth.value;
  thescalingOutput.value = thescaling.value;
  thelengthOutput.value = thelength.value;
  thespreadOutput.value = thespread.value;
@@ -39,6 +40,9 @@ function setup(graphtype){
    break;
   case "axis":
    if (axismodel(V0)) okay = true;
+   break;
+  case "newaxis":
+   if (newaxismodel(V0)) okay = true;
    break;
   default:
    alert("Set-up must be called with a focus type");
