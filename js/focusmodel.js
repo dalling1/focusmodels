@@ -182,7 +182,7 @@ function wipeInfo(){
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
 function nodeDistance(a,b){
- a=collapseAddress(a); // check this still works
+ a=collapseAddress(a);
  b=collapseAddress(b);
 
  // remove common prefix
@@ -650,4 +650,31 @@ function savePNG(){
   height: saveBounds.maxY-saveBounds.minY,
  };
  saveSvgAsPng(document.getElementById("thecanvas"), "graph.png", saveOptions);
+}
+
+/* ********************************************************************************************* */
+/* ********************************************************************************************* */
+/* ********************************************************************************************* */
+function deleteChildren(a){
+ // loop over all nodes and find a's children, but before deleting them, delete their children
+ for (var n=0;n<nodeIndex.length;n++){
+  if (nodeParent[n]==a){
+   deleteChildren(nodeIndex[n]); // call deleteChildren() on each child node recursively
+   // child node's children have been deleted, so delete this child node:
+   //
+   // add code here:
+   //  - delete the label SVG object
+   //  - delete the node (circle) SVG object
+   //  - delete (splice) the node's entry in various arrays
+   //    -- this might not be necessary, could we just have a "don't draw this node" flag?
+   //    -- that would obviate the SVG deletions too...
+  }
+ }
+}
+
+/* ********************************************************************************************* */
+/* ********************************************************************************************* */
+/* ********************************************************************************************* */
+function countOnAxis(){
+ return nodeOnAxis.filter(function(s) { return s; }).length;
 }
