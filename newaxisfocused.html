@@ -39,14 +39,14 @@
   <output style="width:20px;vertical-align:middle;" name="thevalencyOutputName" id="thevalencyOutput">999</output><br/>
 
   <span title="Click to reset" style="cursor:pointer;" onclick="thewidth.value=3; thewidthOutput.value = thewidth.value; if (newaxismodel(V0)) drawgraph();">Width:</span>
-  <input type="range" style="width:80px;" min="2" max="16" step="1" value="3" id="thewidth" oninput="thewidthOutput.value = thewidth.value; if (newaxismodel(V0)) drawgraph();" />
+  <input type="range" style="width:80px;" min="1" max="12" step="1" value="3" id="thewidth" oninput="thewidthOutput.value = thewidth.value; if (newaxismodel(V0)) drawgraph();" />
   <output style="width:20px;vertical-align:middle;" name="thewidthOutputName" id="thewidthOutput">999</output><br/>
 
   <span title="Click to reset" style="cursor:pointer;" onclick="thelevels.value=2; thelevelsOutput.value = thelevels.value; if (newaxismodel(V0)) drawgraph();">Depth:</span>
-  <input type="range" style="width:80px;" min="0" max="7" step="1" value="2" id="thelevels" oninput="thelevelsOutput.value = thelevels.value; if (newaxismodel(V0)) drawgraph();" />
+  <input type="range" style="width:80px;" min="1" max="7" step="1" value="2" id="thelevels" oninput="thelevelsOutput.value = thelevels.value; if (newaxismodel(V0)) drawgraph();" />
   <output style="width:20px;vertical-align:middle;" name="thelevelsOutputName" id="thelevelsOutput">999</output><br/>
 
-  <span title="Click to reset" style="cursor:pointer;" onclick="thescaling.value=0.5; thescalingOutput.value = thescaling.value; if (newaxismodel(V0)) drawgraph();">Edge scaling:</span>
+  <span title="Click to reset" style="cursor:pointer;" onclick="thescaling.value=0.5; thescalingOutput.value = thescaling.value; if (newaxismodel(V0)) drawgraph();">Depth scaling:</span>
   <input type="range" style="width:80px;" min="0.1" max="2" step="0.05" value="0.5" id="thescaling" oninput="thescalingOutput.value = thescaling.value; if (newaxismodel(V0)) drawgraph();" />
   <output style="width:20px;vertical-align:middle;" name="thescalingOutputName" id="thescalingOutput">999</output><br/>
 
@@ -54,9 +54,11 @@
   <input type="range" style="width:80px;" min="0.1" max="5" step="0.1" value="1" id="thelength" oninput="thelengthOutput.value = thelength.value; if (newaxismodel(V0)) drawgraph();" />
   <output style="width:20px;vertical-align:middle;" name="thelengthOutputName" id="thelengthOutput">999</output><br/>
 
-  <span title="Click to reset" style="cursor:pointer;" onclick="thespread.value='0.5'; thespreadOutput.value = thespread.value; if (newaxismodel(V0)) drawgraph();">Branch spread:</span>
-  <input type="range" style="width:70px;" min="0.1" max="4" step="0.1" value="0.5" id="thespread" oninput="thespreadOutput.value = thespread.value; if (newaxismodel(V0)) drawgraph();" />
-  <output style="width:20px;vertical-align:middle;" name="thespreadOutputName" id="thespreadOutput">999</output><span style="vertical-align:middle;">&#960;</span><br/>
+  <span title="Click to reset" style="cursor:pointer;" onclick="thespread.value='0.9'; thespreadOutput.value = thespread.value; if (newaxismodel(V0)) drawgraph();">Spread:</span>
+  <input type="range" style="width:80px;" min="0.1" max="1" step="0.1" value="0.9" id="thespread" oninput="thespreadOutput.value = thespread.value; if (newaxismodel(V0)) drawgraph();" />
+  <output style="width:20px;vertical-align:middle;" name="thespreadOutputName" id="thespreadOutput">999</output><br/>
+<!--  <output style="width:20px;vertical-align:middle;" name="thespreadOutputName" id="thespreadOutput">999</output><span style="vertical-align:middle;">&#960;</span><br/>
+-->
 
   <span class="littlenote" title="If this is not ticked, edges will be coloured according to their type">i</span> <label for="plainedgesbutton">Edge colour <input type="checkbox" id="plainedgesbutton" checked="checked" onclick="if (newaxismodel(V0)) drawgraph();" /></label>
   <input type="text" class="basicpicker controlpicker" id="edgepicker" onchange="if (newaxismodel(V0)) drawgraph();" value="#000000" /><br/>
@@ -90,7 +92,7 @@
 
   <span title="Click to reset" style="cursor:pointer;" onclick="thetextangle.value='0'; thetextangleOutput.value = thetextangle.value; if (newaxismodel(V0)) drawgraph();">Label angle:</span>
   <input type="range" style="width:100px;" min="-90" max="90" step="15" value="0" id="thetextangle" oninput="thetextangleOutput.value = thetextangle.value; if (newaxismodel(V0)) drawgraph();" />
-  <output style="width:14px;vertical-align:middle;" name="thetextangleOutputName" id="thetextangleOutput">999</output><sup>o</sup><br/>
+  <output style="width:14px;text-align:right;vertical-align:middle;" name="thetextangleOutputName" id="thetextangleOutput">999</output><sup>o</sup><br/>
 
   <span title="Click to reset" style="cursor:pointer;" onclick="thefontsize.value=15; fontsizeOutput.value = thefontsize.value; if (newaxismodel(V0)) drawgraph();">Label size:</span>
   <input type="range" style="width:100px;" min="10" max="30" step="5" value="15" id="thefontsize" oninput="fontsizeOutput.value = thefontsize.value; if (newaxismodel(V0)) drawgraph();" />
