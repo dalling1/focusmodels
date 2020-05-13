@@ -100,7 +100,7 @@ function checkValidAddress(el){
  for (var i=0;i<valency;i++) labels += colournames[i]; // get available node label "alphabet"
  var re = new RegExp("^[" + labels + "]*$|^0$");
  var isValid = re.test(addr);
-// console.log("Checking "+addr+ ": "+(isValid?"valid":"invalid"));
+ if (debug) console.log("Checking "+addr+ ": "+(isValid?"valid":"invalid"));
  if (isValid){
   $(el).removeClass("invalid");
   $("#automorphismbutton").prop("disabled",false);
@@ -368,17 +368,13 @@ function drawgraph(){
 
 
  /* get the canvas element and size it properly (transfer the CSS size to the proper canvas attributes) */
-// var canvas = document.getElementById("thecanvas");
-// canvas.width = $('#thecanvas').width();
-// canvas.height = $('#thecanvas').height();
  $('#thecanvas').attr('width',$('#thecanvas').width());
  $('#thecanvas').attr('height',$('#thecanvas').height());
 
  canvaswidth = $('#thecanvas').width();
  canvasheight = $('#thecanvas').height();
  centreX = Math.round(canvaswidth/2) + offsetX;
-// var centreY = canvasheight - 100; // axis-focused
- centreY = Math.round(canvasheight/2) + offsetY; // vertex- or edge-focused
+ centreY = Math.round(canvasheight/2) + offsetY;
 
  // draw the origin and some axes:
  if (showaxes){
@@ -439,7 +435,6 @@ function drawgraph(){
 //  if (debug) $("#info").append("<p class="debug">"+nodeAngle[vv]/pi+"  "+nodePosition[vv][0].toFixed(3)+", "+nodePosition[vv][1].toFixed(3));
 
   $(document.createElementNS("http://www.w3.org/2000/svg","circle")).attr({
-//   "fill": nodeColour,
    "fill": (nodeIgnore[vv]?(ignoreNodeColour.length?ignoreNodeColour:"none"):nodeColour),
    "stroke": "none",
    "r": nodeRadius,
@@ -519,8 +514,6 @@ function drawgraph(){
  }
 
  // finally, scroll the info div to the end, in case we appended anything
-// var theend = $('#theinfo').scrollHeight;
-// $('#theinfo').scrollTop(theend);
  $("#info").animate({ scrollTop: $('#info').prop("scrollHeight")}, 1000);
 
  // finished successfully
@@ -549,7 +542,8 @@ function getTransformedBBox(obj){
    matrixXY(tr,bbox0.x,bbox0.y),
    matrixXY(tr,bbox0.x+bbox0.width,bbox0.y),
    matrixXY(tr,bbox0.x+bbox0.width,bbox0.y+bbox0.height),
-   matrixXY(tr,bbox0.x,bbox0.y+bbox0.height) ];
+   matrixXY(tr,bbox0.x,bbox0.y+bbox0.height)
+ ];
  bbox1.x = Number.POSITIVE_INFINITY;
  bbox1.y = Number.POSITIVE_INFINITY;
  bbox1.width = Number.NEGATIVE_INFINITY;
@@ -689,15 +683,17 @@ function countOnAxis(){
  return nodeOnAxis.filter(function(s) { return s; }).length;
 }
 
-/* **************************************************************************/
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
-function nearestNode(x,y){
+/* ********************************************************************************************* */
+function nearestNode(x,y,maxDistance=-1){
+ // Returns the closest node to the provided x and y coordinates, within a range of maxDistance
+ // If maxDistance is negative, it is ignored (the nearest node is returned, at any distance from (x,y))
  var thenode = -1;
  var dist = 10000000;
  for (var i=0;i<nodeScreenPosition.length;i++){
   var thisdist = Math.pow(Math.pow(nodeScreenPosition[i][0] - x,2) + Math.pow(nodeScreenPosition[i][1] - y,2),0.5);
-  if (thisdist<dist){
+  if (thisdist<dist & (thisdist<=maxDistance | maxDistance<0)){
    dist = thisdist;
    thenode = i;
   }
@@ -711,7 +707,7 @@ function nearestNode(x,y){
 
 
 
-/* **************************************************************************/
+/* ********************************************************************************************* */
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
 function canvasClick(evt){
@@ -735,9 +731,11 @@ function canvasClick(evt){
  var y = Math.round(evt.clientY - dim.top);
 // console.log("CLICKED x: "+x+" y:"+y);
 
- var usenode = nearestNode(x,y);
+ var clickRadius = 100;
+ var usenode = nearestNode(x,y,clickRadius);
  if (usenode === null){
-  alert("No nearest node found (??)"); // this shouldn't happen! (and probably won't)
+  //  No node is within a distance of clickRadius
+  if (debug) console.log("Click was too far from any node to be used");
  } else {
 
   if (evt.ctrlKey) {
@@ -749,7 +747,7 @@ function canvasClick(evt){
 
    var addr = nodeAddress[usenode];
    if (addr.length==0) addr = "0";
-//   console.log("NEAREST NODE: "+nodeAddress[usenode]);
+   if (debug) console.log("Chose nearest node: "+nodeAddress[usenode]);
    var changeField = $(".clickentry:first"); //.attr("id");
    $(changeField).attr("value",addr);
    $("#auto1").addClass("clickentry");
@@ -775,7 +773,6 @@ function canvasClick(evt){
     nodeLabel[usenode] = newlabel;
     drawgraph();
    }
-
 
   }
  }
