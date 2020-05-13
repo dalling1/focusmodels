@@ -732,7 +732,7 @@ function canvasClick(evt){
  var y = Math.round(evt.clientY - dim.top);
 // console.log("CLICKED x: "+x+" y:"+y);
 
- var clickRadius = 100;
+ var clickRadius = 100; // effective range of clicks: nodes further than this will not, in effect, be clicked
  var usenode = nearestNode(x,y,clickRadius);
  if (usenode === null){
   //  No node is within a distance of clickRadius
