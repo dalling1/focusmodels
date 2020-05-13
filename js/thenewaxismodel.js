@@ -196,7 +196,7 @@ function newaxismodel(initialVertex){
  // LEFT:
  nodeIndex[nodeIndex.length] = nodeIndex[nodeIndex.length-1]+1; // label the new node incrementally, like the others
  newnode = nodeIndex[nodeIndex.length-1]; // ... and grab that label for convenience
- nodePosition[newnode] = [nodePosition[leftEndNode][0]-rootSpacing, nodePosition[leftEndNode][1]];
+ nodePosition[newnode] = [nodePosition[leftEndNode][0]-rootSpacing/2, nodePosition[leftEndNode][1]];
  nodeAddress[newnode] = 'LL';
  nodeParent[newnode] = nodeIndex[leftEndNode];
  nodeDepth[newnode] = -2;
@@ -209,7 +209,7 @@ function newaxismodel(initialVertex){
  // RIGHT:
  nodeIndex[nodeIndex.length] = nodeIndex[nodeIndex.length-1]+1; // label the new node incrementally, like the others
  newnode = nodeIndex[nodeIndex.length-1]; // ... and grab that label for convenience
- nodePosition[newnode] = [nodePosition[rightEndNode][0]+rootSpacing, nodePosition[rightEndNode][1]];
+ nodePosition[newnode] = [nodePosition[rightEndNode][0]+rootSpacing/2, nodePosition[rightEndNode][1]];
  nodeAddress[newnode] = 'RR';
  nodeParent[newnode] = nodeIndex[rightEndNode];
  nodeDepth[newnode] = -2;
