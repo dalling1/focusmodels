@@ -36,7 +36,8 @@ function vertexmodel(initialVertex){
  var tmpedgelength = eval($("#thelength").val());
  var tmpedgescaling = eval($("#thescaling").val());
 // var tmpbranchspread = eval($("#thespread").val());
- printinfo = $("#infobutton").prop('checked');
+ printinfo = $("#infobutton").prop("checked");
+ var fadeleaves = $("#fadeleavesbutton").prop("checked");
 
  // VALIDATE THE INPUT:
  var afraction = RegExp('[0-9]+/[0-9]+');
@@ -117,7 +118,7 @@ function vertexmodel(initialVertex){
   nodeOnAxis[i] = true; // initial nodes are on-axis, by definition
   nodeK[i] = 0;
 //xxx  nodeKK[i] = 0;
-  nodeIgnore[i] = false;
+  nodeIgnore[i] = false; // false by default for root nodes
  }
  // set up a list which we will permute
 //xxx var Klist = new Array(valency);
@@ -140,6 +141,9 @@ function vertexmodel(initialVertex){
   for (ii=0;ii<nodeList.length;ii++){
 //   if (debug) console.log('DEBUG: Making children of node '+nodeList[ii]);
    var thisnode = nodeList[ii]; // get the label for convenience
+   if (fadeleaves){ // if we are fading the leaves, thisnode is no longer a leaf
+    nodeIgnore[thisnode] = false;
+   }
    for (var k=0;k<valency;k++){ // loop through valency
     if (L==0 | k>0){ // loop through all valencies // THIS ISN'T RIGHT: WE *DO* NEED SOME K=0 AT HIGHER LEVELS...
      nodeIndex[nodeIndex.length] = nodeIndex[nodeIndex.length-1]+1; // label the new node incrementally
@@ -152,7 +156,8 @@ function vertexmodel(initialVertex){
      nodeAddress[newnode] = collapseAddress(nodeAddress[nodeParent[newnode]] + colournames[nodeK[newnode]]);
      nodeAngle[newnode] = nodeAngle[nodeParent[newnode]]+pi + k*alpha; // not k-1 in javascript
 //     nodeAngle[newnode] = nodeAngle[newnode] % (2.0*pi); // clean up a little
-     nodeIgnore[newnode] = false; // default
+//     nodeIgnore[newnode] = false; // default
+     nodeIgnore[newnode] = (fadeleaves?true:false); // false, unless we are fading leaf nodes (user control): then, set this to true but make it false later if we add children
 
 // TESTING
 //nodeAddress[newnode]=nodeK[newnode]; // testing

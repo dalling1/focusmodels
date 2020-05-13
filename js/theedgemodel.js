@@ -39,6 +39,7 @@ function edgemodel(initialEdge){
  var tmpedgescaling = eval($("#thescaling").val());
  var tmpbranchspread = eval($("#thespread").val());
  printinfo = $("#infobutton").prop('checked');
+ var fadeleaves = $("#fadeleavesbutton").prop("checked");
 
  // VALIDATE THE INPUT:
  var afraction = RegExp('[0-9]+/[0-9]+');
@@ -150,6 +151,9 @@ console.log('Nlevels = '+Nlevels);
   for (ii=0;ii<nodeList.length;ii++){
 //   if (debug) console.log('DEBUG: Making children of node '+nodeList[ii]);
    var thisnode = nodeList[ii]; // get the label for convenience
+   if (fadeleaves){ // if we are fading the leaves, thisnode is no longer a leaf
+    nodeIgnore[thisnode] = false;
+   }
    for (var k=0;k<valency;k++){ // loop through valency
     if (k>0){ // don't add the parent again
      nodeIndex[nodeIndex.length] = nodeIndex[nodeIndex.length-1]+1; // label the new node incrementally
@@ -168,7 +172,8 @@ console.log('Nlevels = '+Nlevels);
 //works      nodeAngle[newnode] = nodeAngle[nodeParent[newnode]] - pi/2 + k*(alpha); // was (k-1)*alpha in the MATLAB code (1-indexed)
       nodeAngle[newnode] = nodeAngle[nodeParent[newnode]] + pi/2 + pi + gamma2 + k*(alpha); // was (k-1)*alpha in the MATLAB code (1-indexed)
      }
-     nodeIgnore[newnode] = false; // default
+//     nodeIgnore[newnode] = false; // default
+     nodeIgnore[newnode] = (fadeleaves?true:false); // false, unless we are fading leaf nodes (user control): then, set this to true but make it false later if we add children
 
      nodePosition[newnode]=new Array(2); // initialise
      nodePosition[newnode][0] = nodePosition[thisnode][0] + calcEdgeLength(1+nodeLevel[newnode],valency,edgelength,edgescaling)*Math.sin(nodeAngle[newnode])
