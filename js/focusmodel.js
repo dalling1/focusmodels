@@ -334,10 +334,13 @@ function drawgraph(){
 
  // default colours:
  var axesColour = '#555';
- var labelColour = '#f00';
- var edgeColour = '#000';
  var nodeColour = '#000';
- var ignoreColour = '#0f0';
+ var edgeColour = '#000';
+ var labelColour = '#f00';
+ var ignoreNodeColour = ''; // set empty to not draw ignored nodes; was '#0f0'
+ var ignoreEdgeColour = '#888'; // set empty to not draw edges for ignored nodes; was '#0f0'
+ var ignoreLabelColour = ''; // set empty to not label ignored nodes; was '#0f0'
+ var ignoreDash = '6'; // SVG dash pattern for edges between ignored nodes and their parents
 
  // user-selected colours:
  axesColour = document.getElementById("axespicker").value;
@@ -437,7 +440,7 @@ function drawgraph(){
 
   $(document.createElementNS("http://www.w3.org/2000/svg","circle")).attr({
 //   "fill": nodeColour,
-   "fill": (nodeIgnore[vv]?ignoreColour:nodeColour),
+   "fill": (nodeIgnore[vv]?(ignoreNodeColour.length?ignoreNodeColour:"none"):nodeColour),
    "stroke": "none",
    "r": nodeRadius,
    "cx": xx,
@@ -461,7 +464,8 @@ function drawgraph(){
 
 
    $(document.createElementNS("http://www.w3.org/2000/svg","line")).attr({
-    "stroke": thisEdgeColour,
+    "stroke": (nodeIgnore[vv]?(ignoreEdgeColour.length?ignoreEdgeColour:"none"):thisEdgeColour),
+    "stroke-dasharray": (nodeIgnore[vv]?ignoreDash:"1"),
     "stroke-width": lineWidth,
     "stroke-linecap": "round",
      "x1": xx0,
@@ -498,7 +502,7 @@ function drawgraph(){
    if (thislabel.length>0){ // don't create (empty) labels with blank text
     var newText = document.createElementNS("http://www.w3.org/2000/svg","text");
     $(newText).attr({
-     "fill": labelColour,
+     "fill": (nodeIgnore[vv]?(ignoreLabelColour.length?ignoreLabelColour:"none"):labelColour),
      "font-size": fontSize,
      "x": xx + labelOffsetX,
      "y": yy + labelOffsetY,

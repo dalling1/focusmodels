@@ -158,8 +158,6 @@ function newaxismodel(initialVertex){
    } else {
 //    var thisGroupWidth = 0.45*groupWidth*((depth-L+1)/(depth+1)); // scale the group width according to depth (to prevent overlap)
     var thisGroupWidth = Math.pow(0.95,L+1)*groupWidth*((depth-L+1)/(depth+1)); // scale the group width according to depth (to prevent overlap)
-console.log("thisGroupWidth = "+thisGroupWidth);
-console.log("edgelength = "+edgelength);
     nodeSpacing = thisGroupWidth/(groupNodeCount-1);
     groupOrigin = nodePosition[parentnode][0] - thisGroupWidth/2; // left-hand edge of this group (based on parent's x-coordinate)
    }
@@ -187,5 +185,39 @@ console.log("edgelength = "+edgelength);
    } // loop over valency (ie. kk), ie. loop over this group (children of one parent node in the level above)
   } // loop over this depth's parent nodes
  } // loop over depth
+
+
+ // Finally, add faded/dashed extensions of the axis, to show that it continues:
+ // the axis end nodes are the root node and the node with address=longestname.substring(0,width-1)
+ var leftEndNode = nodeAddress.indexOf('');
+ var rightEndNode = nodeAddress.indexOf(longestname.substring(0,width-1));
+ // add these phantoms to the node list so that they can be drawn by drawgraph()
+ // (but do it here at the end so that the index numbering doesn't interrupt the regular nodes)
+ // LEFT:
+ nodeIndex[nodeIndex.length] = nodeIndex[nodeIndex.length-1]+1; // label the new node incrementally, like the others
+ newnode = nodeIndex[nodeIndex.length-1]; // ... and grab that label for convenience
+ nodePosition[newnode] = [nodePosition[leftEndNode][0]-rootSpacing, nodePosition[leftEndNode][1]];
+ nodeAddress[newnode] = 'LL';
+ nodeParent[newnode] = nodeIndex[leftEndNode];
+ nodeDepth[newnode] = -2;
+ nodeAngle[newnode] = 0;
+ nodeOnAxis[newnode] = true;
+ nodeK[newnode] = -1;
+ nodeKK[newnode] = -1; // not needed?
+ nodeIgnore[newnode] = true; // use this to indicate a fade or whatever to drawgraph()
+
+ // RIGHT:
+ nodeIndex[nodeIndex.length] = nodeIndex[nodeIndex.length-1]+1; // label the new node incrementally, like the others
+ newnode = nodeIndex[nodeIndex.length-1]; // ... and grab that label for convenience
+ nodePosition[newnode] = [nodePosition[rightEndNode][0]+rootSpacing, nodePosition[rightEndNode][1]];
+ nodeAddress[newnode] = 'RR';
+ nodeParent[newnode] = nodeIndex[rightEndNode];
+ nodeDepth[newnode] = -2;
+ nodeAngle[newnode] = 0;
+ nodeOnAxis[newnode] = true;
+ nodeK[newnode] = -1;
+ nodeKK[newnode] = -1; // not needed?
+ nodeIgnore[newnode] = true; // use this to indicate a fade or whatever to drawgraph()
+
  return 1; // success
 } // end newaxismodel function
