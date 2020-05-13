@@ -75,7 +75,7 @@ function newaxismodel(initialVertex){
  for (i=longestname.length;i>0;i--) inverselongestname+=longestname[i-1];
 
  // initialise positioning variables:
- var groupSize = 0;
+ var groupNodeCount = 0;
  var nodeSpacing = 0;
  var groupOrigin = 0;
 
@@ -138,28 +138,34 @@ function newaxismodel(initialVertex){
    }
   }
 
+  // how many nodes at this depth? use this to determine spacing/spread
+  var depthNodeCount = width*Math.pow(valency-1,L-2); // valid for depth >= 2
+  console.log("   "+depthNodeCount+" nodes at depth "+L);
+
   // add the children (together, the "group") to each parent node in the level above
   for (ii=0;ii<indx.length;ii++){
    var parentnode = indx[ii]; // use the parent node's index for convenience
    // how many children for each node above?:
    if (L==2){
-    groupSize = valency - 2; // at L=2, the parents (which lie on the axis) each have two neighbours already
+    groupNodeCount = valency - 2; // at L=2, the parents (which lie on the axis) each have two neighbours already
    } else {
-    groupSize = valency - 1; // but below that, nodes are only connected to their parent (one neighbour)
+    groupNodeCount = valency - 1; // but below that, nodes are only connected to their parent (one neighbour)
    }
    // so how far apart do they lie?:
-   if (groupSize==1){
+   if (groupNodeCount==1){
     nodeSpacing=0;
     groupOrigin = nodePosition[parentnode][0];
    } else {
-//    var thisgroupWidth = 0.45*groupWidth*((depth-L+1)/(depth+1)); // scale the group width according to depth (to prevent overlap)
-    var thisgroupWidth = Math.pow(0.95,L+1)*groupWidth*((depth-L+1)/(depth+1)); // scale the group width according to depth (to prevent overlap)
-    nodeSpacing = thisgroupWidth/(groupSize-1);
-    groupOrigin = nodePosition[parentnode][0] - thisgroupWidth/2; // left-hand edge of this group (based on parent's x-coordinate)
+//    var thisGroupWidth = 0.45*groupWidth*((depth-L+1)/(depth+1)); // scale the group width according to depth (to prevent overlap)
+    var thisGroupWidth = Math.pow(0.95,L+1)*groupWidth*((depth-L+1)/(depth+1)); // scale the group width according to depth (to prevent overlap)
+console.log("thisGroupWidth = "+thisGroupWidth);
+console.log("edgelength = "+edgelength);
+    nodeSpacing = thisGroupWidth/(groupNodeCount-1);
+    groupOrigin = nodePosition[parentnode][0] - thisGroupWidth/2; // left-hand edge of this group (based on parent's x-coordinate)
    }
 
    groupKlist = circshift(Klist,-nodeK[parentnode]-1); // clockwise order for this group (ie. start with the "next" colour after the parent's one)
-   for (var kk=0;kk<groupSize;kk++){ // loop over valency (kk is a dummy variable, indexing into the circshifted list)
+   for (var kk=0;kk<groupNodeCount;kk++){ // loop over valency (kk is a dummy variable, indexing into the circshifted list)
     k = groupKlist[kk]; // "colour" of the new node
 
     // create a new node:
