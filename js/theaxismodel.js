@@ -43,6 +43,7 @@ function axismodel(initialVertex){
  var tmpedgescaling = eval($("#thescaling").val());
  var tmpbranchspread = eval($("#thespread").val());
  printinfo = $("#infobutton").prop('checked');
+ var fadeleaves = $("#fadeleavesbutton").prop("checked");
 
  // VALIDATE THE INPUT:
  var afraction = RegExp('[0-9]+/[0-9]+');
@@ -152,6 +153,9 @@ function axismodel(initialVertex){
   for (ii=0;ii<nodeList.length;ii++){
 //   if (debug) console.log('DEBUG: Making children of node '+nodeList[ii]);
    var thisnode = nodeList[ii]; // get the label for convenience
+   if (fadeleaves){ // if we are fading the leaves, thisnode is no longer a leaf
+    nodeIgnore[thisnode] = false;
+   }
    thisKlist = circshift(Klist,-nodeK[thisnode]); // clockwise order for this node (ie. start with the "next" colour after the current one)
    for (var kk=0;kk<valency;kk++){ // loop through valency (kk is a dummy variable, indexing into the circshifted list)
     k = thisKlist[kk];
@@ -164,7 +168,7 @@ function axismodel(initialVertex){
      nodeK[newnode] = k;
      nodeKK[newnode] = kk;
      nodeAddress[newnode] = collapseAddress(nodeAddress[nodeParent[newnode]] + colournames[nodeK[newnode]]);
-     nodeIgnore[newnode] = false;
+     nodeIgnore[newnode] = (fadeleaves?true:false); // false, unless we are fading leaf nodes (user control): then, set this to true but make it false later if we add children
      nodeLevel[newnode] = nodeLevel[nodeParent[newnode]]+1; // "normal" (ie. non-root) vertex
 //     if (debug) console.log('DEBUG: making a child (kk='+kk+',k='+k+') with parent '+nodeParent[newnode]);
 

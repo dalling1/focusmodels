@@ -31,6 +31,7 @@ function newaxismodel(initialVertex){
  var tmpedgelength = eval($("#thelength").val()); // "overall scale" on the web page
  var tmpgroupspread = eval($("#thespread").val());
  printinfo = $("#infobutton").prop('checked');
+ var fadeleaves = $("#fadeleavesbutton").prop("checked");
 
  // VALIDATE THE INPUT:
  var afraction = RegExp('[0-9]+/[0-9]+'); // allows use of fractions in the input; not currently implemented in HTML since sliders are used instead of text fields
@@ -145,6 +146,9 @@ function newaxismodel(initialVertex){
   // add the children (together, the "group") to each parent node in the level above
   for (ii=0;ii<nodeList.length;ii++){
    var parentnode = nodeList[ii]; // use the parent node's index for convenience
+   if (fadeleaves){ // if we are fading the leaves, parentnode is no longer a leaf ("thisnode" in the other models)
+    nodeIgnore[parentnode] = false;
+   }
    // how many children for each node above?:
    if (L==2){
     groupNodeCount = valency - 2; // at L=2, the parents (which lie on the axis) each have two neighbours already
@@ -180,7 +184,7 @@ function newaxismodel(initialVertex){
     nodeOnAxis[newnode] = false;
     nodeK[newnode] = k;
     nodeKK[newnode] = k; // not needed?
-    nodeIgnore[newnode] = false;
+    nodeIgnore[newnode] = (fadeleaves?true:false); // false, unless we are fading leaf nodes (user control): then, set this to true but make it false later if we add children
 
    } // loop over valency (ie. kk), ie. loop over this group (children of one parent node in the level above)
   } // loop over this depth's parent nodes
