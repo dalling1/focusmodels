@@ -93,7 +93,7 @@ function reverseString(str){
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
 function checkValidAddress(el){
-// var addr = el.value;
+ var debug = false;
  var addr = $(el).attr("value");
  var valency = $("#thevalency").val();
  var labels = "";
@@ -714,6 +714,7 @@ function canvasClick(evt){
  // We need to test whether the user clicked on an empty piece of the canvas
  // or on an SVG element (node, line, etc.). In the latter case, get the bounding
  // box of the parent element (ie. the SVG object itself), not the clicked object.
+ var debug = false;
  var e = evt.target;
  if (e.ownerSVGElement === null){ // clicked on the canvas
   var dim = e.getBoundingClientRect();
