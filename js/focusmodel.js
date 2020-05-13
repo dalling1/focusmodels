@@ -465,7 +465,7 @@ function drawgraph(){
 
    $(document.createElementNS("http://www.w3.org/2000/svg","line")).attr({
     "stroke": (nodeIgnore[vv]?(ignoreEdgeColour.length?ignoreEdgeColour:"none"):thisEdgeColour),
-    "stroke-dasharray": (nodeIgnore[vv]?ignoreDash:"1"),
+    "stroke-dasharray": (nodeIgnore[vv]?ignoreDash:"none"),
     "stroke-width": lineWidth,
     "stroke-linecap": "round",
      "x1": xx0,
