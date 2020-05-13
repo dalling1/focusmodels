@@ -131,10 +131,10 @@ function newaxismodel(initialVertex){
   if (printinfo) $('#info').append('<p style="text-indent:10px;">Making depth='+L+' children</p>');
 
   // find nodes at the previous depth:
-  var indx = new Array(0);
+  var nodeList = new Array(0);
   for (n=0;n<nodeDepth.length;n++){
    if (nodeDepth[n]==(L-1)){
-    indx[indx.length] = n;
+    nodeList[nodeList.length] = n;
    }
   }
 
@@ -143,8 +143,8 @@ function newaxismodel(initialVertex){
   console.log("   "+depthNodeCount+" nodes at depth "+L);
 
   // add the children (together, the "group") to each parent node in the level above
-  for (ii=0;ii<indx.length;ii++){
-   var parentnode = indx[ii]; // use the parent node's index for convenience
+  for (ii=0;ii<nodeList.length;ii++){
+   var parentnode = nodeList[ii]; // use the parent node's index for convenience
    // how many children for each node above?:
    if (L==2){
     groupNodeCount = valency - 2; // at L=2, the parents (which lie on the axis) each have two neighbours already

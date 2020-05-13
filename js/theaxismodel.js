@@ -6,7 +6,6 @@ function axismodel(initialVertex){
  var debug = false;
  var valency = 5; // later we can get these from the user controls
  var Nlevels = 2; // default
-//xxx var axiswidth = 5; // default
  var Nroots = 1;
  var edgelength = 2; // base edge length
  var edgescaling = 1; // base edge scaling (from one level to another)
@@ -49,7 +48,6 @@ function axismodel(initialVertex){
  var afraction = RegExp('[0-9]+/[0-9]+');
  if (Number.isInteger(tmpvalency)) valency = tmpvalency;
  if (Number.isInteger(tmpNlevels)) Nlevels = tmpNlevels;
-//xxx if (Number.isInteger(tmpWidth)) axiswidth = tmpWidth;
  if (Number.isInteger(tmpoffsetX)) offsetX = tmpoffsetX;
  if (Number.isInteger(tmpoffsetY)) offsetY = tmpoffsetY;
  console.log('Nlevels = '+Nlevels); // report
@@ -77,10 +75,6 @@ function axismodel(initialVertex){
   $('#info').append('<p class="error">Valency must be less than 27 (or add new colour names in the code!)</p>');
   return 0;
  }
-
- // for the width-depth version of the axis-focused model, set the number of root nodes to the width:
-//xxx Nroots = axiswidth;
-
 
  // angles between branches (computed):
  gamma2 = pi/2-gamma1/2;      // offset to centre the branch edges (use different values to tilt the whole tree)
@@ -147,17 +141,17 @@ function axismodel(initialVertex){
   if (debug) console.log('Running level '+L);
   if (printinfo) $('#info').append('<p style="text-indent:10px;">Making level '+L+' children</p>');
   // nodes to attach edges to:
-  indx = new Array(0);
+  nodeList = new Array(0);
   for (n=0;n<nodeLevel.length;n++){
    if (nodeLevel[n]==L){
-    indx[indx.length] = n;
+    nodeList[nodeList.length] = n;
    }
   }
-  if (debug) console.log('qqq Level '+L+': indx = '+indx);
+  if (debug) console.log('qqq Level '+L+': nodeList = '+nodeList);
 
-  for (ii=0;ii<indx.length;ii++){
-//   if (debug) console.log('DEBUG: Making children of node '+indx[ii]);
-   var thisnode = indx[ii]; // get the label for convenience
+  for (ii=0;ii<nodeList.length;ii++){
+//   if (debug) console.log('DEBUG: Making children of node '+nodeList[ii]);
+   var thisnode = nodeList[ii]; // get the label for convenience
    thisKlist = circshift(Klist,-nodeK[thisnode]); // clockwise order for this node (ie. start with the "next" colour after the current one)
    for (var kk=0;kk<valency;kk++){ // loop through valency (kk is a dummy variable, indexing into the circshifted list)
     k = thisKlist[kk];

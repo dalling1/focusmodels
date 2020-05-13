@@ -130,16 +130,16 @@ function vertexmodel(initialVertex){
   if (debug) console.log('Running level '+L);
   if (printinfo) $('#info').append('<p style="text-indent:10px;">Making level '+L+' children</p>');
   // nodes to attach edges to:
-  indx = new Array(0);
+  nodeList = new Array(0);
   for (n=0;n<nodeLevel.length;n++){
    if (nodeLevel[n]==L){
-    indx[indx.length] = n;
+    nodeList[nodeList.length] = n;
    }
   }
 
-  for (ii=0;ii<indx.length;ii++){
-//   if (debug) console.log('DEBUG: Making children of node '+indx[ii]);
-   var thisnode = indx[ii]; // get the label for convenience
+  for (ii=0;ii<nodeList.length;ii++){
+//   if (debug) console.log('DEBUG: Making children of node '+nodeList[ii]);
+   var thisnode = nodeList[ii]; // get the label for convenience
    for (var k=0;k<valency;k++){ // loop through valency
     if (L==0 | k>0){ // loop through all valencies // THIS ISN'T RIGHT: WE *DO* NEED SOME K=0 AT HIGHER LEVELS...
      nodeIndex[nodeIndex.length] = nodeIndex[nodeIndex.length-1]+1; // label the new node incrementally
