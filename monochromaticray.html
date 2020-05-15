@@ -42,8 +42,8 @@
    <button style="font-size:0.6em;" id="extrasbutton" onclick="showallcontrols();">Show all controls</button><br/>
   </div>
 
-  <span title="Click to reset" style="cursor:pointer;" onclick="thevalency.value=5; thevalencyOutput.value = thevalency.value; if (monoraymodel(V0)) drawgraph();">Valency:</span>
-  <input type="range" style="width:80px;" min="2" max="16" step="1" value="5" id="thevalency" oninput="thevalencyOutput.value = thevalency.value; if (monoraymodel(V0)) drawgraph();" />
+  <span title="Click to reset" style="cursor:pointer;" onclick="thevalency.value=8; thevalencyOutput.value = thevalency.value; if (monoraymodel(V0)) drawgraph();">Valency:</span>
+  <input type="range" style="width:80px;" min="2" max="16" step="1" value="8" id="thevalency" oninput="thevalencyOutput.value = thevalency.value; if (monoraymodel(V0)) drawgraph();" />
   <output style="width:20px;vertical-align:middle;" name="thevalencyOutputName" id="thevalencyOutput">999</output><br/>
 
   <span title="Click to reset" style="cursor:pointer;" onclick="thewidth.value=3; thewidthOutput.value = thewidth.value; if (monoraymodel(V0)) drawgraph();">Width:</span>
@@ -72,8 +72,8 @@
 
  <span title="Click to reset" style="cursor:pointer;" onclick="whichlabel.value=1; if (monoraymodel(V0)) drawgraph();">Labels</span>
   <select style="width:80px;" id="whichlabel" oninput="if (monoraymodel(V0)) drawgraph();" />
-   <option value="0">None</option>
-   <option value="1" selected>Address</option>
+   <option value="0" selected>None</option>
+   <option value="1">Address</option>
    <option value="2">Index</option>
    <option value="3">Custom</option>
   </select>
