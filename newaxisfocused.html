@@ -9,6 +9,7 @@
  <script src="js/focusmodel.js"></script>
  <script src="js/thevertexmodel.js"></script>
  <script src="js/theedgemodel.js"></script>
+ <script src="js/theaxismodel.js"></script>
  <script src="js/thenewaxismodel.js"></script>
  <script src="js/jspdf.min.js"></script>
  <script src="js/spectrum.js"></script>
@@ -34,7 +35,11 @@
   <div class="navshadow"></div>
  </div>
 
- <div class="thecontrols">
+ <div class="thecontrols" style="z-index:100;">
+  <div class="somebuttons">
+   <button style="font-size:0.6em;" id="extrasbutton" onclick="showallcontrols();">Show all controls</button><br/>
+  </div>
+
   <span title="Click to reset" style="cursor:pointer;" onclick="thevalency.value=5; thevalencyOutput.value = thevalency.value; if (newaxismodel(V0)) drawgraph();">Valency:</span>
   <input type="range" style="width:80px;" min="2" max="16" step="1" value="5" id="thevalency" oninput="thevalencyOutput.value = thevalency.value; if (newaxismodel(V0)) drawgraph();" />
   <output style="width:20px;vertical-align:middle;" name="thevalencyOutputName" id="thevalencyOutput">999</output><br/>
@@ -58,8 +63,6 @@
   <span title="Click to reset" style="cursor:pointer;" onclick="thespread.value='0.9'; thespreadOutput.value = thespread.value; if (newaxismodel(V0)) drawgraph();">Spread:</span>
   <input type="range" style="width:80px;" min="0.1" max="1" step="0.1" value="0.9" id="thespread" oninput="thespreadOutput.value = thespread.value; if (newaxismodel(V0)) drawgraph();" />
   <output style="width:20px;vertical-align:middle;" name="thespreadOutputName" id="thespreadOutput">999</output><br/>
-<!--  <output style="width:20px;vertical-align:middle;" name="thespreadOutputName" id="thespreadOutput">999</output><span style="vertical-align:middle;">&#960;</span><br/>
--->
 
   <span class="littlenote" title="If this is not ticked, edges will be coloured according to their type">i</span> <label for="plainedgesbutton">Edge colour <input type="checkbox" id="plainedgesbutton" checked="checked" onclick="if (newaxismodel(V0)) drawgraph();" /></label>
   <input type="text" class="basicpicker controlpicker" id="edgepicker" onchange="if (newaxismodel(V0)) drawgraph();" value="#000000" /><br/>
@@ -130,12 +133,17 @@
    <br/>
    <button id="automorphismbutton" onclick="automorphism();" disabled="disabled">Automorphism</button><br/>
   </div>
-  <p>Enter two node addresses into the boxes above, or click on the graph: the closest node will be added to the orange-outlined box. For now, no animation is shown, but the graph is relabelled according to the chosen automorphism.</p>
+  <p style="font-size:0.7em;">Enter two node addresses into the boxes above, or CTRL-click on the graph: the closest node will be added to the orange-outlined box. For now, no animation is shown, but the graph is relabelled according to the chosen automorphism.</p>
  </div>
 
  <div id="info" class="showinfo"></div>
 
- <div id="theframe" class="showgraph"><svg id="thecanvas" style="width: 100%; height: 100%;" onclick="canvasClick(evt);"></svg></div>
+ <div id="theframe" class="showgraph" style="position:relative;">
+  <svg id="thecanvas" style="width: 100%; height: 100%;" onclick="canvasClick(evt);"></svg>
+  <div id="extracontrols">
+    More controls will go here.
+  </div>
+ </div>
 
  <script>
   $(".basicpicker").spectrum({

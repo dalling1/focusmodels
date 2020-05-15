@@ -88,9 +88,9 @@ function axismodel(initialVertex){
  inverselongestname = '';
 
  for (var i=0;i<valency;i++) longestname+=colournames[i];
- for (i=0;i<Math.ceil(Nlevels/valency);i++) tmp+=longestname;
+ for (var i=0;i<Math.ceil(Nlevels/valency);i++) tmp+=longestname;
  longestname = tmp;
- for (i=longestname.length;i>0;i--) inverselongestname+=longestname[i-1];
+ for (var i=longestname.length;i>0;i--) inverselongestname+=longestname[i-1];
 //console.log(' longestname is '+longestname);
 
 
@@ -119,7 +119,7 @@ function axismodel(initialVertex){
  // set values for root nodes:
  var rootSpacing = 2;
  var rootOrigin = -(Nroots-1)*rootSpacing/2;
- for (i=0;i<Nroots;i++){
+ for (var i=0;i<Nroots;i++){
   nodePosition[i] = [rootOrigin + rootSpacing*i, 0]; // positions of root nodes
   nodeIndex[i] = i;         // "labels" of root nodes
   nodeAddress[i] = collapseAddress(initialVertex[0]);
@@ -133,24 +133,24 @@ function axismodel(initialVertex){
  }
  // set up a list which we will permute
  var Klist = new Array(valency);
- for (i=0;i<valency;i++) Klist[i] = i;
+ for (var i=0;i<valency;i++) Klist[i] = i;
 
  //
  // Iteratively add nodes outward from the "root node" above:
  //
- for (L=0;L<Nlevels;L++){
+ for (var L=0;L<Nlevels;L++){
   if (debug) console.log('Running level '+L);
   if (printinfo) $('#info').append('<p style="text-indent:10px;">Making level '+L+' children</p>');
   // nodes to attach edges to:
   nodeList = new Array(0);
-  for (n=0;n<nodeLevel.length;n++){
+  for (var n=0;n<nodeLevel.length;n++){
    if (nodeLevel[n]==L){
     nodeList[nodeList.length] = n;
    }
   }
   if (debug) console.log('qqq Level '+L+': nodeList = '+nodeList);
 
-  for (ii=0;ii<nodeList.length;ii++){
+  for (var ii=0;ii<nodeList.length;ii++){
 //   if (debug) console.log('DEBUG: Making children of node '+nodeList[ii]);
    var thisnode = nodeList[ii]; // get the label for convenience
    if (fadeleaves){ // if we are fading the leaves, thisnode is no longer a leaf
@@ -162,7 +162,7 @@ function axismodel(initialVertex){
     if (L==0 || k!=nodeK[thisnode]){ // loop through all valencies, but don't add the "duplicate" one, which would take us back to the parent node, except the first time
 
      nodeIndex[nodeIndex.length] = nodeIndex[nodeIndex.length-1]+1; // label the new node incrementally
-     newnode = nodeIndex[nodeIndex.length-1]; // ... and grab that label for convenience
+     var newnode = nodeIndex[nodeIndex.length-1]; // ... and grab that label for convenience
      // from here on, "thisnode" is the parent and "newnode" is the leaf:
      nodeParent[newnode] = nodeIndex[thisnode];
      nodeK[newnode] = k;

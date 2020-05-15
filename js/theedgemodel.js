@@ -11,25 +11,18 @@ function edgemodel(initialEdge){
  var edgescaling = 1; // base edge scaling (from one level to another)
  var gamma1 = pi; // branch spread angle
  var gamma2 = 0;
- var printinfo = 1;
  offsetX = 0;
  offsetY = 0;
  var colournames = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
 
  if (initialEdge===undefined){
+  // set the default edge to focus on
   initialEdge = Array(2);
   initialEdge[0] = '';
   initialEdge[1] = colournames[0];
  }
 
- // set the default edge to focus on
-// var initialEdge = Array(2);
-// initialEdge[0] = '';
-// initialEdge[1] = colournames[0];
-
  // GET INPUTS FROM THE WEB PAGE:
-// var tmpvalency = eval($("#valencyfield").val());
-// var tmpNlevels = eval($("#depthfield").val());
  var tmpvalency = eval($("#thevalency").val());
  var tmpNlevels = eval($("#thelevels").val());
  var tmpoffsetX = eval($("#theoffsetX").val());
@@ -38,7 +31,7 @@ function edgemodel(initialEdge){
  var tmpedgelength = eval($("#thelength").val());
  var tmpedgescaling = eval($("#thescaling").val());
  var tmpbranchspread = eval($("#thespread").val());
- printinfo = $("#infobutton").prop('checked');
+ var printinfo = $("#infobutton").prop('checked'); // undefined if infobutton does not exist, which is fine
  var fadeleaves = $("#fadeleavesbutton").prop("checked");
 
  // VALIDATE THE INPUT:
@@ -85,15 +78,15 @@ console.log('Nlevels = '+Nlevels);
  inverselongestname = '';
 
  for (var i=0;i<valency;i++) longestname+=colournames[i];
- for (i=0;i<Math.ceil(Nlevels/valency);i++) tmp+=longestname;
+ for (var i=0;i<Math.ceil(Nlevels/valency);i++) tmp+=longestname;
  longestname = tmp;
- for (i=longestname.length;i>0;i--) inverselongestname+=longestname[i-1];
+ for (var i=longestname.length;i>0;i--) inverselongestname+=longestname[i-1];
 //console.log(' longestname is '+longestname);
 
  if (valency>2){
-  Ntotal = Nroots*(valency*Math.pow(valency-1,Nlevels)-2)/(valency-2);
+  var Ntotal = Nroots*(valency*Math.pow(valency-1,Nlevels)-2)/(valency-2);
  } else {
-  Ntotal = Nroots*(Nlevels*valency+1); // check
+  var Ntotal = Nroots*(Nlevels*valency+1); // check
  }
  if (debug) console.log('Number of nodes is be '+Ntotal);
  if (printinfo & $('#info').html().length>0) $('#info').append('<hr width="88%"/>'); // after the first RUN, separate output with a line
@@ -111,7 +104,7 @@ console.log('Nlevels = '+Nlevels);
  nodeIgnore = new Array(Nroots); // used to stop drawing particular branches (create no child nodes of ignored nodes)
 
  // set values for FIRST root nodes:
- for (i=0;i<Nroots;i++){
+ for (var i=0;i<Nroots;i++){
 //old  nodePosition[i] = [-0.5+5*i, 0]; // positions of root nodes  0,5,10,15... offset by -0.5
   nodePosition[i] = [-edgelength/2 + 5*i, 0]; // positions of root nodes  0,5,10,15... offset by -0.5
   nodeIndex[i] = i;         // "labels" of root nodes
@@ -123,7 +116,7 @@ console.log('Nlevels = '+Nlevels);
   nodeIgnore[i] = false;
  }
  // set values for SECOND root nodes:
- for (i=0;i<Nroots;i++){
+ for (var i=0;i<Nroots;i++){
 //old  nodePosition[Nroots+i] = [0.5+5*i, 0]; // positions of root nodes  0,5,10,15... offset by -0.5
   nodePosition[Nroots+i] = [edgelength/2 + 5*i, 0]; // positions of root nodes  0,5,10,15... offset by -0.5
   nodeIndex[Nroots+i] = Nroots+i;         // "labels" of root nodes
@@ -137,18 +130,18 @@ console.log('Nlevels = '+Nlevels);
  //
  // Iteratively add nodes outward from the "root node" above:
  //
- for (L=0;L<Nlevels;L++){
+ for (var L=0;L<Nlevels;L++){
   if (debug) console.log('Running level '+L);
   if (printinfo) $('#info').append('<p style="text-indent:10px;">Making level '+L+' children</p>');
   // nodes to attach edges to:
   nodeList = new Array(0);
-  for (n=0;n<nodeLevel.length;n++){
+  for (var n=0;n<nodeLevel.length;n++){
    if (nodeLevel[n]==L){
     nodeList[nodeList.length] = n;
    }
   }
 
-  for (ii=0;ii<nodeList.length;ii++){
+  for (var ii=0;ii<nodeList.length;ii++){
 //   if (debug) console.log('DEBUG: Making children of node '+nodeList[ii]);
    var thisnode = nodeList[ii]; // get the label for convenience
    if (fadeleaves){ // if we are fading the leaves, thisnode is no longer a leaf
@@ -157,7 +150,7 @@ console.log('Nlevels = '+Nlevels);
    for (var k=0;k<valency;k++){ // loop through valency
     if (k>0){ // don't add the parent again
      nodeIndex[nodeIndex.length] = nodeIndex[nodeIndex.length-1]+1; // label the new node incrementally
-     newnode = nodeIndex[nodeIndex.length-1]; // ... and grab that label for convenience
+     var newnode = nodeIndex[nodeIndex.length-1]; // ... and grab that label for convenience
      // from here on, "thisnode" is the parent and "newnode" is the leaf:
      nodeParent[newnode] = nodeIndex[thisnode];
 //     nodeK[newnode] = k;

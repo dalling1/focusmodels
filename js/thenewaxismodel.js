@@ -64,7 +64,7 @@ function newaxismodel(initialVertex){
 
  // set up a list which we will permute
  var Klist = new Array(valency);
- for (i=0;i<valency;i++) Klist[i] = i;
+ for (var i=0;i<valency;i++) Klist[i] = i;
 
  // get the longest node address [do we need this in this (new) model?]
  var longestname = '';
@@ -73,7 +73,7 @@ function newaxismodel(initialVertex){
   longestname+=colournames[i%valency];
  }
  // and its reverse:
- for (i=longestname.length;i>0;i--) inverselongestname+=longestname[i-1];
+ for (var i=longestname.length;i>0;i--) inverselongestname+=longestname[i-1];
 
  // initialise positioning variables:
  var groupNodeCount = 0;
@@ -95,7 +95,7 @@ function newaxismodel(initialVertex){
  // set values for root (on-axis) nodes:
  var rootSpacing = edgelength;
  var rootOrigin = -(width-1)*rootSpacing/2;
- for (i=0;i<width;i++){
+ for (var i=0;i<width;i++){
   nodePosition[i] = [rootOrigin + rootSpacing*i, 0]; // positions of root (on-axis) nodes
   nodeIndex[i] = i;         // "labels" of root (on-axis) nodes
   if (i==0) nodeAddress[i] = collapseAddress(initialVertex[0]);
@@ -111,9 +111,9 @@ function newaxismodel(initialVertex){
 
 /* [not right for this new model]
  if (valency>2){
-  Ntotal = width*(valency*Math.pow(valency-1,depth)-2)/(valency-2);
+  var Ntotal = width*(valency*Math.pow(valency-1,depth)-2)/(valency-2);
  } else {
-  Ntotal = width*(depth*valency+1);
+  var Ntotal = width*(depth*valency+1);
  }
  console.log('Number of nodes will be '+Ntotal); // report
  if (printinfo & $('#info').html().length>0) $('#info').append('<hr width="88%"/>'); // after the first RUN, separate output with a line
@@ -133,7 +133,7 @@ function newaxismodel(initialVertex){
 
   // find nodes at the previous depth:
   var nodeList = new Array(0);
-  for (n=0;n<nodeDepth.length;n++){
+  for (var n=0;n<nodeDepth.length;n++){
    if (nodeDepth[n]==(L-1)){
     nodeList[nodeList.length] = n;
    }
@@ -144,7 +144,7 @@ function newaxismodel(initialVertex){
   console.log("   "+depthNodeCount+" nodes at depth "+L);
 
   // add the children (together, the "group") to each parent node in the level above
-  for (ii=0;ii<nodeList.length;ii++){
+  for (var ii=0;ii<nodeList.length;ii++){
    var parentnode = nodeList[ii]; // use the parent node's index for convenience
    if (fadeleaves){ // if we are fading the leaves, parentnode is no longer a leaf ("thisnode" in the other models)
     nodeIgnore[parentnode] = false;
@@ -172,7 +172,7 @@ function newaxismodel(initialVertex){
 
     // create a new node:
     nodeIndex[nodeIndex.length] = nodeIndex[nodeIndex.length-1]+1; // label the new node incrementally
-    newnode = nodeIndex[nodeIndex.length-1]; // ... and grab that label for convenience
+    var newnode = nodeIndex[nodeIndex.length-1]; // ... and grab that label for convenience
     // thus, now "parentnode" is the parent and "newnode" is the leaf
 
     nodePosition[newnode] = [groupOrigin + nodeSpacing*kk, -(L-1)*depthSpacing];
@@ -199,7 +199,7 @@ function newaxismodel(initialVertex){
  // (but do it here at the end so that the index numbering doesn't interrupt the regular nodes)
  // LEFT:
  nodeIndex[nodeIndex.length] = nodeIndex[nodeIndex.length-1]+1; // label the new node incrementally, like the others
- newnode = nodeIndex[nodeIndex.length-1]; // ... and grab that label for convenience
+ var newnode = nodeIndex[nodeIndex.length-1]; // ... and grab that label for convenience
  nodePosition[newnode] = [nodePosition[leftEndNode][0]-rootSpacing/2, nodePosition[leftEndNode][1]];
  nodeAddress[newnode] = 'LL';
  nodeParent[newnode] = nodeIndex[leftEndNode];
@@ -212,7 +212,7 @@ function newaxismodel(initialVertex){
 
  // RIGHT:
  nodeIndex[nodeIndex.length] = nodeIndex[nodeIndex.length-1]+1; // label the new node incrementally, like the others
- newnode = nodeIndex[nodeIndex.length-1]; // ... and grab that label for convenience
+ var newnode = nodeIndex[nodeIndex.length-1]; // ... and grab that label for convenience
  nodePosition[newnode] = [nodePosition[rightEndNode][0]+rootSpacing/2, nodePosition[rightEndNode][1]];
  nodeAddress[newnode] = 'RR';
  nodeParent[newnode] = nodeIndex[rightEndNode];

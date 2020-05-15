@@ -10,6 +10,7 @@
  <script src="js/thevertexmodel.js"></script>
  <script src="js/theedgemodel.js"></script>
  <script src="js/theaxismodel.js"></script>
+ <script src="js/thenewaxismodel.js"></script>
  <script src="js/jspdf.min.js"></script>
  <script src="js/spectrum.js"></script>
  <script src="js/rgbcolor.js"></script>
@@ -35,6 +36,10 @@
  </div>
 
  <div class="thecontrols">
+  <div class="somebuttons">
+   <button style="font-size:0.6em;" id="extrasbutton" onclick="showallcontrols();">Show all controls</button><br/>
+  </div>
+
   <span title="Click to reset" style="cursor:pointer;" onclick="thevalency.value=5; thevalencyOutput.value = thevalency.value; if (axismodel(V0)) drawgraph();">Valency:</span>
   <input type="range" style="width:80px;" min="2" max="16" step="1" value="5" id="thevalency" oninput="thevalencyOutput.value = thevalency.value; if (axismodel(V0)) drawgraph();" />
   <output style="width:20px;vertical-align:middle;" name="thevalencyOutputName" id="thevalencyOutput">999</output><br/>
@@ -129,7 +134,12 @@
 
  <div id="info" class="showinfo"></div>
 
- <div id="theframe" class="showgraph"><svg id="thecanvas" style="width: 100%; height: 100%;" onclick="canvasClick(evt);"></svg></div>
+ <div id="theframe" class="showgraph" style="position:relative;">
+  <svg id="thecanvas" style="width: 100%; height: 100%;" onclick="canvasClick(evt);"></svg>
+  <div id="extracontrols">
+    More controls will go here.
+  </div>
+ </div>
 
  <script>
   $(".basicpicker").spectrum({

@@ -4,7 +4,7 @@
 function setup(graphtype){
  var okay = false;
 
- // make sure the control displays are the same as the controls' values:
+ // make sure the control displays (labels) are the same as the controls' values:
  thevalencyOutput.value = thevalency.value;
  thelevelsOutput.value = thelevels.value;
  if (graphtype=="newaxis") thewidthOutput.value = thewidth.value;
@@ -50,7 +50,6 @@ function setup(graphtype){
    return 0;
  }
 
-
  if (okay){
   if (typeof nodeLabel == 'object'){ // check if the custom label array exists
    // yes? then do nothing
@@ -62,7 +61,6 @@ function setup(graphtype){
  } else {
   alert("Graph set-up failed");
  }
-
 
  return 1;
 }
@@ -309,8 +307,6 @@ function collapseAddress(str=""){
 function drawgraph(){
  var debug = false;
  var pi = Math.PI;
- var textAngle = 0;
- showlabels = 0; // off by default
 
  wipeCanvas();
  if (debug) $('#info').append('Drawing the graph....');
@@ -318,21 +314,7 @@ function drawgraph(){
  // make sure the custom node labels are up to date with the number of nodes:
  if (nodeLabel.length != nodeIndex.length) createNodeLabel();
 
-// var showlabels = $("#labelbutton").prop('checked');
- var showaxes = $("#axesbutton").prop('checked');
- var plainedges = $("#plainedgesbutton").prop('checked');
-
- var tmpshowlabels = eval($("#whichlabel").val());
- if (isFinite(tmpshowlabels)){
-  showlabels = tmpshowlabels;
- }
-
- var tmptextangle = eval($("#thetextangle").val());
- if (isFinite(tmptextangle)){
-  textAngle = tmptextangle;
- }
-
- // default colours:
+ // Set some default values (which the user might change with the controls):
  var axesColour = '#555';
  var nodeColour = '#000';
  var edgeColour = '#000';
@@ -342,39 +324,31 @@ function drawgraph(){
  var ignoreLabelColour = ''; // set empty to not label ignored nodes; was '#0f0'
  var ignoreDash = '6'; // SVG dash pattern for edges between ignored nodes and their parents
 
+ // Get values from user controls on the web page:
+ // -- we're not too worried about NaN values here, whihc could arise if the user fiddles with the page or javascript and breaks something
  // user-selected colours:
  axesColour = document.getElementById("axespicker").value;
  labelColour = document.getElementById("labelpicker").value;
  edgeColour = document.getElementById("edgepicker").value;
  nodeColour = document.getElementById("nodepicker").value;
-
- fontSize = 10; // default value; need this variable for savePDF and savePNG
- var tmpfontsize = eval($("#thefontsize").val());
- if (isFinite(tmpfontsize)){
-  fontSize = tmpfontsize;
- }
-
- nodeRadius = 5; // default value; need this variable for savePDF and savePNG
- var tmpnodesize = eval($("#thenodesize").val());
- if (isFinite(tmpnodesize)){
-  nodeRadius = tmpnodesize;
- }
-
- var lineWidth = 0.2; // default value
- var tmplinewidth = eval($("#thelinewidth").val());
- if (isFinite(tmplinewidth)){
-  lineWidth = tmplinewidth;
- }
-
+ // label-related variables:
+ var fontSize = parseInt($("#thefontsize").val());
+ var textAngle = parseFloat($("#thetextangle").val());
+ var showlabels = parseInt($("#whichlabel").val());
+ // pen-related variables
+ var nodeRadius = parseFloat($("#thenodesize").val());
+ var lineWidth = parseFloat($("#thelinewidth").val());
+ var showaxes = $("#axesbutton").prop('checked');
+ var plainedges = $("#plainedgesbutton").prop('checked');
 
  /* get the canvas element and size it properly (transfer the CSS size to the proper canvas attributes) */
  $('#thecanvas').attr('width',$('#thecanvas').width());
  $('#thecanvas').attr('height',$('#thecanvas').height());
 
- canvaswidth = $('#thecanvas').width();
- canvasheight = $('#thecanvas').height();
- centreX = Math.round(canvaswidth/2) + offsetX;
- centreY = Math.round(canvasheight/2) + offsetY;
+ var canvaswidth = $('#thecanvas').width();
+ var canvasheight = $('#thecanvas').height();
+ var centreX = Math.round(canvaswidth/2) + offsetX;
+ var centreY = Math.round(canvasheight/2) + offsetY;
 
  // draw the origin and some axes:
  if (showaxes){
@@ -397,16 +371,6 @@ function drawgraph(){
   }).appendTo("#thecanvas");
  } // end if showaxes
 
-/*
-  .drawArc({ // a circle at the origin
-   strokeStyle: "#444",
-   fillStyle: "#fff",
-   x: centreX,
-   y: canvasheight - centreY,
-   radius: 8
-  })
-*/
-
  // edge-colouring way: pick a colour (https://medialab.github.io/iwanthue/) from the list
  colournames = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
 // var someColours = ["#5238cb", "#67b53c", "#a63dd8", "#57b27a", "#da48ce", "#4c702a", "#9264e0", "#b09b3a", "#4a2891", "#d78232", "#6071de", "#da4528", "#32b8d3", "#d23d56", "#5592dd", "#863920", "#43519a", "#d87c61", "#4a2362", "#df3f92", "#ad8cd2", "#8e2a53", "#d97cd3", "#db7297", "#99308e", "#8b539a"];
@@ -417,18 +381,18 @@ function drawgraph(){
  someColours = someColours.concat(moreColours);
 
  // overall scaling for the whole graph:
- useScale = 100;
+ var useScale = 100;
  for (var vv=0;vv<nodePosition.length;vv++){
-  xx = centreX + useScale*nodePosition[vv][0];
-  yy = canvasheight - (centreY + useScale*nodePosition[vv][1]);
+  var xx = centreX + useScale*nodePosition[vv][0];
+  var yy = canvasheight - (centreY + useScale*nodePosition[vv][1]);
   // store the "screen" coordinates to make node selection easier (for automorphisms)
   nodeScreenPosition[vv]=new Array(2); // (re-)initialise
   nodeScreenPosition[vv][0] = xx;
   nodeScreenPosition[vv][1] = yy;
 
   if (nodeParent[vv]>=0){ // use only non-root nodes
-   xx0 = centreX + useScale*nodePosition[nodeParent[vv]][0];
-   yy0 = canvasheight - (centreY + useScale*nodePosition[nodeParent[vv]][1]);
+   var xx0 = centreX + useScale*nodePosition[nodeParent[vv]][0];
+   var yy0 = canvasheight - (centreY + useScale*nodePosition[nodeParent[vv]][1]);
   }
 
 //  if (debug) $("#info").append("<p class="debug">"+vv+"] "+xx.toFixed(2)+", "+yy.toFixed(2));
@@ -572,9 +536,9 @@ function bounds() {
  var minY = Number.POSITIVE_INFINITY;
  var maxY = Number.NEGATIVE_INFINITY;
 
-// var showlabels = $("#labelbutton").prop('checked');
+ var showlabels = parseInt($("#whichlabel").val());
 
- svgchildren=document.getElementById("thecanvas").children;
+ var svgchildren=document.getElementById("thecanvas").children;
  for (var i=0;i<svgchildren.length;i++){
   switch (svgchildren[i].nodeName){
    case "circle": // node
@@ -645,7 +609,7 @@ function savePNG(){
  // for options see https://github.com/exupero/saveSvgAsPng
  var transparentBG = $("#transparencybutton").prop('checked');
  var saveBounds = bounds();
- saveOptions = {
+ var saveOptions = {
   scale: 2.0, // larger, better quality
   backgroundColor: (transparentBG?"#fff0":"#fff"), // transparent or not
   left: saveBounds.minX,
@@ -778,4 +742,18 @@ function canvasClick(evt){
   }
  }
  return 1;
+}
+
+
+/* ********************************************************************************************* */
+/* ********************************************************************************************* */
+/* ********************************************************************************************* */
+function showallcontrols(){
+ // toggles the extra control panel, an animation suggesting that it slides out
+ var ex = $("#extracontrols");
+ if (parseFloat(ex.css("padding-left"))>2){
+  ex.animate({width:"5px",padding:"2px"},100);
+ } else {
+  ex.animate({width:"250px",padding:"10px"},100);
+ }
 }

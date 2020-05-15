@@ -81,9 +81,9 @@ function vertexmodel(initialVertex){
  inverselongestname = '';
 
  for (var i=0;i<valency;i++) longestname+=colournames[i];
- for (i=0;i<Math.ceil(Nlevels/valency);i++) tmp+=longestname;
+ for (var i=0;i<Math.ceil(Nlevels/valency);i++) tmp+=longestname;
  longestname = tmp;
- for (i=longestname.length;i>0;i--) inverselongestname+=longestname[i-1];
+ for (var i=longestname.length;i>0;i--) inverselongestname+=longestname[i-1];
 //console.log(' longestname is '+longestname);
 
  if (valency>2){
@@ -108,7 +108,7 @@ function vertexmodel(initialVertex){
  nodeIgnore = new Array(Nroots); // used to stop drawing particular branches (create no child nodes of ignored nodes)
 //xxx var nodeKK = new Array(Nroots);
  // set values for root nodes:
- for (i=0;i<Nroots;i++){
+ for (var i=0;i<Nroots;i++){
   nodePosition[i] = [5*i, 0]; // positions of root nodes
   nodeIndex[i] = i;         // "labels" of root nodes
   nodeAddress[i] = collapseAddress(initialVertex[0]);
@@ -122,23 +122,23 @@ function vertexmodel(initialVertex){
  }
  // set up a list which we will permute
 //xxx var Klist = new Array(valency);
-//xxx for (i=0;i<valency;i++) Klist[i] = i;
+//xxx for (var i=0;i<valency;i++) Klist[i] = i;
 
  //
  // Iteratively add nodes outward from the "root node" above:
  //
- for (L=0;L<Nlevels;L++){
+ for (var L=0;L<Nlevels;L++){
   if (debug) console.log('Running level '+L);
   if (printinfo) $('#info').append('<p style="text-indent:10px;">Making level '+L+' children</p>');
   // nodes to attach edges to:
   nodeList = new Array(0);
-  for (n=0;n<nodeLevel.length;n++){
+  for (var n=0;n<nodeLevel.length;n++){
    if (nodeLevel[n]==L){
     nodeList[nodeList.length] = n;
    }
   }
 
-  for (ii=0;ii<nodeList.length;ii++){
+  for (var ii=0;ii<nodeList.length;ii++){
 //   if (debug) console.log('DEBUG: Making children of node '+nodeList[ii]);
    var thisnode = nodeList[ii]; // get the label for convenience
    if (fadeleaves){ // if we are fading the leaves, thisnode is no longer a leaf
