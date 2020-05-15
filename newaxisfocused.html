@@ -35,7 +35,7 @@
   <div class="navshadow"></div>
  </div>
 
- <div class="thecontrols" style="z-index:100;">
+ <div class="thecontrols">
   <div class="somebuttons">
    <button style="font-size:0.6em;" id="extrasbutton" onclick="showallcontrols();">Show all controls</button><br/>
   </div>
@@ -99,7 +99,7 @@
 
   <span title="Click to reset" style="cursor:pointer;" onclick="thetextangle.value='0'; thetextangleOutput.value = thetextangle.value; if (newaxismodel(V0)) drawgraph();">Label angle:</span>
   <input type="range" style="width:100px;" min="-90" max="90" step="15" value="0" id="thetextangle" oninput="thetextangleOutput.value = thetextangle.value; if (newaxismodel(V0)) drawgraph();" />
-  <output style="width:14px;text-align:right;vertical-align:middle;" name="thetextangleOutputName" id="thetextangleOutput">999</output><sup>o</sup><br/>
+  <output style="width:14px;vertical-align:middle;" name="thetextangleOutputName" id="thetextangleOutput">999</output><sup>o</sup><br/>
 
   <span title="Click to reset" style="cursor:pointer;" onclick="thefontsize.value=15; fontsizeOutput.value = thefontsize.value; if (newaxismodel(V0)) drawgraph();">Label size:</span>
   <input type="range" style="width:100px;" min="10" max="30" step="5" value="15" id="thefontsize" oninput="fontsizeOutput.value = thefontsize.value; if (newaxismodel(V0)) drawgraph();" />
