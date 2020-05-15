@@ -7,8 +7,8 @@ function setup(graphtype){
  // make sure the control displays (labels) are the same as the controls' values:
  thevalencyOutput.value = thevalency.value;
  thelevelsOutput.value = thelevels.value;
- if (graphtype=="newaxis") thewidthOutput.value = thewidth.value;
  thescalingOutput.value = thescaling.value;
+ if (graphtype=="newaxis"|graphtype=="monoray") thewidthOutput.value = thewidth.value;
  thelengthOutput.value = thelength.value;
  thespreadOutput.value = thespread.value;
  offsetXOutput.value = theoffsetX.value;
@@ -43,6 +43,9 @@ function setup(graphtype){
    break;
   case "newaxis":
    if (newaxismodel(V0)) okay = true;
+   break;
+  case "monoray":
+   if (monoraymodel(V0)) okay = true;
    break;
   default:
    alert("Set-up must be called with a focus type");
@@ -335,11 +338,14 @@ function drawgraph(){
  var fontSize = parseInt($("#thefontsize").val());
  var textAngle = parseFloat($("#thetextangle").val());
  var showlabels = parseInt($("#whichlabel").val());
- // pen-related variables
+ // pen-related variables:
  var nodeRadius = parseFloat($("#thenodesize").val());
  var lineWidth = parseFloat($("#thelinewidth").val());
  var showaxes = $("#axesbutton").prop('checked');
  var plainedges = $("#plainedgesbutton").prop('checked');
+ // canvas-related variables:
+ var offsetX = parseFloat($("#theoffsetX").val()); // pixels, but allow float
+ var offsetY = parseFloat($("#theoffsetY").val()); // pixels, but allow float
 
  /* get the canvas element and size it properly (transfer the CSS size to the proper canvas attributes) */
  $('#thecanvas').attr('width',$('#thecanvas').width());

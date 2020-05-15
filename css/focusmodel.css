@@ -19,6 +19,7 @@ svg {cursor: pointer;}
 #theframe {width: 90%; height: 90vh; margin: 10px auto; box-shadow: inset 5px 5px 23px #666;}
 .showgraph {background-color: #fff;}
 input, output {display: inline-block; vertical-align: middle;}
+.disabledcontrol {color:#999; cursor:not-allowed;}
 
 .invalid {color: red;}
 .clickentry {border: 2px solid orange;}

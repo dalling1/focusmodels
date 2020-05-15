@@ -11,8 +11,6 @@ function newaxismodel(initialVertex){
  var edgelength = 2; // base edge length
  var groupspread = 1;
  var printinfo = 1;
- offsetX = 0;
- offsetY = 0;
 
  var colournames = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
 
@@ -25,8 +23,6 @@ function newaxismodel(initialVertex){
  var tmpvalency = eval($("#thevalency").val());
  var tmpdepth = eval($("#thelevels").val()); // we won't change the underlying control element ID in the HTML file, just its label
  var tmpWidth = eval($("#thewidth").val());
- var tmpoffsetX = eval($("#theoffsetX").val());
- var tmpoffsetY = eval($("#theoffsetY").val());
  var tmpdepthscaling = eval($("#thescaling").val());
  var tmpedgelength = eval($("#thelength").val()); // "overall scale" on the web page
  var tmpgroupspread = eval($("#thespread").val());
@@ -38,8 +34,6 @@ function newaxismodel(initialVertex){
  if (Number.isInteger(tmpvalency)) valency = tmpvalency;
  if (Number.isInteger(tmpdepth)) depth = tmpdepth;
  if (Number.isInteger(tmpWidth)) width = tmpWidth;
- if (Number.isInteger(tmpoffsetX)) offsetX = tmpoffsetX;
- if (Number.isInteger(tmpoffsetY)) offsetY = tmpoffsetY;
  if (debug) console.log('depth = '+depth); // report
  if (debug) console.log('width = '+width); // report
  if (isFinite(tmpdepthscaling)){

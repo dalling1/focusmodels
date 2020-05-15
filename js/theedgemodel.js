@@ -11,8 +11,6 @@ function edgemodel(initialEdge){
  var edgescaling = 1; // base edge scaling (from one level to another)
  var gamma1 = pi; // branch spread angle
  var gamma2 = 0;
- offsetX = 0;
- offsetY = 0;
  var colournames = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
 
  if (initialEdge===undefined){
@@ -25,8 +23,6 @@ function edgemodel(initialEdge){
  // GET INPUTS FROM THE WEB PAGE:
  var tmpvalency = eval($("#thevalency").val());
  var tmpNlevels = eval($("#thelevels").val());
- var tmpoffsetX = eval($("#theoffsetX").val());
- var tmpoffsetY = eval($("#theoffsetY").val());
  var tmpgamma1 = eval($("#gamma1field").val());
  var tmpedgelength = eval($("#thelength").val());
  var tmpedgescaling = eval($("#thescaling").val());
@@ -38,8 +34,6 @@ function edgemodel(initialEdge){
  var afraction = RegExp('[0-9]+/[0-9]+');
  if (Number.isInteger(tmpvalency)) valency = tmpvalency;
  if (Number.isInteger(tmpNlevels)) Nlevels = tmpNlevels;
- if (Number.isInteger(tmpoffsetX)) offsetX = tmpoffsetX;
- if (Number.isInteger(tmpoffsetY)) offsetY = tmpoffsetY;
 console.log('Nlevels = '+Nlevels);
  if (isFinite(tmpgamma1)){
   gamma1 = tmpgamma1*pi;

@@ -11,8 +11,6 @@ function axismodel(initialVertex){
  var edgescaling = 1; // base edge scaling (from one level to another)
  var gamma1 = pi; // branch spread angle
  var printinfo = 1;
- offsetX = 0;
- offsetY = 0;
 
  // angles affecting the overall layout:
 // var gamma1 = pi; // spread angle of hanging nodes (smaller means "pointier" trees); default pi
@@ -36,8 +34,6 @@ function axismodel(initialVertex){
  var tmpvalency = eval($("#thevalency").val());
  var tmpNlevels = eval($("#thelevels").val());
 //xxx var tmpWidth = eval($("#thewidth").val());
- var tmpoffsetX = eval($("#theoffsetX").val());
- var tmpoffsetY = eval($("#theoffsetY").val());
  var tmpgamma1 = eval($("#gamma1field").val());
  var tmpedgelength = eval($("#thelength").val());
  var tmpedgescaling = eval($("#thescaling").val());
@@ -49,8 +45,6 @@ function axismodel(initialVertex){
  var afraction = RegExp('[0-9]+/[0-9]+');
  if (Number.isInteger(tmpvalency)) valency = tmpvalency;
  if (Number.isInteger(tmpNlevels)) Nlevels = tmpNlevels;
- if (Number.isInteger(tmpoffsetX)) offsetX = tmpoffsetX;
- if (Number.isInteger(tmpoffsetY)) offsetY = tmpoffsetY;
  console.log('Nlevels = '+Nlevels); // report
  if (isFinite(tmpgamma1)){
   gamma1 = tmpgamma1*pi;
