@@ -58,8 +58,8 @@
   <input type="range" style="width:80px;" min="0.1" max="2" step="0.05" value="0.5" id="thescaling" oninput="thescalingOutput.value = thescaling.value; if (monoraymodel(V0)) drawgraph();" />
   <output style="width:20px;vertical-align:middle;" name="thescalingOutputName" id="thescalingOutput">999</output><br/>
 
-  <span title="Click to reset" style="cursor:pointer;" onclick="thelength.value=1; thelengthOutput.value = thelength.value; if (monoraymodel(V0)) drawgraph();">Overall scale:</span>
-  <input type="range" style="width:80px;" min="0.1" max="5" step="0.1" value="1" id="thelength" oninput="thelengthOutput.value = thelength.value; if (monoraymodel(V0)) drawgraph();" />
+  <span title="Click to reset" style="cursor:pointer;" onclick="thelength.value=2; thelengthOutput.value = thelength.value; if (monoraymodel(V0)) drawgraph();">Overall scale:</span>
+  <input type="range" style="width:80px;" min="0.1" max="5" step="0.1" value="2" id="thelength" oninput="thelengthOutput.value = thelength.value; if (monoraymodel(V0)) drawgraph();" />
   <output style="width:20px;vertical-align:middle;" name="thelengthOutputName" id="thelengthOutput">999</output><br/>
 
   <span title="Click to reset" style="cursor:pointer;" onclick="thespread.value='0.9'; thespreadOutput.value = thespread.value; if (monoraymodel(V0)) drawgraph();">Ray spread:</span>
@@ -96,6 +96,7 @@
   <span title="Click to reset" style="cursor:pointer;" onclick="theoffsetX.value=0; offsetXOutput.value = theoffsetX.value; if (monoraymodel(V0)) drawgraph();">Offset X:</span>
   <input type="range" style="width:100px;" min="-500" max="500" step="50" value="0" id="theoffsetX" oninput="offsetXOutput.value = theoffsetX.value; if (monoraymodel(V0)) drawgraph();" />
   <output style="width:20px;vertical-align:middle;" name="offsetXOutputName" id="offsetXOutput">999</output><br/>
+
   <span title="Click to reset" style="cursor:pointer;" onclick="theoffsetY.value=0; offsetYOutput.value = theoffsetY.value; if (monoraymodel(V0)) drawgraph();">Offset Y:</span>
   <input type="range" style="width:100px;" min="-500" max="500" step="50" value="0" id="theoffsetY" oninput="offsetYOutput.value = theoffsetY.value; if (monoraymodel(V0)) drawgraph();" />
   <output style="width:20px;vertical-align:middle;" name="offsetYOutputName" id="offsetYOutput">999</output><br/>
@@ -143,8 +144,28 @@
 
  <div id="theframe" class="showgraph" style="position:relative;">
   <svg id="thecanvas" style="width: 100%; height: 100%;" onclick="canvasClick(evt);"></svg>
-  <div id="extracontrols">
-    More controls will go here.
+  <div id="extracontrols" class="thecontrols">
+   <p style="display:none;">More controls can go here:</p>
+   <span title="Click to reset" style="cursor:pointer;" onclick="thearrowsize.value=3; thearrowsizeOutput.value = thearrowsize.value; if (monoraymodel(V0)) drawgraph();">Arrow size:</span>
+   <input type="range" style="width:80px;" min="0" max="20" step="1" value="3" id="thearrowsize" oninput="thearrowsizeOutput.value = thearrowsize.value; if (monoraymodel(V0)) drawgraph();" />
+   <output style="width:20px;vertical-align:middle;" name="thearrowsizeOutputName" id="thearrowsizeOutput">999</output><br/>
+
+   <span title="Click to reset" style="cursor:pointer;" onclick="thearrowratio.value=2.0; thearrowratioOutput.value = parseFloat(thearrowratio.value).toFixed(2); if (monoraymodel(V0)) drawgraph();">Arrow ratio:</span>
+   <input type="range" style="width:80px;" min="0.5" max="3" step="0.05" value="2.0" id="thearrowratio" oninput="thearrowratioOutput.value = parseFloat(thearrowratio.value).toFixed(2); if (monoraymodel(V0)) drawgraph();" />
+   <output style="width:20px;vertical-align:middle;" name="thearrowratioOutputName" id="thearrowratioOutput">999</output><br/>
+
+   <span title="Click to reset" style="cursor:pointer;" onclick="thearrowoffset.value=0.3; thearrowoffsetOutput.value = parseFloat(thearrowoffset.value).toFixed(2); if (monoraymodel(V0)) drawgraph();">Arrow offset:</span>
+   <input type="range" style="width:80px;" min="0.1" max="0.9" step="0.05" value="0.3" id="thearrowoffset" oninput="thearrowoffsetOutput.value = parseFloat(thearrowoffset.value).toFixed(2); if (monoraymodel(V0)) drawgraph();" />
+   <output style="width:20px;vertical-align:middle;" name="thearrowoffsetOutputName" id="thearrowoffsetOutput">999</output><br/>
+
+   <label for="filledarrowsbutton">Filled arrows? <input type="checkbox" id="filledarrowsbutton" checked="checked" onclick="if (monoraymodel(V0)) drawgraph();" /></label><br/>
+
+<!--
+   <div class="somebuttons">
+    <button id="runmorebutton" onclick="if (monoraymodel(V0)) drawgraph();">DRAW</button>
+   </div>
+-->
+
   </div>
  </div>
 

@@ -18,6 +18,10 @@ function setup(graphtype){
  fontsizeOutput.value = thefontsize.value;
  nodesizeOutput.value = thenodesize.value;
  linewidthOutput.value = thelinewidth.value;
+ // "more controls":
+ thearrowsizeOutput.value = thearrowsize.value;
+ thearrowoffsetOutput.value = thearrowoffset.value;
+ thearrowratioOutput.value = thearrowratio.value;
 
  // change the canvas cursor to "alias" when pressing control (for picking automorphism nodes)
  $(document).on('keydown', function (event) {
@@ -178,6 +182,10 @@ function calcEdgeLength(level,valency,baselength=1,edgescaling=1){
 function wipeCanvas(){
  var edgeColour = document.getElementById("edgepicker").value;
  var axesColour = document.getElementById("axespicker").value;
+ var arrowSize = parseFloat($("#thearrowsize").val());
+ var filledarrows = $("#filledarrowsbutton").prop("checked");
+ var arrowratio = Math.pow(parseFloat($("#thearrowratio").val()),2.0);
+
  $("#thecanvas").empty();
  // after clearing the canvas we need to insert the marker definition:
  document.getElementById('thecanvas').insertAdjacentHTML('afterbegin','\
@@ -191,10 +199,11 @@ function wipeCanvas(){
  <marker id="rayarrow" markerWidth="10" markerHeight="10" refX="2" refY="3" orient="auto" markerUnits="strokeWidth">\
   <path d="M0,0 L3,3 L0,6" stroke-width="0.1" fill="none" stroke="'+edgeColour+'" />\
  </marker>\
- <path id="rayarrowbase" d="M-4,0 L0,6 L4,0 " stroke-width="0.5" fill="none" stroke="'+edgeColour+'" />\
+ <path id="rayarrowbase" d="M-'+arrowSize+',0 L0,'+(arrowSize*arrowratio)+' L'+arrowSize+',0'+(filledarrows?' z" fill="'+edgeColour+'"':'"')+' stroke-width="0.5" fill="none" stroke="'+edgeColour+'" />\
 </defs>');
  return 1;
 }
+// <path id="rayarrowbase" d="M-4,0 L0,6 L4,0 " stroke-width="0.5" fill="none" stroke="'+edgeColour+'" />\
 
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
@@ -351,7 +360,7 @@ function drawgraph(){
  var ignoreDash = '6'; // SVG dash pattern for edges between ignored nodes and their parents
 
  // Get values from user controls on the web page:
- // -- we're not too worried about NaN values here, whihc could arise if the user fiddles with the page or javascript and breaks something
+ // -- we're not too worried about NaN values here, which could arise if the user fiddles with the page or javascript and breaks something
  // user-selected colours:
  axesColour = document.getElementById("axespicker").value;
  labelColour = document.getElementById("labelpicker").value;
@@ -832,8 +841,8 @@ function addArrows(){
  var centreX = Math.round(canvaswidth/2) + offsetX;
  var centreY = Math.round(canvasheight/2) + offsetY;
  var useScale = 100; // this needs to be a global variable IE. put it on the "all controls" panel
- var arrowSize = 3; // this needs to be a user control
- var arrowOffset = 0.3; // this needs to be a user control [value is between 0 and 1]
+// var arrowSize = parseFloat($("#thearrowsize").val());
+ var arrowOffset = parseFloat($("#thearrowoffset").val()); // pixels, but allow float
  var pi = Math.PI;
 
  for (var i=0;i<nodeIndex.length;i++){
@@ -844,10 +853,15 @@ function addArrows(){
    var arrowPosition = lineMidPoint(nodePosition[thisnode],nodePosition[parentnode],arrowOffset);
 
    // transform coords according to the overall scaling:
+   // child position:
    var xx1 = centreX + useScale*nodePosition[thisnode][0];
    var yy1 = canvasheight - (centreY + useScale*nodePosition[thisnode][1]);
+   // arrow position:
    var xx2 = centreX + useScale*arrowPosition[0];
    var yy2 = canvasheight - (centreY + useScale*arrowPosition[1]);
+   // parent position:
+   var xx3 = centreX + useScale*nodePosition[parentnode][0];
+   var yy3 = canvasheight - (centreY + useScale*nodePosition[parentnode][1]);
 /*
    $(document.createElementNS("http://www.w3.org/2000/svg","line")).attr({
     "marker-end": "url(#rayarrow)",
@@ -862,8 +876,8 @@ function addArrows(){
    // use the <use> element instead (we need to do our own rotation, though):
    var cx = xx2;
    var cy = yy2;
-   var rotangle = -90+Math.atan((yy2-yy1)/(xx2-xx1))*(180/pi);
-   document.getElementById('thecanvas').insertAdjacentHTML('beforeend','<use x="'+xx2+'" y="'+yy2+'" width="10" height="10" xlink:href="#rayarrowbase" transform="rotate('+rotangle+' '+cx+' '+cy+')" />');
+   var rotangle = -90+Math.atan((yy3-yy1)/(xx3-xx1))*(180/pi);
+   document.getElementById('thecanvas').insertAdjacentHTML('beforeend','<use x="'+cx+'" y="'+cy+'" width="10" height="10" xlink:href="#rayarrowbase" transform="rotate('+rotangle+' '+cx+' '+cy+')" />');
 
   } // end check that node has a parent
  } // end loop over nodes
