@@ -191,6 +191,7 @@ function wipeCanvas(){
  <marker id="rayarrow" markerWidth="10" markerHeight="10" refX="2" refY="3" orient="auto" markerUnits="strokeWidth">\
   <path d="M0,0 L3,3 L0,6" stroke-width="0.1" fill="none" stroke="'+edgeColour+'" />\
  </marker>\
+ <path id="rayarrowbase" d="M-4,0 L0,6 L4,0 " stroke-width="0.5" fill="none" stroke="'+edgeColour+'" />\
 </defs>');
  return 1;
 }
@@ -471,6 +472,8 @@ function drawgraph(){
     "y1": yy0,
     "x2": xx,
     "y2": yy,
+    // give the extensions an id just in case we need to find them:
+    "id": (nodeAddress[vv]=="RR"|nodeAddress[nodeParent[vv]]=="RR"|nodeAddress[vv]=="LL"|nodeAddress[nodeParent[vv]]=="LL"?nodeAddress[vv]:""),
    }).appendTo("#thecanvas");
   }
 
@@ -827,6 +830,7 @@ function addArrows(){
  var centreY = Math.round(canvasheight/2) + offsetY;
  var useScale = 100; // this needs to be a global variable IE. put it on the "all controls" panel
  var arrowSize = 3; // this needs to be a user control
+ var pi = Math.PI;
 
  for (var i=0;i<nodeIndex.length;i++){
   // for every node, add an arrow to the line between it and its parent
@@ -840,6 +844,7 @@ function addArrows(){
    var yy1 = canvasheight - (centreY + useScale*nodePosition[thisnode][1]);
    var xx2 = centreX + useScale*arrowPosition[0];
    var yy2 = canvasheight - (centreY + useScale*arrowPosition[1]);
+/*
    $(document.createElementNS("http://www.w3.org/2000/svg","line")).attr({
     "marker-end": "url(#rayarrow)",
     "x1": xx1,
@@ -849,6 +854,13 @@ function addArrows(){
     "stroke": "none",
     "stroke-width": arrowSize,
    }).appendTo("#thecanvas");
+*/
+   // use the <use> element instead (we need to do our own rotation, though):
+   var cx = xx2;
+   var cy = yy2;
+   var rotangle = -90+Math.atan((yy2-yy1)/(xx2-xx1))*(180/pi);
+   document.getElementById('thecanvas').insertAdjacentHTML('beforeend','<use x="'+xx2+'" y="'+yy2+'" width="10" height="10" xlink:href="#rayarrowbase" transform="rotate('+rotangle+' '+cx+' '+cy+')" />');
+
   } // end check that node has a parent
  } // end loop over nodes
  return 1;
