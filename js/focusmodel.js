@@ -809,10 +809,13 @@ function showallcontrols(){
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
-function lineMidPoint(start,end){
- var midX = (start[0]+end[0])*0.5;
- var midY = (start[1]+end[1])*0.5;
- return [midX,midY];
+function lineMidPoint(start,end,factor=0.5){
+// var midX = (start[0]+end[0])*0.5;
+// var midY = (start[1]+end[1])*0.5;
+// return [midX,midY];
+ var alongX = start[0]+factor*(end[0]-start[0]);
+ var alongY = start[1]+factor*(end[1]-start[1]);
+ return [alongX,alongY];
 }
 
 /* ********************************************************************************************* */
@@ -830,6 +833,7 @@ function addArrows(){
  var centreY = Math.round(canvasheight/2) + offsetY;
  var useScale = 100; // this needs to be a global variable IE. put it on the "all controls" panel
  var arrowSize = 3; // this needs to be a user control
+ var arrowOffset = 0.3; // this needs to be a user control [value is between 0 and 1]
  var pi = Math.PI;
 
  for (var i=0;i<nodeIndex.length;i++){
@@ -837,7 +841,7 @@ function addArrows(){
   var thisnode = nodeIndex[i];
   var parentnode = nodeParent[i];
   if (thisnode>=0 & parentnode>=0 & !nodeIgnore[thisnode]){ // skip it if this node has no parent, or the node is faded
-   var arrowPosition = lineMidPoint(nodePosition[thisnode],nodePosition[parentnode]);
+   var arrowPosition = lineMidPoint(nodePosition[thisnode],nodePosition[parentnode],arrowOffset);
 
    // transform coords according to the overall scaling:
    var xx1 = centreX + useScale*nodePosition[thisnode][0];
@@ -865,4 +869,35 @@ function addArrows(){
  } // end loop over nodes
  return 1;
 
+}
+
+/* ********************************************************************************************* */
+/* ********************************************************************************************* */
+/* ********************************************************************************************* */
+function canvasScale(pos=[0,0]){
+ // scaling:
+ var offsetX = parseFloat($("#theoffsetX").val()); // pixels, but allow float
+ var offsetY = parseFloat($("#theoffsetY").val()); // pixels, but allow float
+ var canvaswidth = $('#thecanvas').width();
+ var canvasheight = $('#thecanvas').height();
+ var centreX = Math.round(canvaswidth/2) + offsetX;
+ var centreY = Math.round(canvasheight/2) + offsetY;
+ var useScale = 100; // this needs to be a global variable IE. put it on the "all controls" panel
+ // output:
+
+ if (pos.length==2){
+  // single coordinate given as input:
+  var x=pos[0];
+  var y=pos[1];
+  var newpos = [centreX + useScale*x, canvasheight - (centreY + useScale*y)];
+ } else {
+  // array of coordinates given as input:
+  var newpos = Array(pos.length);
+  for (var i=0;i<pos.length;i++){
+   var x=pos[i][0];
+   var y=pos[i][1];
+   newpos[i] = [centreX + useScale*x, canvasheight - (centreY + useScale*y)];
+  }
+ }
+ return newpos;
 }
