@@ -19,9 +19,11 @@ function setup(graphtype){
  nodesizeOutput.value = thenodesize.value;
  linewidthOutput.value = thelinewidth.value;
  // "more controls":
- thearrowsizeOutput.value = thearrowsize.value;
- thearrowoffsetOutput.value = thearrowoffset.value;
- thearrowratioOutput.value = thearrowratio.value;
+ if (graphtype=="monoray"){
+  thearrowsizeOutput.value = thearrowsize.value;
+  thearrowoffsetOutput.value = thearrowoffset.value;
+  thearrowratioOutput.value = thearrowratio.value;
+ }
 
  // change the canvas cursor to "alias" when pressing control (for picking automorphism nodes)
  $(document).on('keydown', function (event) {
@@ -421,7 +423,7 @@ function drawgraph(){
  } // end if showaxes
 
  // edge-colouring way: pick a colour (https://medialab.github.io/iwanthue/) from the list
- colournames = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
+ colournames = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
 // var someColours = ["#5238cb", "#67b53c", "#a63dd8", "#57b27a", "#da48ce", "#4c702a", "#9264e0", "#b09b3a", "#4a2891", "#d78232", "#6071de", "#da4528", "#32b8d3", "#d23d56", "#5592dd", "#863920", "#43519a", "#d87c61", "#4a2362", "#df3f92", "#ad8cd2", "#8e2a53", "#d97cd3", "#db7297", "#99308e", "#8b539a"];
 // var someColours = ["#80752d", "#456dd3", "#7db93a", "#dd4a59", "#50c068", "#db5831", "#6e9bdb", "#de9735", "#335989", "#bbb13b", "#661e2a", "#60c3a4", "#9d3a22", "#5ab1c7", "#6d1f18", "#9fb878", "#ab414f", "#537e2d", "#e49185", "#314b22", "#b46e35", "#498362", "#52291f", "#cfa572", "#734d24", "#a1655c"];
  var someColours = ["#ff4444", "#44dd44", "#6677ff", "#ffaa55", "#aabbff", "#cccccc", "#888888", "#111111"];
@@ -429,19 +431,11 @@ function drawgraph(){
  var moreColours = ["#F0A3FF", "#0075DC", "#993F00", "#4C005C", "#191919", "#005C31", "#2BCE48", "#FFCC99", "#808080", "#94FFB5", "#8F7C00", "#9DCC00", "#C20088", "#003380", "#FFA455", "#FFA8BB", "#426600", "#FF0010", "#5EF1F2", "#00998F", "#E0FF66", "#74AAFF", "#990000", "#FFFF80", "#FFFF00", "#FF5055"];
  someColours = someColours.concat(moreColours);
 
- // overall scaling for the whole graph:
- var useScale = 100; // this needs to be a global variable IE. put it on the "all controls" panel
  for (var vv=0;vv<nodePosition.length;vv++){
-  var xx = centreX + useScale*nodePosition[vv][0];
-  var yy = canvasheight - (centreY + useScale*nodePosition[vv][1]);
-  // store the "screen" coordinates to make node selection easier (for automorphisms)
-  nodeScreenPosition[vv]=new Array(2); // (re-)initialise
-  nodeScreenPosition[vv][0] = xx;
-  nodeScreenPosition[vv][1] = yy;
+  nodeScreenPosition[vv] = canvasScale(nodePosition[vv]);
 
   if (nodeParent[vv]>=0){ // use only non-root nodes
-   var xx0 = centreX + useScale*nodePosition[nodeParent[vv]][0];
-   var yy0 = canvasheight - (centreY + useScale*nodePosition[nodeParent[vv]][1]);
+   var position0 = canvasScale(nodePosition[nodeParent[vv]]);
   }
 
 //  if (debug) $("#info").append("<p class="debug">"+vv+"] "+xx.toFixed(2)+", "+yy.toFixed(2));
@@ -451,8 +445,8 @@ function drawgraph(){
    "fill": (nodeIgnore[vv]?(ignoreNodeColour.length?ignoreNodeColour:"none"):nodeColour),
    "stroke": "none",
    "r": nodeRadius,
-   "cx": xx,
-   "cy": yy,
+   "cx": nodeScreenPosition[vv][0],
+   "cy": nodeScreenPosition[vv][1],
   }).appendTo("#thecanvas");
 
   // usual way: all edges are the same (user-selected) colour
@@ -477,10 +471,10 @@ function drawgraph(){
     "stroke-width": (nodeOnAxis[vv]?lineWidth:lineWidth), // later we might add a "on-axis edge width" control
     "stroke-linecap": "round",
 //    "marker-end": "url(#axesarrow)", // we probably don't want these
-    "x1": xx0,
-    "y1": yy0,
-    "x2": xx,
-    "y2": yy,
+    "x1": position0[0],
+    "y1": position0[1],
+    "x2": nodeScreenPosition[vv][0],
+    "y2": nodeScreenPosition[vv][1],
     // give the extensions an id just in case we need to find them:
     "id": (nodeAddress[vv]=="RR"|nodeAddress[nodeParent[vv]]=="RR"|nodeAddress[vv]=="LL"|nodeAddress[nodeParent[vv]]=="LL"?nodeAddress[vv]:""),
    }).appendTo("#thecanvas");
@@ -515,9 +509,9 @@ function drawgraph(){
     $(newText).attr({
      "fill": (nodeIgnore[vv]?(ignoreLabelColour.length?ignoreLabelColour:"none"):labelColour),
      "font-size": fontSize,
-     "x": xx + labelOffsetX,
-     "y": yy + labelOffsetY,
-     "transform": "rotate("+textAngle+","+(xx+labelOffsetX)+","+(yy+labelOffsetY)+")",
+     "x": nodeScreenPosition[vv][0] + labelOffsetX,
+     "y": nodeScreenPosition[vv][1] + labelOffsetY,
+     "transform": "rotate("+textAngle+","+(nodeScreenPosition[vv][0]+labelOffsetX)+","+(nodeScreenPosition[vv][1]+labelOffsetY)+")",
      "style": "dominant-baseline:middle; text-anchor:"+(showlabels==3?"left":"middle")+";",
     });
     // the text node has been created, so insert the node's label
@@ -840,8 +834,7 @@ function addArrows(){
  var offsetY = parseFloat($("#theoffsetY").val()); // pixels, but allow float
  var centreX = Math.round(canvaswidth/2) + offsetX;
  var centreY = Math.round(canvasheight/2) + offsetY;
- var useScale = 100; // this needs to be a global variable IE. put it on the "all controls" panel
-// var arrowSize = parseFloat($("#thearrowsize").val());
+// var arrowSize = parseFloat($("#thearrowsize").val()); // only needed if we make arrows with SVG lines (currently using <use> instances)
  var arrowOffset = parseFloat($("#thearrowoffset").val()); // pixels, but allow float
  var reversedarrows = $("#reversedarrowsbutton").prop("checked");
  var pi = Math.PI;
@@ -855,14 +848,12 @@ function addArrows(){
 
    // transform coords according to the overall scaling:
    // child position:
-   var xx1 = centreX + useScale*nodePosition[thisnode][0];
-   var yy1 = canvasheight - (centreY + useScale*nodePosition[thisnode][1]);
+   var childPos = canvasScale(nodePosition[thisnode]);
    // arrow position:
-   var xx2 = centreX + useScale*arrowPosition[0];
-   var yy2 = canvasheight - (centreY + useScale*arrowPosition[1]);
+   var arrowPos = canvasScale(arrowPosition);
    // parent position:
-   var xx3 = centreX + useScale*nodePosition[parentnode][0];
-   var yy3 = canvasheight - (centreY + useScale*nodePosition[parentnode][1]);
+   var parentPos = canvasScale(nodePosition[parentnode]);
+
 /*
    $(document.createElementNS("http://www.w3.org/2000/svg","line")).attr({
     "marker-end": "url(#rayarrow)",
@@ -875,9 +866,9 @@ function addArrows(){
    }).appendTo("#thecanvas");
 */
    // use the <use> element instead (we need to do our own rotation, though):
-   var cx = xx2;
-   var cy = yy2;
-   var rotangle = -90+Math.atan((yy3-yy1)/(xx3-xx1))*(180/pi);
+   var cx = arrowPos[0];
+   var cy = arrowPos[1];
+   var rotangle = -90+Math.atan((parentPos[1]-childPos[1])/(parentPos[0]-childPos[0]))*(180/pi);
    if (reversedarrows) rotangle+=180;
    document.getElementById('thecanvas').insertAdjacentHTML('beforeend','<use x="'+cx+'" y="'+cy+'" width="10" height="10" xlink:href="#rayarrowbase" transform="rotate('+rotangle+' '+cx+' '+cy+')" />');
 

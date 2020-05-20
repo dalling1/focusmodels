@@ -12,7 +12,7 @@ function newaxismodel(initialVertex){
  var groupspread = 1;
  var printinfo = 1;
 
- var colournames = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
+ var colournames = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
 
  if (initialVertex===undefined){
   initialVertex = Array(1);
@@ -52,7 +52,7 @@ function newaxismodel(initialVertex){
   groupspread = eval(tmpgroupspread)*pi;
  }
  if (valency>colournames.length){
-  $('#info').append('<p class="error">Valency must be less than 27 (or add new colour names in the code!)</p>');
+  $('#info').append('<p class="error">Valency must be less than '+colournames.length+' (or add new colour names in the code!)</p>');
   return 0;
  }
 

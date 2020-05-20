@@ -7,8 +7,7 @@ function monoraymodel(initialVertex){
  var edgelength = 2; // base edge length ("overall scale" on the web page)
  var printinfo = 1;
  var leftToRight = false;
-
- var colournames = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
+ var colournames = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
 
  if (initialVertex===undefined){
   initialVertex = Array(1);
@@ -28,8 +27,8 @@ function monoraymodel(initialVertex){
  // VALIDATE THE INPUT:
  var afraction = RegExp('[0-9]+/[0-9]+'); // allows use of fractions in the input; not currently implemented in HTML since sliders are used instead of text fields
  if (valency>colournames.length){
-  $('#info').append('<p class="error">Valency must be less than 27 (or add new colour names in the code!)</p>');
-  alert("Valency must be less than 27 (or add new colour names in the code!)");
+  $('#info').append('<p class="error">Valency must be less than '+colournames.length+' (or add new colour names in the code!)</p>');
+  alert("Valency must be less than "+colournames.length+" (or add new colour names in the code!)");
   return 0;
  }
 

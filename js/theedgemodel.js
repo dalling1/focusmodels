@@ -11,7 +11,7 @@ function edgemodel(initialEdge){
  var edgescaling = 1; // base edge scaling (from one level to another)
  var gamma1 = pi; // branch spread angle
  var gamma2 = 0;
- var colournames = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
+ var colournames = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
 
  if (initialEdge===undefined){
   // set the default edge to focus on
@@ -56,7 +56,7 @@ console.log('Nlevels = '+Nlevels);
   gamma1 = eval(tmpbranchspread)*pi;
  }
  if (valency>colournames.length){
-  $('#info').append('<p class="error">Valency must be less than 27 (or add new colour names in the code!)</p>');
+  $('#info').append('<p class="error">Valency must be less than "+colournames.length+" (or add new colour names in the code!)</p>');
   return 0;
  }
 
@@ -93,13 +93,13 @@ console.log('Nlevels = '+Nlevels);
  nodeParent = new Array(Nroots);
  nodeAngle = new Array(Nroots);
  nodeIndex = new Array(Nroots);
+ nodeOnAxis = new Array(Nroots);
  var nodeK = new Array(Nroots);
  var nodeLevel = new Array(Nroots);
  nodeIgnore = new Array(Nroots); // used to stop drawing particular branches (create no child nodes of ignored nodes)
 
  // set values for FIRST root nodes:
  for (var i=0;i<Nroots;i++){
-//old  nodePosition[i] = [-0.5+5*i, 0]; // positions of root nodes  0,5,10,15... offset by -0.5
   nodePosition[i] = [-edgelength/2 + 5*i, 0]; // positions of root nodes  0,5,10,15... offset by -0.5
   nodeIndex[i] = i;         // "labels" of root nodes
   nodeAddress[i] = collapseAddress(initialEdge[0]);
@@ -108,10 +108,10 @@ console.log('Nlevels = '+Nlevels);
   nodeLevel[i] = 0;
   nodeAngle[i] = 0;
   nodeIgnore[i] = false;
+  nodeOnAxis[i] = false; // no on-axis nodes in this model
  }
  // set values for SECOND root nodes:
  for (var i=0;i<Nroots;i++){
-//old  nodePosition[Nroots+i] = [0.5+5*i, 0]; // positions of root nodes  0,5,10,15... offset by -0.5
   nodePosition[Nroots+i] = [edgelength/2 + 5*i, 0]; // positions of root nodes  0,5,10,15... offset by -0.5
   nodeIndex[Nroots+i] = Nroots+i;         // "labels" of root nodes
   nodeAddress[Nroots+i] = collapseAddress(initialEdge[1]);

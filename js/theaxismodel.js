@@ -21,7 +21,7 @@ function axismodel(initialVertex){
 // gamma1 = 1*pi/3;
 // gamma2 = 0;
 
- var colournames = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
+ var colournames = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
 
  if (initialVertex===undefined){
   initialVertex = Array(1);
@@ -67,7 +67,7 @@ function axismodel(initialVertex){
   gamma1 = eval(tmpbranchspread)*pi;
  }
  if (valency>colournames.length){
-  $('#info').append('<p class="error">Valency must be less than 27 (or add new colour names in the code!)</p>');
+  $('#info').append('<p class="error">Valency must be less than '+colournames.length+' (or add new colour names in the code!)</p>');
   return 0;
  }
 
@@ -106,7 +106,7 @@ function axismodel(initialVertex){
  nodeAngle = new Array(Nroots);
  nodeIndex = new Array(Nroots);
  var nodeLevel = new Array(Nroots);
- var nodeOnAxis = new Array(Nroots);
+ nodeOnAxis = new Array(Nroots);
  var nodeK = new Array(Nroots);
  var nodeKK = new Array(Nroots);
  nodeIgnore = new Array(Nroots); // used to stop drawing particular branches (create no child nodes of ignored nodes)
