@@ -84,10 +84,12 @@
    <label for="infobutton">Print info <input type="checkbox" id="infobutton" /></label><br/>
 -->
 
-  <label for="fadeleavesbutton">Fade leaf nodes? <input type="checkbox" id="fadeleavesbutton" onclick="if (monoraymodel(V0)) drawgraph();" /></label>
+  <label for="fadeleavesbutton">Fade leaf nodes? <input type="checkbox" id="fadeleavesbutton" onclick="if (monoraymodel(V0)) drawgraph();" /></label><br/>
+  <label for="showarrowsbutton">Show edge arrows? <input type="checkbox" id="showarrowsbutton" checked="checked" onclick="if (monoraymodel(V0)) drawgraph();" /></label>
 
   <div class="somebuttons">
    <button id="runbutton" onclick="if (monoraymodel(V0)) drawgraph();">DRAW</button><br/>
+   <button id="runbutton" onclick="if (monoraymodel(V0)) addArrows();">ARROWS</button><br/>
   </div>
 
   <hr/>

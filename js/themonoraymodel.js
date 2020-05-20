@@ -6,6 +6,7 @@ function monoraymodel(initialVertex){
  var debug = false;
  var edgelength = 2; // base edge length ("overall scale" on the web page)
  var printinfo = 1;
+ var leftToRight = false;
 
  var colournames = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
 
@@ -66,7 +67,12 @@ function monoraymodel(initialVertex){
  var rootSpacing = edgelength;
  var rootOrigin = -(width-1)*rootSpacing/2;
  for (var i=0;i<width;i++){
-  nodePosition[i] = [rootOrigin + rootSpacing*i, 0]; // positions of root (on-axis) nodes
+  // positions of root (on-axis) nodes:
+  if (leftToRight){
+   nodePosition[i] = [rootOrigin + rootSpacing*i, 0]; // node with address '' is on the left (causes issues with arrow directions...)
+  } else {
+   nodePosition[i] = [-rootOrigin + -rootSpacing*i, 0]; // node with address '' is on the right
+  }
   nodeIndex[i] = i;         // "labels" of root (on-axis) nodes
   if (i==0) nodeAddress[i] = collapseAddress(initialVertex[0]);
   else      nodeAddress[i] = nodeAddress[i-1]+longestname[i-1];
@@ -140,7 +146,11 @@ function monoraymodel(initialVertex){
  // LEFT:
  nodeIndex[nodeIndex.length] = nodeIndex[nodeIndex.length-1]+1; // label the new node incrementally, like the others
  var newnode = nodeIndex[nodeIndex.length-1]; // ... and grab that label for convenience
- nodePosition[newnode] = [nodePosition[leftEndNode][0]-(rootSpacing/2+edgelength*raylength), nodePosition[leftEndNode][1]];
+ if (leftToRight){ // which extension should be longer?
+  nodePosition[newnode] = [nodePosition[leftEndNode][0]-(rootSpacing/2+edgelength*raylength), nodePosition[leftEndNode][1]];
+ } else {
+  nodePosition[newnode] = [nodePosition[leftEndNode][0]+(rootSpacing/2), nodePosition[leftEndNode][1]];
+ }
  nodeAddress[newnode] = 'LL';
  nodeParent[newnode] = nodeIndex[leftEndNode];
  nodeDepth[newnode] = -2;
@@ -153,7 +163,11 @@ function monoraymodel(initialVertex){
  // RIGHT:
  nodeIndex[nodeIndex.length] = nodeIndex[nodeIndex.length-1]+1; // label the new node incrementally, like the others
  var newnode = nodeIndex[nodeIndex.length-1]; // ... and grab that label for convenience
- nodePosition[newnode] = [nodePosition[rightEndNode][0]+(rootSpacing/2), nodePosition[rightEndNode][1]];
+ if (leftToRight){ // which extension should be longer?
+  nodePosition[newnode] = [nodePosition[rightEndNode][0]+(rootSpacing/2), nodePosition[rightEndNode][1]];
+ } else {
+  nodePosition[newnode] = [nodePosition[rightEndNode][0]-(rootSpacing/2+edgelength*raylength), nodePosition[rightEndNode][1]];
+ }
  nodeAddress[newnode] = 'RR';
  nodeParent[newnode] = nodeIndex[rightEndNode];
  nodeDepth[newnode] = -2;

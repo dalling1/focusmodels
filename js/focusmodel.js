@@ -3,6 +3,7 @@
 /* ********************************************************************************************* */
 function setup(graphtype){
  var okay = false;
+ wipeCanvas();
 
  // make sure the control displays (labels) are the same as the controls' values:
  thevalencyOutput.value = thevalency.value;
@@ -175,9 +176,28 @@ function calcEdgeLength(level,valency,baselength=1,edgescaling=1){
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
 function wipeCanvas(){
+ var edgeColour = document.getElementById("edgepicker").value;
+ var axesColour = document.getElementById("axespicker").value;
  $("#thecanvas").empty();
+ // after clearing the canvas we need to insert the marker definition:
+ document.getElementById('thecanvas').insertAdjacentHTML('afterbegin','\
+<defs>\
+ <marker id="axesarrow" markerWidth="10" markerHeight="10" refX="10" refY="3" orient="auto" markerUnits="strokeWidth">\
+  <path d="M0,0 L0,6 L9,3 z" fill="'+axesColour+'" />\
+ </marker>\
+ <marker id="arrow" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">\
+  <path d="M0,0 L0,6 L9,3 z" fill="'+edgeColour+'" />\
+ </marker>\
+ <marker id="rayarrow" markerWidth="10" markerHeight="10" refX="2" refY="3" orient="auto" markerUnits="strokeWidth">\
+  <path d="M0,0 L3,3 L0,6" stroke-width="0.1" fill="none" stroke="'+edgeColour+'" />\
+ </marker>\
+</defs>');
  return 1;
 }
+
+/* ********************************************************************************************* */
+/* ********************************************************************************************* */
+/* ********************************************************************************************* */
 function wipeInfo(){
  $('#info').html('');
  return 1;
@@ -311,7 +331,9 @@ function drawgraph(){
  var debug = false;
  var pi = Math.PI;
 
+ // clear the canvas:
  wipeCanvas();
+
  if (debug) $('#info').append('Drawing the graph....');
 
  // make sure the custom node labels are up to date with the number of nodes:
@@ -338,11 +360,12 @@ function drawgraph(){
  var fontSize = parseInt($("#thefontsize").val());
  var textAngle = parseFloat($("#thetextangle").val());
  var showlabels = parseInt($("#whichlabel").val());
+ var showarrows = $("#showarrowsbutton").prop("checked");
  // pen-related variables:
  var nodeRadius = parseFloat($("#thenodesize").val());
  var lineWidth = parseFloat($("#thelinewidth").val());
  var showaxes = $("#axesbutton").prop('checked');
- var plainedges = $("#plainedgesbutton").prop('checked');
+ var plainedges = $("#plainedgesbutton").prop('checked'); // plain=all the same colour; not plain=coloured by edge type
  // canvas-related variables:
  var offsetX = parseFloat($("#theoffsetX").val()); // pixels, but allow float
  var offsetY = parseFloat($("#theoffsetY").val()); // pixels, but allow float
@@ -356,24 +379,34 @@ function drawgraph(){
  var centreX = Math.round(canvaswidth/2) + offsetX;
  var centreY = Math.round(canvasheight/2) + offsetY;
 
- // draw the origin and some axes:
+ // draw the axes, if requested:
  if (showaxes){
   $(document.createElementNS("http://www.w3.org/2000/svg","line")).attr({
+   "id": "haxis",
+   "marker-end": "url(#axesarrow)",
    "stroke": axesColour,
    "stroke-width": 1,
+   // if we draw the axes as a path, use this:
+   //   "d": "M "+(centreX-canvaswidth/2-offsetX)+","+(canvasheight-centreY)+" L "+(centreX+canvaswidth/2-offsetX)+","+(canvasheight-centreY),
+   // but for now we are still using line:
    "x1": centreX - canvaswidth/2 - offsetX,
    "y1": canvasheight - centreY,
    "x2": centreX + canvaswidth/2 - offsetX,
-   "y2": canvasheight - centreY
+   "y2": canvasheight - centreY,
   }).appendTo("#thecanvas");
 
   $(document.createElementNS("http://www.w3.org/2000/svg","line")).attr({
+   "id": "vaxis",
+   "marker-end": "url(#axesarrow)",
    "stroke": axesColour,
    "stroke-width": 1,
+   // if we draw the axes as a path, use this:
+   //   "d": "M "+(centreX)+","+(canvasheight)+" L "+(centreX)+","+(0),
+   // but for now we are still using line:
    "x1": centreX,
-   "y1": 0,
+   "y1": canvasheight, // orient the axis line towards the top of the screen (in case we have arrows on the end)
    "x2": centreX,
-   "y2": canvasheight
+   "y2": 0,
   }).appendTo("#thecanvas");
  } // end if showaxes
 
@@ -387,7 +420,7 @@ function drawgraph(){
  someColours = someColours.concat(moreColours);
 
  // overall scaling for the whole graph:
- var useScale = 100;
+ var useScale = 100; // this needs to be a global variable IE. put it on the "all controls" panel
  for (var vv=0;vv<nodePosition.length;vv++){
   var xx = centreX + useScale*nodePosition[vv][0];
   var yy = canvasheight - (centreY + useScale*nodePosition[vv][1]);
@@ -431,12 +464,13 @@ function drawgraph(){
    $(document.createElementNS("http://www.w3.org/2000/svg","line")).attr({
     "stroke": (nodeIgnore[vv]?(ignoreEdgeColour.length?ignoreEdgeColour:"none"):thisEdgeColour),
     "stroke-dasharray": (nodeIgnore[vv]?ignoreDash:"none"),
-    "stroke-width": lineWidth,
+    "stroke-width": (nodeOnAxis[vv]?lineWidth:lineWidth), // later we might add a "on-axis edge width" control
     "stroke-linecap": "round",
-     "x1": xx0,
-     "y1": yy0,
-     "x2": xx,
-     "y2": yy,
+//    "marker-end": "url(#axesarrow)", // we probably don't want these
+    "x1": xx0,
+    "y1": yy0,
+    "x2": xx,
+    "y2": yy,
    }).appendTo("#thecanvas");
   }
 
@@ -481,6 +515,11 @@ function drawgraph(){
    }
   } // end if showlabels
 
+ }
+
+ // add arrows to the lines if requested:
+ if (showarrows){
+  addArrows();
  }
 
  // finally, scroll the info div to the end, in case we appended anything
@@ -771,4 +810,47 @@ function lineMidPoint(start,end){
  var midX = (start[0]+end[0])*0.5;
  var midY = (start[1]+end[1])*0.5;
  return [midX,midY];
+}
+
+/* ********************************************************************************************* */
+/* ********************************************************************************************* */
+/* ********************************************************************************************* */
+function addArrows(){
+ // Adds arrows to all lines in the drawn SVG graph
+ // "Faded" ones are styled according to the fade style
+ var lineWidth = parseFloat($("#thelinewidth").val());
+ var canvaswidth = $('#thecanvas').width();
+ var canvasheight = $('#thecanvas').height();
+ var offsetX = parseFloat($("#theoffsetX").val()); // pixels, but allow float
+ var offsetY = parseFloat($("#theoffsetY").val()); // pixels, but allow float
+ var centreX = Math.round(canvaswidth/2) + offsetX;
+ var centreY = Math.round(canvasheight/2) + offsetY;
+ var useScale = 100; // this needs to be a global variable IE. put it on the "all controls" panel
+ var arrowSize = 3; // this needs to be a user control
+
+ for (var i=0;i<nodeIndex.length;i++){
+  // for every node, add an arrow to the line between it and its parent
+  var thisnode = nodeIndex[i];
+  var parentnode = nodeParent[i];
+  if (thisnode>=0 & parentnode>=0 & !nodeIgnore[thisnode]){ // skip it if this node has no parent, or the node is faded
+   var arrowPosition = lineMidPoint(nodePosition[thisnode],nodePosition[parentnode]);
+
+   // transform coords according to the overall scaling:
+   var xx1 = centreX + useScale*nodePosition[thisnode][0];
+   var yy1 = canvasheight - (centreY + useScale*nodePosition[thisnode][1]);
+   var xx2 = centreX + useScale*arrowPosition[0];
+   var yy2 = canvasheight - (centreY + useScale*arrowPosition[1]);
+   $(document.createElementNS("http://www.w3.org/2000/svg","line")).attr({
+    "marker-end": "url(#rayarrow)",
+    "x1": xx1,
+    "y1": yy1,
+    "x2": xx2,
+    "y2": yy2,
+    "stroke": "none",
+    "stroke-width": arrowSize,
+   }).appendTo("#thecanvas");
+  } // end check that node has a parent
+ } // end loop over nodes
+ return 1;
+
 }
