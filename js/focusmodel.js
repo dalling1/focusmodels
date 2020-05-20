@@ -843,6 +843,7 @@ function addArrows(){
  var useScale = 100; // this needs to be a global variable IE. put it on the "all controls" panel
 // var arrowSize = parseFloat($("#thearrowsize").val());
  var arrowOffset = parseFloat($("#thearrowoffset").val()); // pixels, but allow float
+ var reversedarrows = $("#reversedarrowsbutton").prop("checked");
  var pi = Math.PI;
 
  for (var i=0;i<nodeIndex.length;i++){
@@ -877,6 +878,7 @@ function addArrows(){
    var cx = xx2;
    var cy = yy2;
    var rotangle = -90+Math.atan((yy3-yy1)/(xx3-xx1))*(180/pi);
+   if (reversedarrows) rotangle+=180;
    document.getElementById('thecanvas').insertAdjacentHTML('beforeend','<use x="'+cx+'" y="'+cy+'" width="10" height="10" xlink:href="#rayarrowbase" transform="rotate('+rotangle+' '+cx+' '+cy+')" />');
 
   } // end check that node has a parent
