@@ -19,11 +19,9 @@ function setup(graphtype){
  nodesizeOutput.value = thenodesize.value;
  linewidthOutput.value = thelinewidth.value;
  // "more controls":
- if (graphtype=="monoray"){
-  thearrowsizeOutput.value = thearrowsize.value;
-  thearrowoffsetOutput.value = thearrowoffset.value;
-  thearrowratioOutput.value = thearrowratio.value;
- }
+ thearrowsizeOutput.value = thearrowsize.value;
+ thearrowoffsetOutput.value = thearrowoffset.value;
+ thearrowratioOutput.value = thearrowratio.value;
 
  // change the canvas cursor to "alias" when pressing control (for picking automorphism nodes)
  $(document).on('keydown', function (event) {
@@ -202,6 +200,7 @@ function wipeCanvas(){
   <path d="M0,0 L3,3 L0,6" stroke-width="0.1" fill="none" stroke="'+edgeColour+'" />\
  </marker>\
  <path id="rayarrowbase" d="M-'+arrowSize+',0 L0,'+(arrowSize*arrowratio)+' L'+arrowSize+',0'+(filledarrows?' z" fill="'+edgeColour+'"':'"')+' stroke-width="0.5" fill="none" stroke="'+edgeColour+'" />\
+ <path id="rayarrowbasefaded" d="M-'+arrowSize+',0 L0,'+(arrowSize*arrowratio)+' L'+arrowSize+',0'+(filledarrows?' z" fill="'+edgeColour+'55"':'"')+' stroke-width="0.5" fill="none" stroke="'+edgeColour+'55" />\
 </defs>');
  return 1;
 }
@@ -841,18 +840,15 @@ function addArrows(){
 
  for (var i=0;i<nodeIndex.length;i++){
   // for every node, add an arrow to the line between it and its parent
-  var thisnode = nodeIndex[i];
-  var parentnode = nodeParent[i];
-  if (thisnode>=0 & parentnode>=0 & !nodeIgnore[thisnode]){ // skip it if this node has no parent, or the node is faded
-   var arrowPosition = lineMidPoint(nodePosition[thisnode],nodePosition[parentnode],arrowOffset);
+  var fromNode = nodeParent[i];
+  var toNode = nodeIndex[i];
+  if (fromNode>=0 & toNode>=0 & !nodeIgnore[fromNode]){ // skip it if this node has no parent, or the node is faded
+   var arrowPosition = lineMidPoint(nodePosition[fromNode],nodePosition[toNode],arrowOffset);
 
-   // transform coords according to the overall scaling:
-   // child position:
-   var childPos = canvasScale(nodePosition[thisnode]);
-   // arrow position:
-   var arrowPos = canvasScale(arrowPosition);
-   // parent position:
-   var parentPos = canvasScale(nodePosition[parentnode]);
+   // "from" node position:
+   var fromPosition = canvasScale(nodePosition[fromNode]);
+   // "to" node position:
+   var toPosition = canvasScale(nodePosition[toNode]);
 
 /*
    $(document.createElementNS("http://www.w3.org/2000/svg","line")).attr({
@@ -866,11 +862,15 @@ function addArrows(){
    }).appendTo("#thecanvas");
 */
    // use the <use> element instead (we need to do our own rotation, though):
-   var cx = arrowPos[0];
-   var cy = arrowPos[1];
-   var rotangle = -90+Math.atan((parentPos[1]-childPos[1])/(parentPos[0]-childPos[0]))*(180/pi);
+   var c = canvasScale(arrowPosition);
+   var cx = c[0];
+   var cy = c[1];
+   // Set the angle of the arrow (by default the arrows point straight down the page, since that is
+   // the positive Y direction on the canvas; -90deg moves the angle origin to the right on the web page)
+   // (we *could* redefine the arrows so that this 90deg shift was not necessary)
+   var rotangle = -90+Math.atan2(toPosition[1]-fromPosition[1], toPosition[0]-fromPosition[0])*(180/pi);
    if (reversedarrows) rotangle+=180;
-   document.getElementById('thecanvas').insertAdjacentHTML('beforeend','<use x="'+cx+'" y="'+cy+'" width="10" height="10" xlink:href="#rayarrowbase" transform="rotate('+rotangle+' '+cx+' '+cy+')" />');
+   document.getElementById('thecanvas').insertAdjacentHTML('beforeend','<use x="'+cx+'" y="'+cy+'" width="10" height="10" xlink:href="#rayarrowbase'+(nodeIgnore[fromNode]|nodeIgnore[toNode]?'faded':'')+'" transform="rotate('+rotangle+' '+cx+' '+cy+')" />');
 
   } // end check that node has a parent
  } // end loop over nodes

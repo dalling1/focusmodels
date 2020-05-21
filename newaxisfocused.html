@@ -84,7 +84,8 @@
    <label for="infobutton">Print info <input type="checkbox" id="infobutton" /></label><br/>
 -->
 
-  <label for="fadeleavesbutton">Fade leaf nodes? <input type="checkbox" id="fadeleavesbutton" onclick="if (newaxismodel(V0)) drawgraph();" /></label>
+  <label for="fadeleavesbutton">Fade leaf nodes? <input type="checkbox" id="fadeleavesbutton" onclick="if (newaxismodel(V0)) drawgraph();" /></label><br/>
+  <label for="showarrowsbutton">Show edge arrows? <input type="checkbox" id="showarrowsbutton" onclick="if (newaxismodel(V0)) drawgraph();" /></label>
 
   <div class="somebuttons">
    <button id="runbutton" onclick="if (newaxismodel(V0)) drawgraph();">DRAW</button><br/>
@@ -143,7 +144,28 @@
  <div id="theframe" class="showgraph" style="position:relative;">
   <svg id="thecanvas" style="width: 100%; height: 100%;" onclick="canvasClick(evt);"></svg>
   <div id="extracontrols">
-    More controls will go here.
+   <p style="display:none;">More controls can go here:</p>
+   <span title="Click to reset" style="cursor:pointer;" onclick="thearrowsize.value=3; thearrowsizeOutput.value = thearrowsize.value; if (newaxismodel(V0)) drawgraph();">Arrow size:</span>
+   <input type="range" style="width:80px;" min="0" max="20" step="1" value="3" id="thearrowsize" oninput="thearrowsizeOutput.value = thearrowsize.value; if (newaxismodel(V0)) drawgraph();" />
+   <output style="width:20px;vertical-align:middle;" name="thearrowsizeOutputName" id="thearrowsizeOutput">999</output><br/>
+
+   <span title="Click to reset" style="cursor:pointer;" onclick="thearrowratio.value=2.0; thearrowratioOutput.value = parseFloat(thearrowratio.value).toFixed(2); if (newaxismodel(V0)) drawgraph();">Arrow ratio:</span>
+   <input type="range" style="width:80px;" min="0.5" max="3" step="0.05" value="2.0" id="thearrowratio" oninput="thearrowratioOutput.value = parseFloat(thearrowratio.value).toFixed(2); if (newaxismodel(V0)) drawgraph();" />
+   <output style="width:20px;vertical-align:middle;" name="thearrowratioOutputName" id="thearrowratioOutput">999</output><br/>
+
+   <span title="Click to reset" style="cursor:pointer;" onclick="thearrowoffset.value=0.3; thearrowoffsetOutput.value = parseFloat(thearrowoffset.value).toFixed(2); if (newaxismodel(V0)) drawgraph();">Arrow offset:</span>
+   <input type="range" style="width:80px;" min="0.1" max="0.9" step="0.05" value="0.3" id="thearrowoffset" oninput="thearrowoffsetOutput.value = parseFloat(thearrowoffset.value).toFixed(2); if (newaxismodel(V0)) drawgraph();" />
+   <output style="width:20px;vertical-align:middle;" name="thearrowoffsetOutputName" id="thearrowoffsetOutput">999</output><br/>
+
+   <label for="filledarrowsbutton">Filled arrows? <input type="checkbox" id="filledarrowsbutton" checked="checked" onclick="if (newaxismodel(V0)) drawgraph();" /></label><br/>
+   <label for="reversedarrowsbutton">Reversed arrows? <input type="checkbox" id="reversedarrowsbutton" onclick="if (newaxismodel(V0)) drawgraph();" /></label><br/>
+
+<!--
+   <div class="somebuttons">
+    <button id="runmorebutton" onclick="if (newaxismodel(V0)) drawgraph();">DRAW</button>
+   </div>
+-->
+
   </div>
  </div>
 
