@@ -836,13 +836,15 @@ function addArrows(){
 // var arrowSize = parseFloat($("#thearrowsize").val()); // only needed if we make arrows with SVG lines (currently using <use> instances)
  var arrowOffset = parseFloat($("#thearrowoffset").val()); // pixels, but allow float
  var reversedarrows = $("#reversedarrowsbutton").prop("checked");
+ var fadedarrows = $("#fadedarrowsbutton").prop("checked");
+console.log("fadedarrows: "+fadedarrows);
  var pi = Math.PI;
 
  for (var i=0;i<nodeIndex.length;i++){
   // for every node, add an arrow to the line between it and its parent
   var fromNode = nodeParent[i];
   var toNode = nodeIndex[i];
-  if (fromNode>=0 & toNode>=0 & !nodeIgnore[fromNode]){ // skip it if this node has no parent, or the node is faded
+  if (fromNode>=0 & toNode>=0 & (fadedarrows | (!nodeIgnore[toNode] & !nodeIgnore[fromNode]))){ // skip it if this node has no parent, or the node is faded
    var arrowPosition = lineMidPoint(nodePosition[fromNode],nodePosition[toNode],arrowOffset);
 
    // "from" node position:
