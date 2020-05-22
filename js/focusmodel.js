@@ -22,6 +22,9 @@ function setup(graphtype){
  thearrowsizeOutput.value = thearrowsize.value;
  thearrowoffsetOutput.value = thearrowoffset.value;
  thearrowratioOutput.value = thearrowratio.value;
+// axislinewidthOutput.value = theaxislinewidth.value;
+ axislinewidthOutput.value = thelinewidth.value; // on load, set the axis line width to the normal line width
+ theaxislinewidth.value = thelinewidth.value;
 
  // change the canvas cursor to "alias" when pressing control (for picking automorphism nodes)
  $(document).on('keydown', function (event) {
@@ -375,6 +378,7 @@ function drawgraph(){
  // pen-related variables:
  var nodeRadius = parseFloat($("#thenodesize").val());
  var lineWidth = parseFloat($("#thelinewidth").val());
+ var axisLineWidth = parseFloat($("#theaxislinewidth").val());
  var showaxes = $("#axesbutton").prop('checked');
  var plainedges = $("#plainedgesbutton").prop('checked'); // plain=all the same colour; not plain=coloured by edge type
  // canvas-related variables:
@@ -466,8 +470,9 @@ function drawgraph(){
 
    $(document.createElementNS("http://www.w3.org/2000/svg","line")).attr({
     "stroke": (nodeIgnore[vv]?(ignoreEdgeColour.length?ignoreEdgeColour:"none"):thisEdgeColour),
-    "stroke-dasharray": (nodeIgnore[vv]?ignoreDash:"none"),
-    "stroke-width": (nodeOnAxis[vv]?lineWidth:lineWidth), // later we might add a "on-axis edge width" control
+//old    "stroke-dasharray": (nodeIgnore[vv]?ignoreDash:"none"),
+    "stroke-dasharray": (nodeIgnore[vv]?(nodeOnAxis[vv]?Math.max(ignoreDash,axisLineWidth*0.3*ignoreDash):ignoreDash):"none"),
+    "stroke-width": (nodeOnAxis[vv]?axisLineWidth:lineWidth),
     "stroke-linecap": "round",
 //    "marker-end": "url(#axesarrow)", // we probably don't want these
     "x1": position0[0],
@@ -881,10 +886,9 @@ console.log("fadedarrows: "+fadedarrows);
    var c = canvasScale(arrowPosition);
    var cx = c[0];
    var cy = c[1];
-   // Set the angle of the arrow (by default the arrows point straight down the page, since that is
-   // the positive Y direction on the canvas; -90deg moves the angle origin to the right on the web page)
-   // (we *could* redefine the arrows so that this 90deg shift was not necessary)
-   var rotangle = -90+Math.atan2(toPosition[1]-fromPosition[1], toPosition[0]-fromPosition[0])*(180/pi);
+   // Calculate the rotation of the arrow (the orientation of arrows is such that they point straight down the page
+   // ie. in the positive Y direction on the canvas; -90deg moves the angle origin to the right on the web page)
+   var rotangle = Math.atan2(toPosition[1]-fromPosition[1], toPosition[0]-fromPosition[0])*(180/pi) - 90; // in degrees
    if (reversedarrows) rotangle+=180;
    document.getElementById('thecanvas').insertAdjacentHTML('beforeend','<use x="'+cx+'" y="'+cy+'" width="10" height="10" xlink:href="#rayarrowbase'+(nodeIgnore[fromNode]|nodeIgnore[toNode]?'faded':'')+'" transform="rotate('+rotangle+' '+cx+' '+cy+')" />');
 
