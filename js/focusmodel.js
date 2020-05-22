@@ -472,7 +472,7 @@ function drawgraph(){
     "stroke": (nodeIgnore[vv]?(ignoreEdgeColour.length?ignoreEdgeColour:"none"):thisEdgeColour),
 //old    "stroke-dasharray": (nodeIgnore[vv]?ignoreDash:"none"),
     "stroke-dasharray": (nodeIgnore[vv]?(nodeOnAxis[vv]?Math.max(ignoreDash,axisLineWidth*0.3*ignoreDash):ignoreDash):"none"),
-    "stroke-width": (nodeOnAxis[vv]?axisLineWidth:lineWidth),
+    "stroke-width": (nodeOnAxis[vv]?Math.max(axisLineWidth,lineWidth):lineWidth),
     "stroke-linecap": "round",
 //    "marker-end": "url(#axesarrow)", // we probably don't want these
     "x1": position0[0],
