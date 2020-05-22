@@ -587,6 +587,7 @@ function bounds() {
  var maxY = Number.NEGATIVE_INFINITY;
 
  var showlabels = parseInt($("#whichlabel").val());
+ var showarrows = $("#showarrowsbutton").prop("checked");
 
  var svgchildren=document.getElementById("thecanvas").children;
  for (var i=0;i<svgchildren.length;i++){
@@ -601,10 +602,22 @@ function bounds() {
     if ((circleX+circleW)>maxX) maxX=(circleX+circleW);
     if ((circleY)<minY)         minY=(circleY);
     if ((circleY+circleH)>maxY) maxY=(circleY+circleH);
-
     break;
    case "text": // label
     if (showlabels>0){
+     var bbox = getTransformedBBox(svgchildren[i]);
+     var textX = parseFloat(bbox.x); // left
+     var textY = parseFloat(bbox.y); // top (on screen)
+     var textW = parseFloat(bbox.width);
+     var textH = parseFloat(bbox.height);
+     if ((textX)<minX)       minX=(textX);
+     if ((textX+textW)>maxX) maxX=(textX+textW);
+     if ((textY)<minY)       minY=(textY);
+     if ((textY+textH)>maxY) maxY=(textY+textH);
+    }
+    break;
+   case "use": // arrow
+    if (showarrows>0){
      var bbox = getTransformedBBox(svgchildren[i]);
      var textX = parseFloat(bbox.x); // left
      var textY = parseFloat(bbox.y); // top (on screen)
