@@ -814,10 +814,11 @@ function canvasClick(evt){
 function showallcontrols(){
  // toggles the extra control panel, an animation suggesting that it slides out
  var ex = $("#extracontrols");
- if (parseFloat(ex.css("padding-left"))>2){
-  ex.animate({width:"5px",padding:"2px"},100);
+// if (parseFloat(ex.css("padding-left"))>7){
+ if (parseFloat(ex.css("width"))>200){
+  ex.animate({width:"20px"},100);
  } else {
-  ex.animate({width:"250px",padding:"10px"},100);
+  ex.animate({width:"250px"},100);
  }
 }
 

@@ -39,11 +39,11 @@ input, output {display: inline-block; vertical-align: middle;}
 .navshadow {pointer-events:none; height:26px; width:73%; position:absolute; bottom:-2px; right:-2px; box-shadow: 10px 10px 7px #99a;}
 
 #extracontrols {
- width:5px;
- height:500px;
- overflow:hidden;
+ width: 20px;
+ height: 500px;
+ overflow: hidden;
  box-sizing: border-box;
- padding:2px;
+ padding: 10px;
  border-radius:4px 0 0 2px;
  border:2px solid #bbb;
  border-right: none;
@@ -57,4 +57,15 @@ input, output {display: inline-block; vertical-align: middle;}
  z-index:1;
  position:absolute;
  color: #ed0;
+ transition: all ease 0.41s;
 }
+
+/* this breaks once the "show all controls" button has been pressed (it puts in-line CSS on the element): */
+/* (but leave it for now until we sort something out) */
+#extracontrols:hover {
+ width: 250px;
+ padding: 10px;
+ transition: all ease 0.41s;
+}
+
+.extracontrolpanel {display:inline-block; width:230px;}
