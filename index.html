@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <head>
+ <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
  <title>Focus Models</title>
  <!--
    Written in 2019-2020 by David Allingham  //  David.Allingham[at]newcastle.edu.au
@@ -27,9 +28,11 @@
   body {
    background: #fcfcfc;
    font-family: "Montserrat", sans-serif;
+   width: 100%;
   }
   .banner {
-   width: 100vw;
+   width: 100%;
+   margin: 0 auto;
    height: 10vh;
    overflow: hidden;
    text-align: center;
@@ -39,10 +42,14 @@
    font-family: "Patua One", cursive;
   }
   .content {
-   width: calc(90vw + 60px);
-   min-height: calc(90vh - 51px);
+   /* width: calc(90vw + 50px); */
+   width: 95vw;
+   margin: 0 auto;
+   /* min-height: calc(90vh - 51px); */
    position: relative;
    margin: 0 auto;
+   padding-bottom: 10px;
+   overflow: hidden; /* causes the height to be set to that of the (floating) contents */
   }
   .content a {
    text-decoration: none;
@@ -50,11 +57,11 @@
   }
   .onetool {
    width: 22vw;
-   height: 60vh;
+   height: 50vh;
    float: left;
    box-shadow: 1px 1px 2px #777;
    background: #fff;
-   margin: 0 10px;
+   margin: 10px;
    text-align: center;
   }
   .onetool:hover {
@@ -80,6 +87,7 @@
   }
 
   .credits {
+   clear: both;
    box-sizing: border-box;
    border-top: 1px solid #792a26;
    color: #aaa;
@@ -88,14 +96,14 @@
    height: 36px;
    overflow: hidden;
    background: #ddd;
-   width: 100vw;
+   width: 100%;
    bottom: 0;
   }
   .credits a {
    color: inherit;
   }
 
- @media only screen and ( max-width: 1000px ){
+ @media only screen and ( max-width: 1300px ){
   .onetool {
    float: none;
    width: 80vw;
@@ -144,6 +152,11 @@
    <p>The graph is drawn with vertices hanging from an axis.  This corresponds to translational automorphisms.</p>
   </div>
 
+  <div class="onetool">
+   <h2><a href="monochromaticray.html">Monochromatic ray</a></h2>
+   <div class="imagebox"><a href="monochromaticray.html"><img src="graph-monoray.png" alt="monochromatic ray graph" /></a></div>
+   <p>The graph is drawn with vertices hanging from an axis.  This corresponds to translational automorphisms.</p>
+  </div>
  </div>
 
  <div class="credits">
