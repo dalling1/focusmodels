@@ -187,8 +187,8 @@ function newaxismodel(initialVertex){
 
  // Finally, add faded/dashed extensions of the axis, to show that it continues:
  // the axis end nodes are the root node and the node with address=longestname.substring(0,width-1)
- var leftEndNode = nodeAddress.indexOf('');
- var rightEndNode = nodeAddress.indexOf(longestname.substring(0,width-1));
+ var leftEndNode = 0; // use index instead of address, in case an automorphism has moved the root node off the drawn region of the graph
+ var rightEndNode = width-1;
  // add these phantoms to the node list so that they can be drawn by drawgraph()
  // (but do it here at the end so that the index numbering doesn't interrupt the regular nodes)
  // LEFT:
