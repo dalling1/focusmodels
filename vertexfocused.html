@@ -108,7 +108,7 @@
   <input type="range" style="width:100px;" min="0" max="20" step="1" value="3" id="thenodesize" oninput="nodesizeOutput.value = thenodesize.value; if (vertexmodel(V0)) drawgraph();" />
   <output style="width:20px;vertical-align:middle;" name="nodesizeOutputName" id="nodesizeOutput">999</output><br/>
 
-  <span title="Click to reset" style="cursor:pointer;" onclick="thelinewidth.value=0.2; linewidthOutput.value = thelinewidth.value; if (edgemodel()) drawgraph();">Line width:</span>
+  <span title="Click to reset" style="cursor:pointer;" onclick="thelinewidth.value=0.2; linewidthOutput.value = thelinewidth.value; if (vertexmodel(V0)) drawgraph();">Line width:</span>
   <input type="range" style="width:100px;" min="0" max="4" step="0.1" value="0.2" id="thelinewidth" oninput="linewidthOutput.value = thelinewidth.value; if (vertexmodel(V0)) drawgraph();" />
   <output style="width:20px;vertical-align:middle;" name="linewidthOutputName" id="linewidthOutput">999</output><br/>
 
@@ -158,7 +158,7 @@
     <label for="reversedarrowsbutton">Reversed arrows? <input type="checkbox" id="reversedarrowsbutton" onclick="if (vertexmodel(V0)) drawgraph();" /></label><br/>
     <label for="fadedarrowsbutton">Show arrows on faded edges? <input type="checkbox" id="fadedarrowsbutton" checked="checked" onclick="if (vertexmodel(V0)) drawgraph();" /></label><br/>
 
-    <span title="Click to reset" style="cursor:pointer;" onclick="theaxislinewidth.value=0.2; axislinewidthOutput.value = theaxislinewidth.value; if (edgemodel()) drawgraph();">Axis line width:</span>
+    <span title="Click to reset" style="cursor:pointer;" onclick="theaxislinewidth.value=0.2; axislinewidthOutput.value = theaxislinewidth.value; if (vertexmodel(V0)) drawgraph();">Axis line width:</span>
     <input type="range" style="width:100px;" min="0" max="10" step="0.1" value="0.2" id="theaxislinewidth" oninput="axislinewidthOutput.value = theaxislinewidth.value; if (vertexmodel(V0)) drawgraph();" />
     <output style="width:20px;vertical-align:middle;" name="axislinewidthOutputName" id="axislinewidthOutput">999</output><br/>
    </div>

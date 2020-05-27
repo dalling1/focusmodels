@@ -863,6 +863,11 @@ console.log("fadedarrows: "+fadedarrows);
   // for every node, add an arrow to the line between it and its parent
   var fromNode = nodeParent[i];
   var toNode = nodeIndex[i];
+  if (nodeAddress[i]=="LL"|nodeAddress[nodeParent[i]]=="LL"){
+   fromNode = nodeIndex[i];
+   toNode = nodeParent[i];
+  }
+
   if (fromNode>=0 & toNode>=0 & (fadedarrows | (!nodeIgnore[toNode] & !nodeIgnore[fromNode]))){ // skip it if this node has no parent, or the node is faded
    var arrowPosition = lineMidPoint(nodePosition[fromNode],nodePosition[toNode],arrowOffset);
 
