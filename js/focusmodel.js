@@ -846,17 +846,17 @@ function addArrows(){
  // Adds arrows to all lines in the drawn SVG graph
  // "Faded" ones are styled according to the fade style
  var lineWidth = parseFloat($("#thelinewidth").val());
+ var axisLineWidth = parseFloat($("#theaxislinewidth").val());
  var canvaswidth = $('#thecanvas').width();
  var canvasheight = $('#thecanvas').height();
  var offsetX = parseFloat($("#theoffsetX").val()); // pixels, but allow float
  var offsetY = parseFloat($("#theoffsetY").val()); // pixels, but allow float
  var centreX = Math.round(canvaswidth/2) + offsetX;
  var centreY = Math.round(canvasheight/2) + offsetY;
-// var arrowSize = parseFloat($("#thearrowsize").val()); // only needed if we make arrows with SVG lines (currently using <use> instances)
+ var arrowSize = parseFloat($("#thearrowsize").val()); // only needed if we make arrows with SVG lines (currently using <use> instances)
  var arrowOffset = parseFloat($("#thearrowoffset").val()); // pixels, but allow float
  var reversedarrows = $("#reversedarrowsbutton").prop("checked");
  var fadedarrows = $("#fadedarrowsbutton").prop("checked");
-console.log("fadedarrows: "+fadedarrows);
  var pi = Math.PI;
 
  for (var i=0;i<nodeIndex.length;i++){
@@ -895,8 +895,14 @@ console.log("fadedarrows: "+fadedarrows);
    // ie. in the positive Y direction on the canvas; -90deg moves the angle origin to the right on the web page)
    var rotangle = Math.atan2(toPosition[1]-fromPosition[1], toPosition[0]-fromPosition[0])*(180/pi) - 90; // in degrees
    if (reversedarrows) rotangle+=180;
-   document.getElementById('thecanvas').insertAdjacentHTML('beforeend','<use x="'+cx+'" y="'+cy+'" width="10" height="10" xlink:href="#rayarrowbase'+(nodeIgnore[fromNode]|nodeIgnore[toNode]?'faded':'')+'" transform="rotate('+rotangle+' '+cx+' '+cy+')" />');
-
+   if (nodeOnAxis[toNode]){ // scale arrows if the axis line is thicker than normal lines
+    var thisscale = Math.pow(Math.max(1,axisLineWidth/lineWidth),0.4);
+    cx /= thisscale;
+    cy /= thisscale;
+    document.getElementById('thecanvas').insertAdjacentHTML('beforeend','<use x="'+cx+'" y="'+cy+'" width="10" height="10" xlink:href="#rayarrowbase'+(nodeIgnore[fromNode]|nodeIgnore[toNode]?'faded':'')+'" transform="'+(nodeOnAxis[toNode]?'scale('+thisscale+'),':'')+'rotate('+rotangle+' '+cx+' '+cy+')" />');
+   } else {
+    document.getElementById('thecanvas').insertAdjacentHTML('beforeend','<use x="'+cx+'" y="'+cy+'" width="10" height="10" xlink:href="#rayarrowbase'+(nodeIgnore[fromNode]|nodeIgnore[toNode]?'faded':'')+'" transform="rotate('+rotangle+' '+cx+' '+cy+')" />');
+   }
   } // end check that node has a parent
  } // end loop over nodes
  return 1;
