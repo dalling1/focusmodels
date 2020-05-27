@@ -103,11 +103,18 @@
    color: inherit;
   }
 
+ /* for windows 1000 to 1300 pixels wide, show two panels across the page */
  @media only screen and ( max-width: 1300px ){
+  .onetool {
+   width: 45vw;
+  }
+ }
+
+ /* for windows 1000 pixels wide or less, show only one panel across the page */
+ @media only screen and ( max-width: 800px ){
   .onetool {
    float: none;
    width: 80vw;
-   margin: 0 auto;
   }
  }
 
