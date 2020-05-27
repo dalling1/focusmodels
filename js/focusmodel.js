@@ -68,6 +68,12 @@ function setup(graphtype){
    // no? create it *once*
    createNodeLabel();
   }
+  if (typeof midpointLabel == 'object'){ // check if the custom edge label array exists
+   // yes? then do nothing
+  } else {
+   // no? create it *once*
+   createMidpointLabel();
+  }
   drawgraph();
  } else {
   alert("Graph set-up failed");
@@ -81,9 +87,18 @@ function setup(graphtype){
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
 function createNodeLabel(){
- // make enough blank node labels for every node
+ // make enough blank labels for every node
  nodeLabel = new Array(nodeIndex.length);
  nodeLabel.fill("");
+}
+
+/* ********************************************************************************************* */
+/* ********************************************************************************************* */
+/* ********************************************************************************************* */
+function createMidpointLabel(){
+ // make enough blank labels for every edge
+ midpointLabel = new Array(midpointPosition.length);
+ midpointLabel.fill("");
 }
 
 
@@ -394,6 +409,22 @@ function drawgraph(){
  var centreX = Math.round(canvaswidth/2) + offsetX;
  var centreY = Math.round(canvasheight/2) + offsetY;
 
+ // Test the edge midpoints by drawing yellow dots on them:
+ var midpointtest = false;
+ if (midpointtest){
+  for (var i=0;i<midpointPosition.length;i++){
+   if (!(isNaN(midpointPosition[i][0]) | isNaN(midpointPosition[i][1]))){
+    $(document.createElementNS("http://www.w3.org/2000/svg","circle")).attr({
+     "fill": "#ff0",
+     "stroke": "none",
+     "r": 5,
+     "cx": midpointPosition[i][0],
+     "cy": midpointPosition[i][1],
+    }).appendTo("#thecanvas");
+   }
+  }
+ }
+
  // draw the axes, if requested:
  if (showaxes){
   $(document.createElementNS("http://www.w3.org/2000/svg","line")).attr({
@@ -525,7 +556,32 @@ function drawgraph(){
    }
   } // end if showlabels
 
- }
+
+ } // end loop over nodes
+
+ var showedgelabels = true; // make this a user control
+ if (showedgelabels){
+  for (var i=0;i<midpointLabel.length;i++){
+   thislabel = midpointLabel[i]+"";
+
+   if (thislabel.length>0){ // don't create (empty) labels with blank text
+    var newText = document.createElementNS("http://www.w3.org/2000/svg","text");
+    $(newText).attr({
+     "fill": labelColour,
+     "font-size": fontSize,
+     "x": midpointPosition[i][0] + labelOffsetX,
+     "y": midpointPosition[i][1] + labelOffsetY,
+     "transform": "rotate("+textAngle+","+(midpointPosition[i][0]+labelOffsetX)+","+(midpointPosition[i][1]+labelOffsetY)+")",
+     "style": "dominant-baseline:middle; text-anchor: middle;",
+    });
+    // the text node has been created, so insert the node's label
+    var textNode = document.createTextNode(thislabel);
+    newText.appendChild(textNode);
+    document.getElementById("thecanvas").appendChild(newText);
+   }
+
+  } // end loop over edgelabels
+ } // end showedgelabels
 
  // add arrows to the lines if requested:
  if (showarrows){
@@ -720,7 +776,7 @@ function countOnAxis(){
 /* ********************************************************************************************* */
 function nearestNode(x,y,maxDistance=-1){
  // Returns the closest node to the provided x and y coordinates, within a range of maxDistance
- // If maxDistance is negative, it is ignored (the nearest node is returned, at any distance from (x,y))
+ // If maxDistance is negative, it is ignored (the nearest node is then returned, at *any* distance from (x,y))
  var thenode = -1;
  var dist = 10000000;
  for (var i=0;i<nodeScreenPosition.length;i++){
@@ -732,6 +788,28 @@ function nearestNode(x,y,maxDistance=-1){
  }
  if (thenode>=0){
   return thenode;
+ } else {
+  return null;
+ }
+}
+
+/* ********************************************************************************************* */
+/* ********************************************************************************************* */
+/* ********************************************************************************************* */
+function nearestMidpoint(x,y,maxDistance=-1){
+ // Returns the closest edge midpoint to the provided x and y coordinates, within a range of maxDistance
+ // If maxDistance is negative, it is ignored (the nearest midpoint then is returned, at *any* distance from (x,y))
+ var themidpoint = -1;
+ var dist = 10000000;
+ for (var i=0;i<midpointPosition.length;i++){
+  var thisdist = Math.pow(Math.pow(midpointPosition[i][0] - x,2) + Math.pow(midpointPosition[i][1] - y,2),0.5);
+  if (thisdist<dist & (thisdist<=maxDistance | maxDistance<0)){
+   dist = thisdist;
+   themidpoint = i;
+  }
+ }
+ if (themidpoint>=0){
+  return themidpoint;
  } else {
   return null;
  }
@@ -754,29 +832,22 @@ function canvasClick(evt){
   var dim = e.parentElement.getBoundingClientRect();
  }
 
-/*
- if (evt.shiftKey) {
-  alert("Clicked while pressing SHIFT key");
- }
-*/
-
  var x = Math.round(evt.clientX - dim.left);
  var y = Math.round(evt.clientY - dim.top);
 // console.log("CLICKED x: "+x+" y:"+y);
 
  var clickRadius = 100; // effective range of clicks: nodes further than this will not, in effect, be clicked
- var usenode = nearestNode(x,y,clickRadius);
- if (usenode === null){
-  //  No node is within a distance of clickRadius
-  if (debug) console.log("Click was too far from any node to be used");
- } else {
 
-  if (evt.ctrlKey) {
+ if (evt.ctrlKey) {
+  var usenode = nearestNode(x,y,clickRadius);
+  if (usenode === null){
+   //  No node is within a distance of clickRadius
+   if (debug) console.log("Click was too far from any node to be used");
+  } else {
 
    //
    // CTRL-click: set the automorphism nodes
    //
-
 
    var addr = nodeAddress[usenode];
    if (addr.length==0) addr = "0";
@@ -788,8 +859,50 @@ function canvasClick(evt){
    $(changeField).removeClass("clickentry");
    checkValidAddress(changeField);
 //   $(changeField).removeClass("invalid");
+  } // end check for null node
 
 
+ } else if (evt.shiftKey) {
+//  alert("Clicked while pressing SHIFT key");
+
+  //
+  // SHIFT-click: set edge labels
+  //
+
+  var usemidpoint = nearestMidpoint(x,y,clickRadius);
+  if (usemidpoint === null){
+   //  No midpoint is within a distance of clickRadius
+   if (debug) console.log("Click was too far from any node to be used");
+  } else {
+
+   //
+   // set an edge's midpoint custom label
+   //
+//   var currentaddress = midpointLabel[usemidpoint];
+//   if (currentaddress.length==0) currentaddress="\u{d8}";
+   var currentlabel = midpointLabel[usemidpoint];
+   // request the new label; give the current custom label (if any) as default
+   newlabel = prompt("Set midpoint label");
+   if (newlabel===null){
+    // don't change anything if the user clicked cancel
+   } else {
+    midpointLabel[usemidpoint] = newlabel;
+    drawgraph();
+   }
+  } // end check for null node
+
+
+
+
+
+
+
+
+ } else {
+  var usenode = nearestNode(x,y,clickRadius);
+  if (usenode === null){
+   //  No node is within a distance of clickRadius
+   if (debug) console.log("Click was too far from any node to be used");
   } else {
 
    //
@@ -806,8 +919,8 @@ function canvasClick(evt){
     nodeLabel[usenode] = newlabel;
     drawgraph();
    }
+  } // end check for null node
 
-  }
  }
  return 1;
 }
