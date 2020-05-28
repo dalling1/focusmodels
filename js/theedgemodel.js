@@ -198,7 +198,6 @@ console.log('Nlevels = '+Nlevels);
    fromNode = nodeIndex[i];
    toNode = nodeParent[i];
   }
-
   if (fromNode>=0 & toNode>=0){ // skip it if this node has no parent; faded edges can be labelled
    midpointPosition[i] = canvasScale(lineMidPoint(nodePosition[fromNode],nodePosition[toNode],0.5));
   } else {

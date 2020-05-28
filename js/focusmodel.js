@@ -27,16 +27,22 @@ function setup(graphtype){
  theaxislinewidth.value = thelinewidth.value;
 
  // change the canvas cursor to "alias" when pressing control (for picking automorphism nodes)
- $(document).on('keydown', function (event) {
-  if (event.key=="Control") {
-   $('#thecanvas').css('cursor', 'alias');
-   $('#ctrlnote').addClass("redbg");
+ $(document).on("keydown", function (event) {
+//  if (event.key=="Control") {
+  if (event.ctrlKey) {
+   $("#thecanvas").css("cursor", "alias");
+   $("#ctrlnote").addClass("redbg");
+//  } else if (event.key=="Shift") {
+  } else if (event.shiftKey) {
+   $("#thecanvas").css("cursor", "text");
+   $(".midptlabel").css("display","inline");
   }
  });
  // otherwise, use the array (for selecting nodes whose custom label to change)
- $(document).on('keyup', function (event) {
-  $('#thecanvas').css('cursor', 'pointer');
-   $('#ctrlnote').removeClass("redbg");
+ $(document).on("keyup", function (event) {
+  $("#thecanvas").css("cursor", "pointer");
+  $("#ctrlnote").removeClass("redbg");
+  $(".midptlabel").css("display","none");
  });
 
  switch (graphtype){
@@ -409,19 +415,17 @@ function drawgraph(){
  var centreX = Math.round(canvaswidth/2) + offsetX;
  var centreY = Math.round(canvasheight/2) + offsetY;
 
- // Test the edge midpoints by drawing yellow dots on them:
- var midpointtest = false;
- if (midpointtest){
-  for (var i=0;i<midpointPosition.length;i++){
-   if (!(isNaN(midpointPosition[i][0]) | isNaN(midpointPosition[i][1]))){
-    $(document.createElementNS("http://www.w3.org/2000/svg","circle")).attr({
-     "fill": "#ff0",
-     "stroke": "none",
-     "r": 5,
-     "cx": midpointPosition[i][0],
-     "cy": midpointPosition[i][1],
-    }).appendTo("#thecanvas");
-   }
+ // Add markers for the edge midpoints (drawing yellow dots) but hide them for now:
+ for (var i=0;i<midpointPosition.length;i++){
+  if (!(isNaN(midpointPosition[i][0]) | isNaN(midpointPosition[i][1]))){
+   $(document.createElementNS("http://www.w3.org/2000/svg","circle")).attr({
+    "fill": "#ff0",
+    "stroke": "none",
+    "r": 5,
+    "cx": midpointPosition[i][0],
+    "cy": midpointPosition[i][1],
+    "class": "midptlabel",
+   }).appendTo("#thecanvas");
   }
  }
 
@@ -884,7 +888,9 @@ function canvasClick(evt){
    // request the new label; give the current custom label (if any) as default
    newlabel = prompt("Set midpoint label");
    if (newlabel===null){
-    // don't change anything if the user clicked cancel
+    // if the user clicked cancel hide the midpoints
+    $("#thecanvas").css("cursor", "pointer");
+    $(".midptlabel").css("display","none");
    } else {
     midpointLabel[usemidpoint] = newlabel;
     drawgraph();
