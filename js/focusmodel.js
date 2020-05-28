@@ -658,15 +658,17 @@ function bounds() {
  for (var i=0;i<svgchildren.length;i++){
   switch (svgchildren[i].nodeName){
    case "circle": // node
-    var bbox = getTransformedBBox(svgchildren[i]);
-    var circleX = parseFloat(bbox.x); // left
-    var circleY = parseFloat(bbox.y); // top (on screen)
-    var circleW = parseFloat(bbox.width);
-    var circleH = parseFloat(bbox.height);
-    if ((circleX)<minX)         minX=(circleX);
-    if ((circleX+circleW)>maxX) maxX=(circleX+circleW);
-    if ((circleY)<minY)         minY=(circleY);
-    if ((circleY+circleH)>maxY) maxY=(circleY+circleH);
+    if (svgchildren[i].style.display=="inline"){ // ignore none/empty objects
+     var bbox = getTransformedBBox(svgchildren[i]);
+     var circleX = parseFloat(bbox.x); // left
+     var circleY = parseFloat(bbox.y); // top (on screen)
+     var circleW = parseFloat(bbox.width);
+     var circleH = parseFloat(bbox.height);
+     if ((circleX)<minX)         minX=(circleX);
+     if ((circleX+circleW)>maxX) maxX=(circleX+circleW);
+     if ((circleY)<minY)         minY=(circleY);
+     if ((circleY+circleH)>maxY) maxY=(circleY+circleH);
+    }
     break;
    case "text": // label
     if (showlabels>0){
@@ -709,6 +711,9 @@ function bounds() {
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
 function savePDF(){
+ // make sure the midpoint markers are hidden
+ $(".midptlabel").css("display","none");
+
  var saveBounds = bounds();
  var pdfwidth = Math.ceil(saveBounds.maxX-saveBounds.minX);
  var pdfheight = Math.ceil(saveBounds.maxY-saveBounds.minY);
@@ -735,6 +740,10 @@ function savePDF(){
 /* ********************************************************************************************* */
 function savePNG(){
  // for options see https://github.com/exupero/saveSvgAsPng
+
+ // make sure the midpoint markers are hidden
+ $(".midptlabel").css("display","none");
+
  var transparentBG = $("#transparencybutton").prop('checked');
  var saveBounds = bounds();
  var saveOptions = {
@@ -745,6 +754,7 @@ function savePNG(){
   width: saveBounds.maxX-saveBounds.minX,
   height: saveBounds.maxY-saveBounds.minY,
  };
+
  saveSvgAsPng(document.getElementById("thecanvas"), "graph.png", saveOptions);
 }
 
