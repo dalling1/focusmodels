@@ -96,6 +96,13 @@
   <input type="range" style="width:100px;" min="-500" max="500" step="50" value="0" id="theoffsetY" oninput="offsetYOutput.value = theoffsetY.value; if (vertexmodel(V0)) drawgraph();" />
   <output style="width:20px;vertical-align:middle;" name="offsetYOutputName" id="offsetYOutput">999</output><br/>
 
+  <span title="Click to reset" style="cursor:pointer;" onclick="thelabeloffsetX.value=10; labeloffsetXOutput.value = thelabeloffsetX.value; if (vertexmodel(V0)) drawgraph();">Label offset X:</span>
+  <input type="range" style="width:100px;" min="-100" max="100" step="1" value="10" id="thelabeloffsetX" oninput="labeloffsetXOutput.value = thelabeloffsetX.value; if (vertexmodel(V0)) drawgraph();" />
+  <output style="width:20px;vertical-align:middle;" name="labeloffsetXOutputName" id="labeloffsetXOutput">999</output><br/>
+  <span title="Click to reset" style="cursor:pointer;" onclick="thelabeloffsetY.value=10; labeloffsetYOutput.value = thelabeloffsetY.value; if (vertexmodel(V0)) drawgraph();">Label offset Y:</span>
+  <input type="range" style="width:100px;" min="-100" max="100" step="1" value="10" id="thelabeloffsetY" oninput="labeloffsetYOutput.value = thelabeloffsetY.value; if (vertexmodel(V0)) drawgraph();" />
+  <output style="width:20px;vertical-align:middle;" name="labeloffsetYOutputName" id="labeloffsetYOutput">999</output><br/>
+
   <span title="Click to reset" style="cursor:pointer;" onclick="thetextangle.value='0'; thetextangleOutput.value = thetextangle.value; if (vertexmodel(V0)) drawgraph();">Label angle:</span>
   <input type="range" style="width:100px;" min="-90" max="90" step="15" value="0" id="thetextangle" oninput="thetextangleOutput.value = thetextangle.value; if (vertexmodel(V0)) drawgraph();" />
   <output style="width:14px;vertical-align:middle;" name="thetextangleOutputName" id="thetextangleOutput">999</output><sup>o</sup><br/>

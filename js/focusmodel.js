@@ -405,6 +405,8 @@ function drawgraph(){
  // canvas-related variables:
  var offsetX = parseFloat($("#theoffsetX").val()); // pixels, but allow float
  var offsetY = parseFloat($("#theoffsetY").val()); // pixels, but allow float
+ var labelOffsetX = parseFloat($("#thelabeloffsetX").val()); // pixels, but allow float
+ var labelOffsetY = parseFloat($("#thelabeloffsetY").val()); // pixels, but allow float
 
  /* get the canvas element and size it properly (transfer the CSS size to the proper canvas attributes) */
  $('#thecanvas').attr('width',$('#thecanvas').width());
@@ -518,10 +520,6 @@ function drawgraph(){
     "id": (nodeAddress[vv]=="RR"|nodeAddress[nodeParent[vv]]=="RR"|nodeAddress[vv]=="LL"|nodeAddress[nodeParent[vv]]=="LL"?nodeAddress[vv]:""),
    }).appendTo("#thecanvas");
   }
-
-  // label offsets from their nodes (need to use this in savePDF and savePNG)
-  labelOffsetX = 10;
-  labelOffsetY = 10;
 
   var thislabel = "";
   if (showlabels>0) {
