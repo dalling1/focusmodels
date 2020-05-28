@@ -658,7 +658,7 @@ function bounds() {
  for (var i=0;i<svgchildren.length;i++){
   switch (svgchildren[i].nodeName){
    case "circle": // node
-    if (svgchildren[i].style.display=="inline"){ // ignore none/empty objects
+    if (svgchildren[i].className.baseVal!="midptlabel"){ // ignore the midpoint markers
      var bbox = getTransformedBBox(svgchildren[i]);
      var circleX = parseFloat(bbox.x); // left
      var circleY = parseFloat(bbox.y); // top (on screen)
