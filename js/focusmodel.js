@@ -14,6 +14,8 @@ function setup(graphtype){
  thespreadOutput.value = thespread.value;
  offsetXOutput.value = theoffsetX.value;
  offsetYOutput.value = theoffsetY.value;
+ labeloffsetXOutput.value = thelabeloffsetX.value;
+ labeloffsetYOutput.value = thelabeloffsetY.value;
  thetextangleOutput.value = thetextangle.value;
  fontsizeOutput.value = thefontsize.value;
  nodesizeOutput.value = thenodesize.value;
