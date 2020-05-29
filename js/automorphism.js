@@ -7,8 +7,8 @@ function automorphism(node1,node2){
  previousNodeAddress = nodeAddress; // save the old addresses
 
  var newaddr = [];
- var fromaddr = $("#auto1").attr("value");
- var toaddr = $("#auto2").attr("value");
+ var fromaddr = $("#automorph1").attr("value");
+ var toaddr = $("#automorph2").attr("value");
 
  for (var i=0;i<nodeAddress.length;i++){
   oldaddr = nodeAddress[i];

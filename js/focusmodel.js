@@ -868,8 +868,8 @@ function canvasClick(evt){
    if (debug) console.log("Chose nearest node: "+nodeAddress[usenode]);
    var changeField = $(".clickentry:first"); //.attr("id");
    $(changeField).attr("value",addr);
-   $("#auto1").addClass("clickentry");
-   $("#auto2").addClass("clickentry");
+   $("#automorph1").addClass("clickentry");
+   $("#automorph2").addClass("clickentry");
    $(changeField).removeClass("clickentry");
    checkValidAddress(changeField);
 //   $(changeField).removeClass("invalid");
