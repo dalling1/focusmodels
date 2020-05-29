@@ -70,3 +70,4 @@ input, output {display: inline-block; vertical-align: middle;}
 
 .extracontrolpanel {display:inline-block; width:230px;}
 .midptlabel {display:none;}
+.demobutton {font-size: 12px; border-radius:4px;}
