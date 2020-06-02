@@ -6,7 +6,7 @@ function demoOne(){
  $("#thelength").val(1.3);
  $("#thespread").val(1.8);
  $("#plainedgesbutton").prop("checked",true);
- $("#edgeicker").spectrum("set","#000000");
+ $("#edgepicker").spectrum("set","#000000");
  $("#nodepicker").spectrum("set","#990000");
  $("#whichlabel").val(1);
  $("#labelpicker").spectrum("set","#2244ff");
