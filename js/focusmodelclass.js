@@ -48,30 +48,30 @@ thearrowoffset, filledarrowsbutton, reversedarrowsbutton, fadedarrowsbutton, the
   $("#thescaling").val(this.thescaling); // float
   $("#thelength").val(this.thelength); // float
   $("#thespread").val(this.thespread); // float
-  $("#plainedgesbutton").prop("checked",(this.plainedgesbutton?"true":"false")); // boolean
-  $("#edgepicker").spectrum("set",this.edgepicker); // colour, eg "#990000"
+  $("#plainedgesbutton").prop("checked",(this.plainedgesbutton?true:false)); // boolean
+  $("#edgepicker").spectrum("set",this.edgepicker); // colour
   $("#nodepicker").spectrum("set",this.nodepicker); // colour
   $("#whichlabel").val(this.whichlabel); // int
   $("#labelpicker").spectrum("set",this.labelpicker); // colour
-  $("#axesbutton").prop("checked",(this.axesbutton?"true":"false")); // boolean
+  $("#axesbutton").prop("checked",(this.axesbutton?true:false)); // boolean
   $("#axespicker").spectrum("set",this.axespicker); // colour
-  $("#fadeleavesbutton").prop("checked",(this.fadeleavesbutton?"true":"false")); // boolean
-  $("#showarrowsbutton").prop("checked",(this.showarrowsbutton?"true":"false")); // boolean
+  $("#fadeleavesbutton").prop("checked",(this.fadeleavesbutton?true:false)); // boolean
+  $("#showarrowsbutton").prop("checked",(this.showarrowsbutton?true:false)); // boolean
   $("#theoffsetX").val(this.theoffsetX); // float
   $("#theoffsetY").val(this.theoffsetY); // float
   $("#thetextangle").val(this.thetextangle); // float
   $("#thefontsize").val(this.thefontsize); // int
   $("#thenodesize").val(this.thenodesize); // float
   $("#thelinewidth").val(this.thelinewidth); // float
-  $("#transparencybutton").prop("checked",(this.transparencybutton?"true":"false")); // boolean
+  $("#transparencybutton").prop("checked",(this.transparencybutton?true:false)); // boolean
   $("#automorph1").val(this.automorph1); // float
   $("#automorph2").val(this.automorph2); // float
   $("#thearrowsize").val(this.thearrowsize); // float
   $("#thearrowratio").val(this.thearrowratio); // float
   $("#thearrowoffset").val(this.thearrowoffset); // float
-  $("#filledarrowsbutton").prop("checked",(this.filledarrowsbutton?"true":"false")); // boolean
-  $("#reversedarrowsbutton").prop("checked",(this.reversedarrowsbutton?"true":"false")); // boolean
-  $("#fadedarrowsbutton").prop("checked",(this.fadedarrosbutton?"true":"false")); // boolean
+  $("#filledarrowsbutton").prop("checked",(this.filledarrowsbutton?true:false)); // boolean
+  $("#reversedarrowsbutton").prop("checked",(this.reversedarrowsbutton?true:false)); // boolean
+  $("#fadedarrowsbutton").prop("checked",(this.fadedarrosbutton?true:false)); // boolean
   $("#theaxislinewidth").val(this.theaxislinewidth); // float
 
   setup(this.themodeltype);

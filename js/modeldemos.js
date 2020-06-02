@@ -50,7 +50,7 @@ function demoTwo(){
  demo2.axesbutton = false;
  demo2.axespicker = "#3399ff";
  demo2.fadeleavesbutton = true;
- demo2.showarrowsbutton = false;
+ demo2.showarrowsbutton = true;
  demo2.theoffsetX = 0;
  demo2.theoffsetY = 0;
  demo2.thetextangle = 0;
