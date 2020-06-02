@@ -43,9 +43,9 @@ function demoTwo(){
  demo2.thelength = 1.3;
  demo2.thespread = 1.8;
  demo2.plainedgesbutton = true;
- demo2.edgepicker = "#000000";
+ demo2.edgepicker = "#ffcc00";
  demo2.nodepicker = "#990000";
- demo2.whichlabel = 1;
+ demo2.whichlabel = 0;
  demo2.labelpicker = "#2244ff";
  demo2.axesbutton = false;
  demo2.axespicker = "#3399ff";

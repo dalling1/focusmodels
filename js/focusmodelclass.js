@@ -49,12 +49,12 @@ thearrowoffset, filledarrowsbutton, reversedarrowsbutton, fadedarrowsbutton, the
   $("#thelength").val(this.thelength); // float
   $("#thespread").val(this.thespread); // float
   $("#plainedgesbutton").prop("checked",(this.plainedgesbutton?"true":"false")); // boolean
-  $("#edgepicker").val(this.edgepicker); // colour, eg "#990000"
-  $("#nodepicker").val(this.nodepicker); // colour
+  $("#edgepicker").spectrum("set",this.edgepicker); // colour, eg "#990000"
+  $("#nodepicker").spectrum("set",this.nodepicker); // colour
   $("#whichlabel").val(this.whichlabel); // int
-  $("#labelpicker").val(this.labelpicker); // colour
+  $("#labelpicker").spectrum("set",this.labelpicker); // colour
   $("#axesbutton").prop("checked",(this.axesbutton?"true":"false")); // boolean
-  $("#axespicker").val(this.axespicker); // colour
+  $("#axespicker").spectrum("set",this.axespicker); // colour
   $("#fadeleavesbutton").prop("checked",(this.fadeleavesbutton?"true":"false")); // boolean
   $("#showarrowsbutton").prop("checked",(this.showarrowsbutton?"true":"false")); // boolean
   $("#theoffsetX").val(this.theoffsetX); // float
