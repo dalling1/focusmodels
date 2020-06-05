@@ -119,9 +119,9 @@ function saveToFile(){
  var params = new FocusModel;
  params.saveCurrent();
  var thejson = JSON.stringify(params);
-// var theblob = new Blob([thejson], {type: "application/json"});
- var theblob = new Blob([thejson], {type: "text/plain"}); // easier to open and edit, perhaps
+ var theblob = new Blob([thejson], {type: "application/json"}); // reinforces the idea that this is json data (not just text to mess around with)
+// var theblob = new Blob([thejson], {type: "text/plain"}); // easier to open and edit, perhaps: but use the web page to edit a setup...
 
  var saveAs = window.saveAs;
- saveAs(theblob, "FocusModelSetup.txt");
+ saveAs(theblob, "FocusModelSetup.json");
 }
