@@ -39,9 +39,9 @@ thearrowoffset, filledarrowsbutton, reversedarrowsbutton, fadedarrowsbutton, the
 
  }
 
- // a method to draw a given model object
+ // a method to draw a given model object:
+ // set the page controls and then call setup, which reads those values and draws the graph
  drawModel(){
-//  $("#name").val(this.name);
   $("#themodeltype").val(this.themodeltype); // string, only one of {'vertex','edge','axis','newaxis','monoray'}
   $("#thevalency").val(this.thevalency); // int
   $("#thelevels").val(this.thelevels); // int
@@ -75,5 +75,41 @@ thearrowoffset, filledarrowsbutton, reversedarrowsbutton, fadedarrowsbutton, the
   $("#theaxislinewidth").val(this.theaxislinewidth); // float
 
   setup(this.themodeltype);
+ }
+
+ // a method to save the current set-up to a FocusModel object:
+ saveCurrent(){
+//  this.themodeltype = $("#themodeltype").val(); // string, only one of {'vertex','edge','axis','newaxis','monoray'}
+  this.thevalency = $("#thevalency").val(); // int
+  this.thelevels = $("#thelevels").val(); // int
+  this.thescaling = $("#thescaling").val(); // float
+  this.thelength = $("#thelength").val(); // float
+  this.thespread = $("#thespread").val(); // float
+  this.plainedgesbutton = $("#plainedgesbutton").prop("checked"); // boolean
+  this.edgepicker = $("#edgepicker").spectrum("get"); // colour
+  this.nodepicker = $("#nodepicker").spectrum("get"); // colour
+  this.whichlabel = $("#whichlabel").val(); // int
+  this.labelpicker = $("#labelpicker").spectrum("get"); // colour
+  this.axesbutton = $("#axesbutton").prop("checked"); // boolean
+  this.axespicker = $("#axespicker").spectrum("get"); // colour
+  this.fadeleavesbutton = $("#fadeleavesbutton").prop("checked"); // boolean
+  this.showarrowsbutton = $("#showarrowsbutton").prop("checked"); // boolean
+  this.theoffsetX = $("#theoffsetX").val(); // float
+  this.theoffsetY = $("#theoffsetY").val(); // float
+  this.thetextangle = $("#thetextangle").val(); // float
+  this.thefontsize = $("#thefontsize").val(); // int
+  this.thenodesize = $("#thenodesize").val(); // float
+  this.thelinewidth = $("#thelinewidth").val(); // float
+  this.transparencybutton = $("#transparencybutton").prop("checked"); // boolean
+  this.automorph1 = $("#automorph1").val(); // float
+  this.automorph2 = $("#automorph2").val(); // float
+  this.thearrowsize = $("#thearrowsize").val(); // float
+  this.thearrowratio = $("#thearrowratio").val(); // float
+  this.thearrowoffset = $("#thearrowoffset").val(); // float
+  this.filledarrowsbutton = $("#filledarrowsbutton").prop("checked"); // boolean
+  this.reversedarrowsbutton = $("#reversedarrowsbutton").prop("checked"); // boolean
+  this.fadedarrosbutton = $("#fadedarrowsbutton").prop("checked"); // boolean
+  this.theaxislinewidth = $("#theaxislinewidth").val(); // float
+
  }
 }
