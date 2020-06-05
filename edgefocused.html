@@ -44,6 +44,8 @@
    <button style="font-size:0.6em;" id="extrasbutton" onclick="showallcontrols();">Show all controls</button><br/>
   </div>
 
+  <input type="hidden" id="themodeltype" value="edge"/>
+
   <span title="Click to reset" style="cursor:pointer;" onclick="thevalency.value=5; thevalencyOutput.value = thevalency.value; if (edgemodel(V0)) drawgraph();">Valency:</span>
   <input type="range" style="width:80px;" min="2" max="16" step="1" value="5" id="thevalency" oninput="thevalencyOutput.value = thevalency.value; if (edgemodel(V0)) drawgraph();" />
   <output style="width:20px;vertical-align:middle;" name="thevalencyOutputName" id="thevalencyOutput">999</output><br/>
@@ -127,6 +129,7 @@
    <button onClick="savePDF()" title="Saves a PDF file">Save PDF</button><br/>
    <button onClick="savePNG()" title="Saves a PNG file with tight bounds and transparent background">Save PNG</button><br/>
    <button onClick="saveToFile()" title="Saves the current set-up">Save setup</button><br/>
+   <input style="width:140px;" type="file" id="file-selector" accept=".json" onchange="readFromFile(event);" ><br/>
 <!--
    <button onClick="saveDot()" title="Saves a DOT file">Show DOT format</button><br/><br/>
    <button id="clearbutton" onclick="wipeCanvas();wipeInfo();">CLEAR</button><br/>

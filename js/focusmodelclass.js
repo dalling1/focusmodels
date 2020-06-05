@@ -79,7 +79,7 @@ thearrowratio, thearrowoffset, filledarrowsbutton, reversedarrowsbutton, fadedar
 
  // a method to save the current set-up to a FocusModel object:
  saveCurrent(){
-//  this.themodeltype = $("#themodeltype").val(); // string, only one of {'vertex','edge','axis','newaxis','monoray'}
+  this.themodeltype = $("#themodeltype").val(); // string, only one of {'vertex','edge','axis','newaxis','monoray'}
   this.thevalency = $("#thevalency").val(); // int
   this.thelevels = $("#thelevels").val(); // int
   this.thescaling = $("#thescaling").val(); // float
@@ -124,4 +124,35 @@ function saveToFile(){
 
  var saveAs = window.saveAs;
  saveAs(theblob, "FocusModelSetup.json");
+}
+
+function readFromFile(e){
+ // Tutorial at https://web.dev/read-files/
+ var fileList = e.target.files;
+ for (var i=0;i<fileList.length;i++){
+  console.log(fileList[i].type); // want application/json
+ }
+ if (fileList.length==1){
+  thefile = fileList[0];
+  // read the contents
+  if (thefile.type && thefile.type=="application/json"){
+   console.log("JSON file found");
+   var reader = new FileReader;
+   reader.readAsText(thefile);
+   // wait for the load to complete (https://stackoverflow.com/questions/28658388/):
+   reader.onload = function(e) {
+    var rawLoadModel = JSON.parse(reader.result);
+    // COPY THE LOADED VALUES INTO THE FocusModel OBJECT TO BE DRAWN, then
+    var loadModel = Object.assign(new FocusModel, rawLoadModel);
+    loadModel.drawModel();
+   };
+
+  } else {
+   // wrong type
+   return -1;
+  }
+ } else {
+  // don't handle multiple files
+  return -1;
+ }
 }
