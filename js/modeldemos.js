@@ -33,7 +33,7 @@ function demoOne(){
  setup("edge");
 }
 
-function demoTwo(){
+function demoTwo(rundemo = false){
  // same example as demoOne() but using the FocusModel class
  var demo2 = new FocusModel();
  demo2.themodeltype = "edge";
@@ -68,5 +68,10 @@ function demoTwo(){
  demo2.fadedarrowsbutton = false;
  demo2.theaxislinewidth = 0.2;
 
- demo2.drawModel();
+ // actually draw the example graph?
+ if (rundemo){
+  demo2.drawModel();
+ }
+
+ return demo2;
 }

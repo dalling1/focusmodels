@@ -126,6 +126,7 @@
   <div id="savediv" class="somebuttons">
    <button onClick="savePDF()" title="Saves a PDF file">Save PDF</button><br/>
    <button onClick="savePNG()" title="Saves a PNG file with tight bounds and transparent background">Save PNG</button><br/>
+   <button onClick="saveToFile()" title="Saves the current set-up">Save setup</button><br/>
 <!--
    <button onClick="saveDot()" title="Saves a DOT file">Show DOT format</button><br/><br/>
    <button id="clearbutton" onclick="wipeCanvas();wipeInfo();">CLEAR</button><br/>
@@ -149,7 +150,7 @@
  <div id="theframe" class="showgraph" style="position:relative;">
   <svg id="thecanvas" style="width: 100%; height: 100%;" onclick="canvasClick(evt);"></svg>
   <button class="demobutton" onclick="demoOne();">Example 1</button>
-  <button class="demobutton" onclick="demoTwo();">Example 2</button>
+  <button class="demobutton" onclick="demoTwo(true);">Example 2</button>
 
   <div id="extracontrols" class="thecontrols">
    <p style="display:none;">More controls can go here:</p>

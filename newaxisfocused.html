@@ -6,6 +6,7 @@
  <title>axis-focused model</title>
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+ <script src="js/focusmodelclass.js"></script>
  <script src="js/focusmodel.js"></script>
  <script src="js/thevertexmodel.js"></script>
  <script src="js/theedgemodel.js"></script>
@@ -128,6 +129,7 @@
   <div id="savediv" class="somebuttons">
    <button onClick="savePDF()" title="Saves a PDF file">Save PDF</button><br/>
    <button onClick="savePNG()" title="Saves a PNG file with tight bounds and transparent background">Save PNG</button><br/>
+   <button onClick="saveToFile()" title="Saves the current set-up">Save setup</button><br/>
 <!--
    <button onClick="saveDot()" title="Saves a DOT file">Show DOT format</button><br/><br/>
    <button id="clearbutton" onclick="wipeCanvas();wipeInfo();">CLEAR</button><br/>

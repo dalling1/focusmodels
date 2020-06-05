@@ -1,8 +1,8 @@
 class FocusModel {
- constructor(themodeltype, thevalency, thelevels, thescaling, thelength, thespread, plainedgesbutton, edgepicker, nodepicker, whichlabel, 
-labelpicker, axesbutton, axespicker, fadeleavesbutton, showarrowsbutton, theoffsetX, theoffsetY, thetextangle, 
-thefontsize, thenodesize, thelinewidth, transparencybutton, automorph1, automorph2, thearrowsize, thearrowratio, 
-thearrowoffset, filledarrowsbutton, reversedarrowsbutton, fadedarrowsbutton, theaxislinewidth){
+ constructor(themodeltype, thevalency, thelevels, thescaling, thelength, thespread, plainedgesbutton, edgepicker,
+nodepicker, whichlabel, labelpicker, axesbutton, axespicker, fadeleavesbutton, showarrowsbutton, theoffsetX, theoffsetY,
+thetextangle, thefontsize, thenodesize, thelinewidth, transparencybutton, automorph1, automorph2, thearrowsize,
+thearrowratio, thearrowoffset, filledarrowsbutton, reversedarrowsbutton, fadedarrowsbutton, theaxislinewidth){
 
   this.name = 'FocusModel';
   this.themodeltype = themodeltype; // string, only one of {'vertex','edge','axis','newaxis','monoray'}
@@ -112,4 +112,16 @@ thearrowoffset, filledarrowsbutton, reversedarrowsbutton, fadedarrowsbutton, the
   this.theaxislinewidth = $("#theaxislinewidth").val(); // float
 
  }
+}
+
+// function to save the current controls to a file (this is related to the FocusModel class, so is going here)
+function saveToFile(){
+ var params = new FocusModel;
+ params.saveCurrent();
+ var thejson = JSON.stringify(params);
+// var theblob = new Blob([thejson], {type: "application/json"});
+ var theblob = new Blob([thejson], {type: "text/plain"}); // easier to open and edit, perhaps
+
+ var saveAs = window.saveAs;
+ saveAs(theblob, "FocusModelSetup.txt");
 }

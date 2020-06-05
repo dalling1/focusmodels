@@ -5,6 +5,7 @@ hr {margin: 10px 0;}
 
 .thecontrols {position: absolute; right: 10px; text-align: right; top: 10px; font-size: 14px; color:#900;}
 .thecontrols .somebuttons {text-align: center;}
+.thecontrols .somebuttons button {width: 140px;}
 .thecontrols p {position: initial; width: 200px; text-align: left;}
 .error {font-size: 0.9em; text-transform: uppercase; color: #f55;}
 .todo {color:black; font-size:10px; cursor:default; margin-top:100px;}
