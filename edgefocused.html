@@ -77,7 +77,7 @@
    <option value="2">Index</option>
    <option value="3">Custom</option>
   </select>
-   <input type="text" class="basicpicker controlpicker" id="labelpicker" onchange="if (edgemodel(V0)) drawgraph();" value="#ff0000" /><br/>
+  <input type="text" class="basicpicker controlpicker" id="labelpicker" onchange="if (edgemodel(V0)) drawgraph();" value="#ff0000" /><br/>
   <label for="axesbutton">Draw axes <input type="checkbox" id="axesbutton" onclick="if (edgemodel(V0)) drawgraph();" /></label>
   <input type="text" class="basicpicker controlpicker" id="axespicker" onchange="if (edgemodel(V0)) drawgraph();" value="#888888" /><br/>
 <!--
@@ -129,7 +129,7 @@
    <button onClick="savePDF()" title="Saves a PDF file">Save PDF</button><br/>
    <button onClick="savePNG()" title="Saves a PNG file with tight bounds and transparent background">Save PNG</button><br/>
    <button onClick="saveToFile()" title="Saves the current set-up">Save setup</button><br/>
-   <input style="width:140px;" type="file" id="file-selector" accept=".json" onchange="readFromFile(event);" ><br/>
+   <button for="file-selector" onClick='$("#file-selector").click()'>Load setup:</button><br/><input type="file" id="file-selector" accept=".json" onchange="readFromFile(event);" />
 <!--
    <button onClick="saveDot()" title="Saves a DOT file">Show DOT format</button><br/><br/>
    <button id="clearbutton" onclick="wipeCanvas();wipeInfo();">CLEAR</button><br/>

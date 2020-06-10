@@ -8,6 +8,7 @@
  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
  <script src="js/focusmodelclass.js"></script>
  <script src="js/focusmodel.js"></script>
+ <script src="js/modeldemos.js"></script>
  <script src="js/thevertexmodel.js"></script>
  <script src="js/theedgemodel.js"></script>
  <script src="js/theaxismodel.js"></script>
@@ -42,6 +43,8 @@
   <div class="somebuttons">
    <button style="font-size:0.6em;" id="extrasbutton" onclick="showallcontrols();">Show all controls</button><br/>
   </div>
+
+  <input type="hidden" id="themodeltype" value="monoray"/>
 
   <span title="Click to reset" style="cursor:pointer;" onclick="thevalency.value=8; thevalencyOutput.value = thevalency.value; if (monoraymodel(V0)) drawgraph();">Valency:</span>
   <input type="range" style="width:80px;" min="2" max="16" step="1" value="8" id="thevalency" oninput="thevalencyOutput.value = thevalency.value; if (monoraymodel(V0)) drawgraph();" />
@@ -130,6 +133,7 @@
    <button onClick="savePDF()" title="Saves a PDF file">Save PDF</button><br/>
    <button onClick="savePNG()" title="Saves a PNG file with tight bounds and transparent background">Save PNG</button><br/>
    <button onClick="saveToFile()" title="Saves the current set-up">Save setup</button><br/>
+   <button for="file-selector" onClick='$("#file-selector").click()'>Load setup:</button><br/><input type="file" id="file-selector" accept=".json" onchange="readFromFile(event);" />
 <!--
    <button onClick="saveDot()" title="Saves a DOT file">Show DOT format</button><br/><br/>
    <button id="clearbutton" onclick="wipeCanvas();wipeInfo();">CLEAR</button><br/>
