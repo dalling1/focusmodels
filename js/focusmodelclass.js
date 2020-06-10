@@ -86,12 +86,12 @@ thearrowratio, thearrowoffset, filledarrowsbutton, reversedarrowsbutton, fadedar
   this.thelength = $("#thelength").val(); // float
   this.thespread = $("#thespread").val(); // float
   this.plainedgesbutton = $("#plainedgesbutton").prop("checked"); // boolean
-  this.edgepicker = $("#edgepicker").spectrum("get"); // colour
-  this.nodepicker = $("#nodepicker").spectrum("get"); // colour
+  this.edgepicker = $("#edgepicker").spectrum("get").toHexString(); // colour
+  this.nodepicker = $("#nodepicker").spectrum("get").toHexString(); // colour
   this.whichlabel = $("#whichlabel").val(); // int
-  this.labelpicker = $("#labelpicker").spectrum("get"); // colour
+  this.labelpicker = $("#labelpicker").spectrum("get").toHexString(); // colour
   this.axesbutton = $("#axesbutton").prop("checked"); // boolean
-  this.axespicker = $("#axespicker").spectrum("get"); // colour
+  this.axespicker = $("#axespicker").spectrum("get").toHexString(); // colour
   this.fadeleavesbutton = $("#fadeleavesbutton").prop("checked"); // boolean
   this.showarrowsbutton = $("#showarrowsbutton").prop("checked"); // boolean
   this.theoffsetX = $("#theoffsetX").val(); // float
