@@ -1,5 +1,6 @@
 function demoOne(){
  // change the values of the controls and then call setup(), which sets the control output labels and then draws the graph
+ $("#themodeltype").val("edge");
  $("#thevalency").val(3);
  $("#thelevels").val(6);
  $("#thescaling").val(0.8);
