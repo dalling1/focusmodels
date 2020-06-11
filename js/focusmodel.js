@@ -9,6 +9,12 @@ function setup(){
  params.saveCurrent();
 // graphtype = params.themodeltype;
 
+ // testing: look for an anchor in the URL (later, we might switch models based on this,
+ //          but need to play nicely with existing model setups...)
+ // -- if setup() only gets called on load, maybe we can just switch models: need to check
+ var hashmodel = location.hash.split("#");
+ if (hashmodel.length==2) urlmodel = hashmodel[1]; else urlmodel="";
+
  // make sure the control displays (labels) are the same as the controls' values:
  thevalencyOutput.value = thevalency.value;
  thewidthOutput.value = thewidth.value;
@@ -55,6 +61,10 @@ function setup(){
  $("#thewidth").addClass("disabledcontrol");
  $("#thewidthLabel").addClass("disabledcontrol");
  $("#thewidthOutput").addClass("disabledcontrol");
+
+ if (urlmodel.length & urlmodel!=params.themodeltype){
+  console.log("URL model anchor ("+urlmodel+") and user controls ("+params.themodeltype+") do not agree");
+ }
 
  // do some conditional set-up:
  switch (params.themodeltype){
