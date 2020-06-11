@@ -34,7 +34,6 @@ function edgemodel(initialEdge){
  var afraction = RegExp('[0-9]+/[0-9]+');
  if (Number.isInteger(tmpvalency)) valency = tmpvalency;
  if (Number.isInteger(tmpNlevels)) Nlevels = tmpNlevels;
-console.log('Nlevels = '+Nlevels);
  if (isFinite(tmpgamma1)){
   gamma1 = tmpgamma1*pi;
  } else if (afraction.test(tmpgamma1)){
@@ -75,7 +74,7 @@ console.log('Nlevels = '+Nlevels);
  for (var i=0;i<Math.ceil(Nlevels/valency);i++) tmp+=longestname;
  longestname = tmp;
  for (var i=longestname.length;i>0;i--) inverselongestname+=longestname[i-1];
-//console.log(' longestname is '+longestname);
+
 
  if (valency>2){
   var Ntotal = Nroots*(valency*Math.pow(valency-1,Nlevels)-2)/(valency-2);

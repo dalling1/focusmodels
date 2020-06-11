@@ -45,7 +45,6 @@ function axismodel(initialVertex){
  var afraction = RegExp('[0-9]+/[0-9]+');
  if (Number.isInteger(tmpvalency)) valency = tmpvalency;
  if (Number.isInteger(tmpNlevels)) Nlevels = tmpNlevels;
- console.log('Nlevels = '+Nlevels); // report
  if (isFinite(tmpgamma1)){
   gamma1 = tmpgamma1*pi;
  } else if (afraction.test(tmpgamma1)){
@@ -85,8 +84,6 @@ function axismodel(initialVertex){
  for (var i=0;i<Math.ceil(Nlevels/valency);i++) tmp+=longestname;
  longestname = tmp;
  for (var i=longestname.length;i>0;i--) inverselongestname+=longestname[i-1];
-//console.log(' longestname is '+longestname);
-
 
 
  if (valency>2){
@@ -94,7 +91,7 @@ function axismodel(initialVertex){
  } else {
   Ntotal = Nroots*(Nlevels*valency+1);
  }
- console.log('Number of nodes will be '+Ntotal); // report
+ if (debug) console.log('Number of nodes will be '+Ntotal); // report
  if (printinfo & $('#info').html().length>0) $('#info').append('<hr width="88%"/>'); // after the first RUN, separate output with a line
  if (printinfo) $('#info').append('<p>Number of nodes is '+Ntotal+'</p>');
 

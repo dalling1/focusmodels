@@ -135,7 +135,7 @@ function newaxismodel(initialVertex){
 
   // how many nodes at this depth? use this to determine spacing/spread
   var depthNodeCount = width*Math.pow(valency-1,L-2); // valid for depth >= 2
-  console.log("   "+depthNodeCount+" nodes at depth "+L);
+  if (debug) console.log("   "+depthNodeCount+" nodes at depth "+L);
 
   // add the children (together, the "group") to each parent node in the level above
   for (var ii=0;ii<nodeList.length;ii++){

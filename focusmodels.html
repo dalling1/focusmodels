@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<head>
+ <meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
+ <link rel="stylesheet" href="css/spectrum.css" type="text/css" media="screen" />
+ <link rel="stylesheet" href="css/focusmodel.css" type="text/css" />
+ <title>Focus Models</title>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+ <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+ <script src="js/focusmodelclass.js"></script>
+ <script src="js/focusmodel.js"></script>
+ <script src="js/modeldemos.js"></script>
+ <script src="js/thevertexmodel.js"></script>
+ <script src="js/theedgemodel.js"></script>
+ <script src="js/theaxismodel.js"></script>
+ <script src="js/thenewaxismodel.js"></script>
+ <script src="js/themonoraymodel.js"></script>
+ <script src="js/jspdf.min.js"></script>
+ <script src="js/spectrum.js"></script>
+ <script src="js/rgbcolor.js"></script>
+ <script src="js/svg2pdf.min.js"></script>
+ <script src="js/FileSaver.min.js"></script>
+ <script src="js/saveSvgAsPng.js"></script>
+ <script src="js/automorphism.js"></script>
+ <script>
+  // set the initial focus edge:
+  V0 = ["","a"];
+ </script>
+</head>
+<body onload="setup();">
+ <div class="navigation">
+  <ul>
+   <li><a href="./">home</a></li>
+   <li><span class="navspan" onClick='document.getElementById("themodeltype").value="vertex";drawgraph();'>vertex</span></li>
+   <li><span class="navspan" onClick='document.getElementById("themodeltype").value="edge";drawgraph();'>edge</span></li>
+   <li><span class="navspan" onClick='document.getElementById("themodeltype").value="axis";drawgraph();'>axis</span></li>
+   <li><span class="navspan" onClick='document.getElementById("themodeltype").value="newaxis";drawgraph();'>axis(ii)</span></li>
+   <li><span class="navspan" onClick='document.getElementById("themodeltype").value="monoray";drawgraph();'>monoray</span></li>
+  </ul>
+  <div class="navshadow"></div>
+ </div>
+
+ <div class="thecontrols">
+  <div class="somebuttons">
+   <button style="font-size:0.6em;" id="extrasbutton" onclick="showallcontrols();">Show all controls</button><br/>
+  </div>
+
+  <div style="text-align:center;margin:15px 0;">
+  <span title="Choose a model type" style="cursor:pointer;font-weight:bold;" onclick="drawgraph();">Model:</span>
+  <select style="width:80px;" id="themodeltype" oninput="drawgraph();" />
+   <option value="vertex">Vertex</option>
+   <option value="edge" selected>Edge</option>
+   <option value="axis">Axis</option>
+   <option value="newaxis">Axis (II)</option>
+   <option value="monoray">MonoRay</option>
+  </select>
+  </div>
+
+  <span title="Click to reset" style="cursor:pointer;" onclick="thevalency.value=5; thevalencyOutput.value = thevalency.value; drawgraph();" id="thevalencyLabel">Valency:</span>
+  <input type="range" style="width:80px;" min="2" max="16" step="1" value="5" id="thevalency" oninput="thevalencyOutput.value = thevalency.value; drawgraph();" />
+  <output style="width:20px;vertical-align:middle;" name="thevalencyOutputName" id="thevalencyOutput">999</output><br/>
+
+  <span title="Click to reset" style="cursor:pointer;" onclick="thewidth.value=3; thewidthOutput.value = thewidth.value; drawgraph();" id="thewidthLabel">Width:</span>
+  <input type="range" style="width:80px;" min="1" max="12" step="1" value="3" id="thewidth" oninput="thewidthOutput.value = thewidth.value; drawgraph();" />
+  <output style="width:20px;vertical-align:middle;" name="thewidthOutputName" id="thewidthOutput">999</output><br/>
+
+  <span title="Click to reset" style="cursor:pointer;" onclick="thelevels.value=2; thelevelsOutput.value = thelevels.value; drawgraph();" id="thelevelsLabel">Levels:</span>
+  <input type="range" style="width:80px;" min="0" max="7" step="1" value="2" id="thelevels" oninput="thelevelsOutput.value = thelevels.value; drawgraph();" />
+  <output style="width:20px;vertical-align:middle;" name="thelevelsOutputName" id="thelevelsOutput">999</output><br/>
+
+  <span title="Click to reset" style="cursor:pointer;" onclick="thescaling.value=0.5; thescalingOutput.value = thescaling.value; drawgraph();" id="thescalingLabel">Edge scaling:</span>
+  <input type="range" style="width:80px;" min="0.1" max="2" step="0.05" value="0.5" id="thescaling" oninput="thescalingOutput.value = thescaling.value; drawgraph();" />
+  <output style="width:20px;vertical-align:middle;" name="thescalingOutputName" id="thescalingOutput">999</output><br/>
+
+  <span title="Click to reset" style="cursor:pointer;" onclick="thelength.value=1; thelengthOutput.value = thelength.value; drawgraph();" id="thelengthLabel">Overall scale:</span>
+  <input type="range" style="width:80px;" min="0.1" max="5" step="0.1" value="1" id="thelength" oninput="thelengthOutput.value = thelength.value; drawgraph();" />
+  <output style="width:20px;vertical-align:middle;" name="thelengthOutputName" id="thelengthOutput">999</output><br/>
+
+  <span title="Click to reset" style="cursor:pointer;" onclick="thespread.value='1.0'; thespreadOutput.value = thespread.value; drawgraph();" id="thespreadLabel">Branch spread:</span>
+  <input type="range" style="width:70px;" min="0.1" max="4" step="0.1" value="1.0" id="thespread" oninput="thespreadOutput.value = thespread.value; drawgraph();" />
+  <output style="width:20px;vertical-align:middle;" name="thespreadOutputName" id="thespreadOutput">999</output><span style="vertical-align:middle;">&#960;</span><br/>
+
+  <span class="littlenote" title="If this is not ticked, edges will be coloured according to their type">i</span> <label for="plainedgesbutton" id="edgepickerLabel">Edge colour <input type="checkbox" id="plainedgesbutton" checked="checked" onclick="drawgraph();" /></label>
+  <input type="text" class="basicpicker controlpicker" id="edgepicker" onchange="drawgraph();" value="#000000" /><br/>
+  Node colour: <input type="text" class="basicpicker controlpicker" id="nodepicker" onchange="drawgraph();" value="#000000" /><br/>
+
+  <span title="Click to reset" style="cursor:pointer;" onclick="whichlabel.value=1; drawgraph();" id="whichlabelLabel">Labels</span>
+  <select style="width:80px;" id="whichlabel" oninput="drawgraph();" />
+   <option value="0">None</option>
+   <option value="1" selected>Address</option>
+   <option value="2">Index</option>
+   <option value="3">Custom</option>
+  </select>
+  <input type="text" class="basicpicker controlpicker" id="labelpicker" onchange="drawgraph();" value="#ff0000" /><br/>
+  <label for="axesbutton" id="axesbuttonLabel">Draw axes <input type="checkbox" id="axesbutton" onclick="drawgraph();" /></label>
+  <input type="text" class="basicpicker controlpicker" id="axespicker" onchange="drawgraph();" value="#888888" /><br/>
+<!--
+  <label for="infobutton">Print info <input type="checkbox" id="infobutton" /></label><br/>
+-->
+
+  <label for="fadeleavesbutton" id="fadeleavesbuttonLabel">Fade leaf nodes? <input type="checkbox" id="fadeleavesbutton" onclick="drawgraph();" /></label><br/>
+  <span class="littlenote" title="Arrows are directed from parent to child nodes, coloured with the edge colour">i</span> <label for="showarrowsbutton" id="showarrowsbuttonLabel">Show edge arrows? <input type="checkbox" id="showarrowsbutton" onclick="drawgraph();" /></label>
+
+  <div class="somebuttons">
+   <button id="runbutton" onclick="drawgraph();">DRAW</button><br/>
+  </div>
+
+  <hr/>
+
+  <span title="Click to reset" style="cursor:pointer;" onclick="theoffsetX.value=0; offsetXOutput.value = theoffsetX.value; drawgraph();" id="theoffsetXLabel">Offset X:</span>
+  <input type="range" style="width:100px;" min="-500" max="500" step="50" value="0" id="theoffsetX" oninput="offsetXOutput.value = theoffsetX.value; drawgraph();" />
+  <output style="width:20px;vertical-align:middle;" name="offsetXOutputName" id="offsetXOutput">999</output><br/>
+  <span title="Click to reset" style="cursor:pointer;" onclick="theoffsetY.value=0; offsetYOutput.value = theoffsetY.value; drawgraph();" id="theoffsetYLabel">Offset Y:</span>
+  <input type="range" style="width:100px;" min="-500" max="500" step="50" value="0" id="theoffsetY" oninput="offsetYOutput.value = theoffsetY.value; drawgraph();" />
+  <output style="width:20px;vertical-align:middle;" name="offsetYOutputName" id="offsetYOutput">999</output><br/>
+
+  <span title="Click to reset" style="cursor:pointer;" onclick="thelabeloffsetX.value=10; labeloffsetXOutput.value = thelabeloffsetX.value; drawgraph();" id="thelabeloffsetXLabel">Label offset X:</span>
+  <input type="range" style="width:100px;" min="-100" max="100" step="1" value="10" id="thelabeloffsetX" oninput="labeloffsetXOutput.value = thelabeloffsetX.value; drawgraph();" />
+  <output style="width:20px;vertical-align:middle;" name="labeloffsetXOutputName" id="labeloffsetXOutput">999</output><br/>
+  <span title="Click to reset" style="cursor:pointer;" onclick="thelabeloffsetY.value=10; labeloffsetYOutput.value = thelabeloffsetY.value; drawgraph();" id="thelabeloffsetYLabel">Label offset Y:</span>
+  <input type="range" style="width:100px;" min="-100" max="100" step="1" value="10" id="thelabeloffsetY" oninput="labeloffsetYOutput.value = thelabeloffsetY.value; drawgraph();" />
+  <output style="width:20px;vertical-align:middle;" name="labeloffsetYOutputName" id="labeloffsetYOutput">999</output><br/>
+
+  <span title="Click to reset" style="cursor:pointer;" onclick="thetextangle.value='0'; thetextangleOutput.value = thetextangle.value; drawgraph();" id="thetextangleLabel">Label angle:</span>
+  <input type="range" style="width:100px;" min="-90" max="90" step="15" value="0" id="thetextangle" oninput="thetextangleOutput.value = thetextangle.value; drawgraph();" />
+  <output style="width:14px;vertical-align:middle;" name="thetextangleOutputName" id="thetextangleOutput">999</output><sup>o</sup><br/>
+
+  <span title="Click to reset" style="cursor:pointer;" onclick="thefontsize.value=15; fontsizeOutput.value = thefontsize.value; drawgraph();" id="thefontsizeLabel">Label size:</span>
+  <input type="range" style="width:100px;" min="10" max="30" step="5" value="15" id="thefontsize" oninput="fontsizeOutput.value = thefontsize.value; drawgraph();" />
+  <output style="width:20px;vertical-align:middle;" name="fontsizeOutputName" id="fontsizeOutput">999</output><br/>
+
+  <span title="Click to reset" style="cursor:pointer;" onclick="thenodesize.value=3; nodesizeOutput.value = thenodesize.value; drawgraph();" id="thenodesizeLabel">Node size:</span>
+  <input type="range" style="width:100px;" min="0" max="20" step="1" value="3" id="thenodesize" oninput="nodesizeOutput.value = thenodesize.value; drawgraph();" />
+  <output style="width:20px;vertical-align:middle;" name="nodesizeOutputName" id="nodesizeOutput">999</output><br/>
+
+  <span title="Click to reset" style="cursor:pointer;" onclick="thelinewidth.value=0.2; linewidthOutput.value = thelinewidth.value; drawgraph();" id="thelinewidthLabel">Line width:</span>
+  <input type="range" style="width:100px;" min="0" max="4" step="0.1" value="0.2" id="thelinewidth" oninput="linewidthOutput.value = thelinewidth.value; drawgraph();" />
+  <output style="width:20px;vertical-align:middle;" name="linewidthOutputName" id="linewidthOutput">999</output><br/>
+
+  <label for="transparencybutton" id="transparencybuttonLabel">Transparent background? <input type="checkbox" id="transparencybutton" /></label><br/>
+
+  <div id="savediv" class="somebuttons">
+   <button onClick="savePDF()" title="Saves a PDF file">Save PDF</button><br/>
+   <button onClick="savePNG()" title="Saves a PNG file with tight bounds and transparent background">Save PNG</button><br/>
+   <button onClick="saveToFile()" title="Saves the current set-up">Save setup</button><br/>
+   <button for="file-selector" onClick='$("#file-selector").click()'>Load setup:</button><br/><input type="file" id="file-selector" accept=".json" onchange="readFromFile(event);" />
+<!--
+   <button onClick="saveDot()" title="Saves a DOT file">Show DOT format</button><br/><br/>
+   <button id="clearbutton" onclick="wipeCanvas();wipeInfo();">CLEAR</button><br/>
+-->
+  </div>
+
+  <hr/>
+
+  <div class="somebuttons">
+   <p style="margin-bottom:5px;" id="ctrlnote">CTRL-click to select nodes:</p>
+   <input type="text" size="10" id="automorph1" onfocusout="checkValidAddress(this);" class="clickentry" /> &#x21A6;
+   <input type="text" size="10" id="automorph2" onfocusout="checkValidAddress(this);" class="" />
+   <br/>
+   <button id="automorphismbutton" onclick="automorphism();" disabled="disabled">Automorphism</button><br/>
+  </div>
+  <p style="font-size:0.7em;">Enter two node addresses into the boxes above, or CTRL-click on the graph: the closest node will be added to the orange-outlined box. For now, no animation is shown, but the graph is relabelled according to the chosen automorphism.</p>
+ </div>
+
+ <div id="info" class="showinfo"></div>
+
+ <div id="theframe" class="showgraph" style="position:relative;">
+  <svg id="thecanvas" style="width: 100%; height: 100%;" onclick="canvasClick(evt);"></svg>
+  <button class="demobutton" onclick="demoOne();">Example 1</button>
+  <button class="demobutton" onclick="demoTwo(true);">Example 2</button>
+
+  <div id="extracontrols" class="thecontrols">
+   <p style="display:none;">More controls can go here:</p>
+   <div class="extracontrolpanel">
+    <span title="Click to reset" style="cursor:pointer;" onclick="thearrowsize.value=3; thearrowsizeOutput.value = thearrowsize.value; drawgraph();" id="thearrowsizeLabel">Arrow size:</span>
+    <input type="range" style="width:80px;" min="0" max="20" step="1" value="3" id="thearrowsize" oninput="thearrowsizeOutput.value = thearrowsize.value; drawgraph();" />
+    <output style="width:20px;vertical-align:middle;" name="thearrowsizeOutputName" id="thearrowsizeOutput">999</output><br/>
+
+    <span title="Click to reset" style="cursor:pointer;" onclick="thearrowratio.value=2.0; thearrowratioOutput.value = parseFloat(thearrowratio.value).toFixed(2); drawgraph();" id="thearrowratioLabel">Arrow ratio:</span>
+    <input type="range" style="width:80px;" min="0.5" max="3" step="0.05" value="2.0" id="thearrowratio" oninput="thearrowratioOutput.value = parseFloat(thearrowratio.value).toFixed(2); drawgraph();" />
+    <output style="width:20px;vertical-align:middle;" name="thearrowratioOutputName" id="thearrowratioOutput">999</output><br/>
+
+    <span title="Click to reset" style="cursor:pointer;" onclick="thearrowoffset.value=0.3; thearrowoffsetOutput.value = parseFloat(thearrowoffset.value).toFixed(2); drawgraph();" id="thearrowoffsetLabel">Arrow offset:</span>
+    <input type="range" style="width:80px;" min="0.1" max="0.9" step="0.05" value="0.3" id="thearrowoffset" oninput="thearrowoffsetOutput.value = parseFloat(thearrowoffset.value).toFixed(2); drawgraph();" />
+    <output style="width:20px;vertical-align:middle;" name="thearrowoffsetOutputName" id="thearrowoffsetOutput">999</output><br/>
+
+    <label for="filledarrowsbutton" id="filledarrowsbuttonLabel">Filled arrows? <input type="checkbox" id="filledarrowsbutton" checked="checked" onclick="drawgraph();" /></label><br/>
+    <label for="reversedarrowsbutton" id="reversedarrowsbuttonLabel">Reversed arrows? <input type="checkbox" id="reversedarrowsbutton" onclick="drawgraph();" /></label><br/>
+    <label for="fadedarrowsbutton" id="fadedarrowsbuttonLabel">Show arrows on faded edges? <input type="checkbox" id="fadedarrowsbutton" checked="checked" onclick="drawgraph();" /></label><br/>
+
+    <span title="Click to reset" style="cursor:pointer;" onclick="theaxislinewidth.value=0.2; axislinewidthOutput.value = theaxislinewidth.value; drawgraph();" id="theaxislinewidthLabel">Axis line width:</span>
+    <input type="range" style="width:100px;" min="0" max="10" step="0.1" value="0.2" id="theaxislinewidth" oninput="axislinewidthOutput.value = theaxislinewidth.value; drawgraph();" />
+    <output style="width:20px;vertical-align:middle;" name="axislinewidthOutputName" id="axislinewidthOutput">999</output><br/>
+   </div>
+
+<!--
+   <div class="somebuttons">
+    <button id="runmorebutton" onclick="drawgraph();">DRAW</button>
+   </div>
+-->
+
+  </div>
+ </div>
+
+ <script>
+  $(".basicpicker").spectrum({
+   preferredFormat: "hex3",
+   clickoutFiresChange: "true",
+  });
+ </script>
+
+</body>
+</html>

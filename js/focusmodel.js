@@ -1,15 +1,20 @@
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
-function setup(graphtype){
+function setup(){
  var okay = false;
  wipeCanvas();
 
+ var params = new FocusModel;
+ params.saveCurrent();
+// graphtype = params.themodeltype;
+
  // make sure the control displays (labels) are the same as the controls' values:
  thevalencyOutput.value = thevalency.value;
+ thewidthOutput.value = thewidth.value;
+// if (graphtype=="newaxis"|graphtype=="monoray") thewidthOutput.value = thewidth.value;
  thelevelsOutput.value = thelevels.value;
  thescalingOutput.value = thescaling.value;
- if (graphtype=="newaxis"|graphtype=="monoray") thewidthOutput.value = thewidth.value;
  thelengthOutput.value = thelength.value;
  thespreadOutput.value = thespread.value;
  offsetXOutput.value = theoffsetX.value;
@@ -30,11 +35,9 @@ function setup(graphtype){
 
  // change the canvas cursor to "alias" when pressing control (for picking automorphism nodes)
  $(document).on("keydown", function (event) {
-//  if (event.key=="Control") {
   if (event.ctrlKey) {
    $("#thecanvas").css("cursor", "alias");
    $("#ctrlnote").addClass("redbg");
-//  } else if (event.key=="Shift") {
   } else if (event.shiftKey) {
    $("#thecanvas").css("cursor", "text");
    $(".midptlabel").css("display","inline");
@@ -47,26 +50,42 @@ function setup(graphtype){
   $(".midptlabel").css("display","none");
  });
 
- switch (graphtype){
+ // turn off the "width" control (it will be enabled only for newaxis):
+ $("#thewidth").prop("disabled","disabled");
+ $("#thewidth").addClass("disabledcontrol");
+ $("#thewidthLabel").addClass("disabledcontrol");
+ $("#thewidthOutput").addClass("disabledcontrol");
+
+ // do some conditional set-up:
+ switch (params.themodeltype){
   case "vertex":
+   console.log("graphtype = "+params.themodeltype);
    if (vertexmodel(V0)) okay = true;
    break;
   case "edge":
+   console.log("graphtype = "+params.themodeltype);
    if (edgemodel(V0)) okay = true;
    break;
   case "axis":
+   console.log("graphtype = "+params.themodeltype);
    if (axismodel(V0)) okay = true;
    break;
   case "newaxis":
+   console.log("graphtype = "+params.themodeltype);
    if (newaxismodel(V0)) okay = true;
+   $("#thewidth").removeProp("disabled");
+   $("#thewidthwidth").removeClass("disabledcontrol");
+   $("#thewidthLabel").removeClass("disabledcontrol");
+   $("#thewidthOutput").removeClass("disabledcontrol");
    break;
   case "monoray":
+   console.log("graphtype = "+params.themodeltype);
    if (monoraymodel(V0)) okay = true;
    break;
   default:
+   console.log("graphtype = "+params.themodeltype);
    alert("Set-up must be called with a focus type");
    okay = false;
-   return 0;
  }
 
  if (okay){
@@ -368,6 +387,35 @@ function drawgraph(){
  var debug = false;
  var pi = Math.PI;
 
+ var params = new FocusModel;
+ params.saveCurrent();
+ switch (params.themodeltype){
+  case "vertex":
+   var V0=[""];
+   if (vertexmodel(V0)) okay = true;
+   break;
+  case "edge":
+   var V0=["","a"];
+   if (edgemodel(V0)) okay = true;
+   break;
+  case "axis":
+   var V0=[""];
+   if (axismodel(V0)) okay = true;
+   break;
+  case "newaxis":
+   var V0=[""];
+   if (newaxismodel(V0)) okay = true;
+   break;
+  case "monoray":
+   var V0=[""];
+   if (monoraymodel(V0)) okay = true;
+   break;
+  default:
+   alert("Set-up must be called with a focus type");
+   okay = false;
+   return 0;
+ }
+
  // clear the canvas:
  wipeCanvas();
 
@@ -377,10 +425,10 @@ function drawgraph(){
  if (nodeLabel.length != nodeIndex.length) createNodeLabel();
 
  // Set some default values (which the user might change with the controls):
- var axesColour = '#555';
- var nodeColour = '#000';
- var edgeColour = '#000';
- var labelColour = '#f00';
+//MOVETOCLASS var axesColour = '#555';
+//MOVETOCLASS var nodeColour = '#000';
+//MOVETOCLASS var edgeColour = '#000';
+//MOVETOCLASS var labelColour = '#f00';
  var ignoreNodeColour = ''; // set empty to not draw ignored nodes; was '#0f0'
  var ignoreEdgeColour = '#888'; // set empty to not draw edges for ignored nodes; was '#0f0'
  var ignoreLabelColour = ''; // set empty to not label ignored nodes; was '#0f0'
@@ -389,26 +437,26 @@ function drawgraph(){
  // Get values from user controls on the web page:
  // -- we're not too worried about NaN values here, which could arise if the user fiddles with the page or javascript and breaks something
  // user-selected colours:
- axesColour = document.getElementById("axespicker").value;
- labelColour = document.getElementById("labelpicker").value;
- edgeColour = document.getElementById("edgepicker").value;
- nodeColour = document.getElementById("nodepicker").value;
+ var axesColour = params.axespicker;
+ var labelColour = params.labelpicker;
+ var edgeColour = params.edgepicker;
+ var nodeColour = params.nodepicker;
  // label-related variables:
- var fontSize = parseInt($("#thefontsize").val());
- var textAngle = parseFloat($("#thetextangle").val());
- var showlabels = parseInt($("#whichlabel").val());
- var showarrows = $("#showarrowsbutton").prop("checked");
+ var fontSize = params.thefontsize;
+ var textAngle = params.thetextangle;
+ var showlabels = params.whichlabel;
+ var showarrows = params.showarrowsbutton;
  // pen-related variables:
- var nodeRadius = parseFloat($("#thenodesize").val());
- var lineWidth = parseFloat($("#thelinewidth").val());
- var axisLineWidth = parseFloat($("#theaxislinewidth").val());
- var showaxes = $("#axesbutton").prop('checked');
- var plainedges = $("#plainedgesbutton").prop('checked'); // plain=all the same colour; not plain=coloured by edge type
+ var nodeRadius = params.thenodesize;
+ var lineWidth = params.thelinewidth;
+ var axisLineWidth = params.theaxislinewidth;
+ var showaxes = params.axesbutton;
+ var plainedges = params.plainedgesbutton; // plain=all the same colour; not plain=coloured by edge type
  // canvas-related variables:
- var offsetX = parseFloat($("#theoffsetX").val()); // pixels, but allow float
- var offsetY = parseFloat($("#theoffsetY").val()); // pixels, but allow float
- var labelOffsetX = parseFloat($("#thelabeloffsetX").val()); // pixels, but allow float
- var labelOffsetY = parseFloat($("#thelabeloffsetY").val()); // pixels, but allow float
+ var offsetX = params.theoffsetX;
+ var offsetY = params.theoffsetY;
+ var labelOffsetX = params.thelabeloffsetX;
+ var labelOffsetY = params.thelabeloffsetY;
 
  /* get the canvas element and size it properly (transfer the CSS size to the proper canvas attributes) */
  $('#thecanvas').attr('width',$('#thecanvas').width());

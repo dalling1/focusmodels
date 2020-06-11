@@ -20,7 +20,7 @@ svg {cursor: pointer;}
 #theframe {width: 85%; height: 90vh; margin: 10px auto; box-shadow: inset 5px 5px 23px #666;}
 .showgraph {background-color: #fff;}
 input, output {display: inline-block; vertical-align: middle;}
-.disabledcontrol {color:#999; cursor:not-allowed;}
+.disabledcontrol {color:#999; cursor:not-allowed!important;}
 
 .invalid {color: red;}
 .clickentry {border: 2px solid orange;}
@@ -34,6 +34,8 @@ input, output {display: inline-block; vertical-align: middle;}
 .navigation {border:1px solid black;}
 .navigation a {color:orange;}
 .navigation a:hover {color:white;}
+.navigation .navspan {color:orange; cursor:pointer;}
+.navigation .navspan:hover {color:white;}
 .navigation ul {margin:0; padding:0;}
 .navigation ul li {float:left; list-style-type:none; margin:2px 5px; text-transform:uppercase; font-size: 11px;}
 .navigation {box-shadow: 5px 5px 4px #99a;}

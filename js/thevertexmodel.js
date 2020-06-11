@@ -78,7 +78,7 @@ function vertexmodel(initialVertex){
  for (var i=0;i<Math.ceil(Nlevels/valency);i++) tmp+=longestname;
  longestname = tmp;
  for (var i=longestname.length;i>0;i--) inverselongestname+=longestname[i-1];
-//console.log(' longestname is '+longestname);
+
 
  if (valency>2){
   Ntotal = Nroots*(valency*Math.pow(valency-1,Nlevels)-2)/(valency-2);
