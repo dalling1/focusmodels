@@ -50,6 +50,10 @@
   <input type="range" style="width:80px;" min="2" max="16" step="1" value="5" id="thevalency" oninput="thevalencyOutput.value = thevalency.value; if (edgemodel(V0)) drawgraph();" />
   <output style="width:20px;vertical-align:middle;" name="thevalencyOutputName" id="thevalencyOutput">999</output><br/>
 
+  <span class="disabledcontrol" title="Click to reset" style="cursor:pointer;" onclick="thewidth.value=3; thewidthOutput.value = thewidth.value; if (edgemodel(V0)) drawgraph();">Width:</span>
+  <input disabled="disabled" class="disabledcontrol" type="range" style="width:80px;" min="1" max="12" step="1" value="3" id="thewidth" oninput="thewidthOutput.value = thewidth.value; if (edgemodel(V0)) drawgraph();" />
+  <output class="disabledcontrol" style="width:20px;vertical-align:middle;" name="thewidthOutputName" id="thewidthOutput">999</output><br/>
+
   <span title="Click to reset" style="cursor:pointer;" onclick="thelevels.value=2; thelevelsOutput.value = thelevels.value; if (edgemodel(V0)) drawgraph();">Levels:</span>
   <input type="range" style="width:80px;" min="0" max="7" step="1" value="2" id="thelevels" oninput="thelevelsOutput.value = thelevels.value; if (edgemodel(V0)) drawgraph();" />
   <output style="width:20px;vertical-align:middle;" name="thelevelsOutputName" id="thelevelsOutput">999</output><br/>
