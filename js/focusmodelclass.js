@@ -117,8 +117,11 @@ automorph1, automorph2, thearrowsize, thearrowratio, thearrowoffset, filledarrow
   this.reversedarrowsbutton = $("#reversedarrowsbutton").prop("checked"); // boolean
   this.fadedarrosbutton = $("#fadedarrowsbutton").prop("checked"); // boolean
   this.theaxislinewidth = parseFloat($("#theaxislinewidth").val()); // float
-  this.initialfocus = "";
 
+
+  this.initialfocus = ""; // should this be stored on the HTML page somewhere?
+
+  // can we remove this from here and just use setDefaults()? :
   // set a default initial focus if not given (there is currently no mechanism for the user to specify this)
   if (this.initialfocus.length==0){
    if (this.themodeltype == "edge"){
@@ -129,7 +132,78 @@ automorph1, automorph2, thearrowsize, thearrowratio, thearrowoffset, filledarrow
   }
  }
 
+ setDefaults(){
+  var allowedModels = ['vertex','edge','axis','newaxis','monoray'];
+
+  // some universal defaults
+  if (allowedModels.indexOf(this.themodeltype)==-1){ // not a known model type
+   this.themodeltype = 'vertex';
+  }
+
+  this.initialfocus = [""];
+
+  this.thevalency = 3; // int
+  this.thelevels = 2; // int
+  this.thewidth = 3; // int
+  this.thescaling = 0.5; // float
+  this.thelength = 1.0; // float
+  this.thespread = 0.5; // float
+  this.plainedgesbutton = true; // boolean
+  this.edgepicker = "#000000"; // colour, eg "#990000"
+  this.nodepicker = "#000000"; // colour
+  this.whichlabel = 0; // int
+  this.labelpicker = "#ff0000"; // colour
+  this.axesbutton = false; // boolean
+  this.axespicker = "#888888"; // colour
+  this.fadeleavesbutton = false; // boolean
+  this.showarrowsbutton = false; // boolean
+  this.theoffsetX = 0.0; // float
+  this.theoffsetY = 0.0; // float
+  this.thelabeloffsetX = 10.0; // float
+  this.thelabeloffsetY = 10.0; // float
+  this.thetextangle = 0;
+  this.thefontsize = 15; // int
+  this.thenodesize = 3.0; // float
+  this.thelinewidth = 0.2; // float
+  this.transparencybutton = false; // boolean
+  this.automorph1 = ""; // float
+  this.automorph2 = ""; // float
+  this.thearrowsize = 3.0; // float
+  this.thearrowratio = 2.0; // float
+  this.thearrowoffset = 0.3; // float; between 0 and 1
+  this.filledarrowsbutton = true; // boolean
+  this.reversedarrowsbutton = false; // boolean
+  this.fadedarrowsbutton = true; // boolean
+  this.theaxislinewidth = 0.2; // float
+
+  // make some conditional changes to the default values:
+  switch (this.themodeltype){
+   case "vertex":
+    this.thevalency = 3; // int
+    break;
+   case "edge":
+    this.initialfocus = ["","a"];
+    this.thespread = 1.0; // float
+    break;
+   case "axis":
+    this.theoffsetY = 200.0; // float
+    break;
+   case "newaxis":
+    this.thelevels = 3; // int; "depth"
+    this.thespread = 0.9; // float
+    break;
+   case "monoray":
+    this.thevalency = 8; // int
+    this.thescaling = 2.0; // float
+    this.thespread = 0.9; // float
+    break;
+  }
+
+ }
+
 }
+
+
 
 // function to save the current controls to a file (this is related to the FocusModel class, so is going here)
 function saveToFile(){
