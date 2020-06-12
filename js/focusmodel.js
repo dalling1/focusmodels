@@ -84,7 +84,7 @@ function setup(){
    console.log("graphtype = "+params.themodeltype);
    if (newaxismodel(V0)) okay = true;
    $("#thewidth").removeProp("disabled");
-   $("#thewidthwidth").removeClass("disabledcontrol");
+   $("#thewidth").removeClass("disabledcontrol");
    $("#thewidthLabel").removeClass("disabledcontrol");
    $("#thewidthOutput").removeClass("disabledcontrol");
    break;
