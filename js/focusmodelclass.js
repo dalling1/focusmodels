@@ -1,12 +1,12 @@
 class FocusModel {
  constructor(themodeltype, initialfocus, thevalency, thelevels, thescaling, thelength, thespread, plainedgesbutton, edgepicker,
 nodepicker, whichlabel, labelpicker, axesbutton, axespicker, fadeleavesbutton, showarrowsbutton, theoffsetX, theoffsetY,
-thetextangle, thefontsize, thenodesize, thelinewidth, transparencybutton, automorph1, automorph2, thearrowsize,
-thearrowratio, thearrowoffset, filledarrowsbutton, reversedarrowsbutton, fadedarrowsbutton, theaxislinewidth){
+thelabeloffsetX, thelabeloffsetY, thetextangle, thefontsize, thenodesize, thelinewidth, transparencybutton,
+automorph1, automorph2, thearrowsize, thearrowratio, thearrowoffset, filledarrowsbutton, reversedarrowsbutton, fadedarrowsbutton, theaxislinewidth){
 
   this.name = 'FocusModel';
-  this.initialfocus = initialfocus; // formerly "V0", the initial focus vertex, edge, etc.
   this.themodeltype = themodeltype; // string, only one of {'vertex','edge','axis','newaxis','monoray'}
+  this.initialfocus = initialfocus; // formerly "V0", the initial focus vertex, edge, etc.
   this.thevalency = thevalency; // int
   this.thelevels = thelevels; // int
   this.thescaling = thescaling; // float
@@ -23,6 +23,8 @@ thearrowratio, thearrowoffset, filledarrowsbutton, reversedarrowsbutton, fadedar
   this.showarrowsbutton = showarrowsbutton; // boolean
   this.theoffsetX = theoffsetX; // float
   this.theoffsetY = theoffsetY; // float
+  this.thelabeloffsetX = thelabeloffsetX; // float
+  this.thelabeloffsetY = thelabeloffsetY; // float
   this.thetextangle = thetextangle;
   this.thefontsize = thefontsize; // int
   this.thenodesize = thenodesize; // float
@@ -60,6 +62,8 @@ thearrowratio, thearrowoffset, filledarrowsbutton, reversedarrowsbutton, fadedar
   $("#showarrowsbutton").prop("checked",(this.showarrowsbutton?true:false)); // boolean
   $("#theoffsetX").val(this.theoffsetX); // float
   $("#theoffsetY").val(this.theoffsetY); // float
+  $("#thelabeloffsetX").val(this.thelabeloffsetX); // float
+  $("#thelabeloffsetY").val(this.thelabeloffsetY); // float
   $("#thetextangle").val(this.thetextangle); // float
   $("#thefontsize").val(this.thefontsize); // int
   $("#thenodesize").val(this.thenodesize); // float
@@ -81,39 +85,41 @@ thearrowratio, thearrowoffset, filledarrowsbutton, reversedarrowsbutton, fadedar
  // a method to save the current set-up to a FocusModel object:
  saveCurrent(){
   this.themodeltype = $("#themodeltype").val(); // string, only one of {'vertex','edge','axis','newaxis','monoray'}
-  this.thevalency = $("#thevalency").val(); // int
-  this.thelevels = $("#thelevels").val(); // int
-  this.thescaling = $("#thescaling").val(); // float
-  this.thelength = $("#thelength").val(); // float
-  this.thespread = $("#thespread").val(); // float
+  this.thevalency = parseInt($("#thevalency").val()); // int
+  this.thelevels = parseInt($("#thelevels").val()); // int
+  this.thescaling = parseFloat($("#thescaling").val()); // float
+  this.thelength = parseFloat($("#thelength").val()); // float
+  this.thespread = parseFloat($("#thespread").val()); // float
   this.plainedgesbutton = $("#plainedgesbutton").prop("checked"); // boolean
   this.edgepicker = $("#edgepicker").spectrum("get").toHexString(); // colour
   this.nodepicker = $("#nodepicker").spectrum("get").toHexString(); // colour
-  this.whichlabel = $("#whichlabel").val(); // int
+  this.whichlabel = parseInt($("#whichlabel").val()); // int
   this.labelpicker = $("#labelpicker").spectrum("get").toHexString(); // colour
   this.axesbutton = $("#axesbutton").prop("checked"); // boolean
   this.axespicker = $("#axespicker").spectrum("get").toHexString(); // colour
   this.fadeleavesbutton = $("#fadeleavesbutton").prop("checked"); // boolean
   this.showarrowsbutton = $("#showarrowsbutton").prop("checked"); // boolean
-  this.theoffsetX = $("#theoffsetX").val(); // float
-  this.theoffsetY = $("#theoffsetY").val(); // float
-  this.thetextangle = $("#thetextangle").val(); // float
-  this.thefontsize = $("#thefontsize").val(); // int
-  this.thenodesize = $("#thenodesize").val(); // float
-  this.thelinewidth = $("#thelinewidth").val(); // float
+  this.theoffsetX = parseFloat($("#theoffsetX").val()); // float
+  this.theoffsetY = parseFloat($("#theoffsetY").val()); // float
+  this.thelabeloffsetX = parseFloat($("#thelabeloffsetX").val()); // float
+  this.thelabeloffsetY = parseFloat($("#thelabeloffsetY").val()); // float
+  this.thetextangle = parseFloat($("#thetextangle").val()); // float
+  this.thefontsize = parseInt($("#thefontsize").val()); // int
+  this.thenodesize = parseFloat($("#thenodesize").val()); // float
+  this.thelinewidth = parseFloat($("#thelinewidth").val()); // float
   this.transparencybutton = $("#transparencybutton").prop("checked"); // boolean
-  this.automorph1 = $("#automorph1").val(); // float
-  this.automorph2 = $("#automorph2").val(); // float
-  this.thearrowsize = $("#thearrowsize").val(); // float
-  this.thearrowratio = $("#thearrowratio").val(); // float
-  this.thearrowoffset = $("#thearrowoffset").val(); // float
+  this.automorph1 = parseFloat($("#automorph1").val()); // float
+  this.automorph2 = parseFloat($("#automorph2").val()); // float
+  this.thearrowsize = parseFloat($("#thearrowsize").val()); // float
+  this.thearrowratio = parseFloat($("#thearrowratio").val()); // float
+  this.thearrowoffset = parseFloat($("#thearrowoffset").val()); // float
   this.filledarrowsbutton = $("#filledarrowsbutton").prop("checked"); // boolean
   this.reversedarrowsbutton = $("#reversedarrowsbutton").prop("checked"); // boolean
   this.fadedarrosbutton = $("#fadedarrowsbutton").prop("checked"); // boolean
-  this.theaxislinewidth = $("#theaxislinewidth").val(); // float
+  this.theaxislinewidth = parseFloat($("#theaxislinewidth").val()); // float
   this.initialfocus = "";
 
-  // set a default initial focus if not given (there is currently no mechanism for that anyway)
+  // set a default initial focus if not given (there is currently no mechanism for the user to specify this)
   if (this.initialfocus.length==0){
    if (this.themodeltype == "edge"){
     this.initialfocus = ["","a"];
@@ -121,8 +127,8 @@ thearrowratio, thearrowoffset, filledarrowsbutton, reversedarrowsbutton, fadedar
     this.initialfocus = [""];
    }
   }
-
  }
+
 }
 
 // function to save the current controls to a file (this is related to the FocusModel class, so is going here)

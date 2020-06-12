@@ -70,19 +70,19 @@ function setup(){
  switch (params.themodeltype){
   case "vertex":
    console.log("graphtype = "+params.themodeltype);
-   if (vertexmodel(V0)) okay = true;
+   if (vertexmodel(params.initialfocus)) okay = true;
    break;
   case "edge":
    console.log("graphtype = "+params.themodeltype);
-   if (edgemodel(V0)) okay = true;
+   if (edgemodel(params.initialfocus)) okay = true;
    break;
   case "axis":
    console.log("graphtype = "+params.themodeltype);
-   if (axismodel(V0)) okay = true;
+   if (axismodel(params.initialfocus)) okay = true;
    break;
   case "newaxis":
    console.log("graphtype = "+params.themodeltype);
-   if (newaxismodel(V0)) okay = true;
+   if (newaxismodel(params.initialfocus)) okay = true;
    $("#thewidth").removeProp("disabled");
    $("#thewidth").removeClass("disabledcontrol");
    $("#thewidthLabel").removeClass("disabledcontrol");
@@ -90,7 +90,7 @@ function setup(){
    break;
   case "monoray":
    console.log("graphtype = "+params.themodeltype);
-   if (monoraymodel(V0)) okay = true;
+   if (monoraymodel(params.initialfocus)) okay = true;
    break;
   default:
    console.log("graphtype = "+params.themodeltype);
@@ -401,24 +401,19 @@ function drawgraph(){
  params.saveCurrent();
  switch (params.themodeltype){
   case "vertex":
-   var V0=[""];
-   if (vertexmodel(V0)) okay = true;
+   if (vertexmodel(params.initialfocus)) okay = true;
    break;
   case "edge":
-   var V0=["","a"];
-   if (edgemodel(V0)) okay = true;
+   if (edgemodel(params.initialfocus)) okay = true;
    break;
   case "axis":
-   var V0=[""];
-   if (axismodel(V0)) okay = true;
+   if (axismodel(params.initialfocus)) okay = true;
    break;
   case "newaxis":
-   var V0=[""];
-   if (newaxismodel(V0)) okay = true;
+   if (newaxismodel(params.initialfocus)) okay = true;
    break;
   case "monoray":
-   var V0=[""];
-   if (monoraymodel(V0)) okay = true;
+   if (monoraymodel(params.initialfocus)) okay = true;
    break;
   default:
    alert("Set-up must be called with a focus type");
@@ -1006,7 +1001,6 @@ function canvasClick(evt){
 function showallcontrols(){
  // toggles the extra control panel, an animation suggesting that it slides out
  var ex = $("#extracontrols");
-// if (parseFloat(ex.css("padding-left"))>7){
  if (parseFloat(ex.css("width"))>200){
   ex.animate({width:"20px"},100);
  } else {
@@ -1018,9 +1012,6 @@ function showallcontrols(){
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
 function lineMidPoint(start,end,factor=0.5){
-// var midX = (start[0]+end[0])*0.5;
-// var midY = (start[1]+end[1])*0.5;
-// return [midX,midY];
  var alongX = start[0]+factor*(end[0]-start[0]);
  var alongY = start[1]+factor*(end[1]-start[1]);
  return [alongX,alongY];
