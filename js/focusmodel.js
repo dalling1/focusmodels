@@ -5,6 +5,15 @@ function setup(){
  var okay = false;
  wipeCanvas();
 
+ allowedModels = ['vertex','edge','axis','newaxis','monoray']; // global
+ allparams = new Array(); // global
+ for (var m in allowedModels){
+  var tmpmodel = new FocusModel;
+  tmpmodel.themodeltype = allowedModels[m];
+  tmpmodel.setDefaults();
+  allparams.push(tmpmodel);
+ } 
+
  var params = new FocusModel;
  params.saveCurrent();
 // graphtype = params.themodeltype;
@@ -23,13 +32,13 @@ function setup(){
  thescalingOutput.value = thescaling.value;
  thelengthOutput.value = thelength.value;
  thespreadOutput.value = thespread.value;
- offsetXOutput.value = theoffsetX.value;
- offsetYOutput.value = theoffsetY.value;
- labeloffsetXOutput.value = thelabeloffsetX.value;
- labeloffsetYOutput.value = thelabeloffsetY.value;
+ theoffsetXOutput.value = theoffsetX.value;
+ theoffsetYOutput.value = theoffsetY.value;
+ thelabeloffsetXOutput.value = thelabeloffsetX.value;
+ thelabeloffsetYOutput.value = thelabeloffsetY.value;
  thetextangleOutput.value = thetextangle.value;
- fontsizeOutput.value = thefontsize.value;
- nodesizeOutput.value = thenodesize.value;
+ thefontsizeOutput.value = thefontsize.value;
+ thenodesizeOutput.value = thenodesize.value;
  linewidthOutput.value = thelinewidth.value;
  // "more controls":
  thearrowsizeOutput.value = thearrowsize.value;
@@ -393,12 +402,25 @@ function collapseAddress(str=""){
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
+function switchmodel(){
+ var thismodeltype = $("#themodeltype").val(); // string, only one of {'vertex','edge','axis','newaxis','monoray'}
+ allparams[allowedModels.indexOf(thismodeltype)].drawModel();
+}
+
+/* ********************************************************************************************* */
+/* ********************************************************************************************* */
+/* ********************************************************************************************* */
 function drawgraph(){
  var debug = false;
  var pi = Math.PI;
 
+ // get the current settings for all the page controls:
  var params = new FocusModel;
  params.saveCurrent();
+
+ // store them away into the "allparams" array, for switching between models:
+ allparams[allowedModels.indexOf(params.themodeltype)].saveCurrent();
+
  switch (params.themodeltype){
   case "vertex":
    if (vertexmodel(params.initialfocus)) okay = true;

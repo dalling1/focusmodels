@@ -47,10 +47,15 @@ automorph1, automorph2, thearrowsize, thearrowratio, thearrowoffset, filledarrow
  drawModel(){
   $("#themodeltype").val(this.themodeltype); // string, only one of {'vertex','edge','axis','newaxis','monoray'}
   $("#thevalency").val(this.thevalency); // int
+  $("#thevalencyOutput").val(this.thevalency); // int
   $("#thelevels").val(this.thelevels); // int
+  $("#thelevelsOutput").val(this.thelevels); // int
   $("#thescaling").val(this.thescaling); // float
+  $("#thescalingOutput").val(this.thescaling); // float
   $("#thelength").val(this.thelength); // float
+  $("#thelengthOutput").val(this.thelength); // float
   $("#thespread").val(this.thespread); // float
+  $("#thespreadOutput").val(this.thespread); // float
   $("#plainedgesbutton").prop("checked",(this.plainedgesbutton?true:false)); // boolean
   $("#edgepicker").spectrum("set",this.edgepicker); // colour
   $("#nodepicker").spectrum("set",this.nodepicker); // colour
@@ -61,25 +66,38 @@ automorph1, automorph2, thearrowsize, thearrowratio, thearrowoffset, filledarrow
   $("#fadeleavesbutton").prop("checked",(this.fadeleavesbutton?true:false)); // boolean
   $("#showarrowsbutton").prop("checked",(this.showarrowsbutton?true:false)); // boolean
   $("#theoffsetX").val(this.theoffsetX); // float
+  $("#theoffsetXOutput").val(this.theoffsetX); // float
   $("#theoffsetY").val(this.theoffsetY); // float
+  $("#theoffsetYOutput").val(this.theoffsetY); // float
   $("#thelabeloffsetX").val(this.thelabeloffsetX); // float
+  $("#thelabeloffsetXOutput").val(this.thelabeloffsetX); // float
   $("#thelabeloffsetY").val(this.thelabeloffsetY); // float
+  $("#thelabeloffsetYOutput").val(this.thelabeloffsetY); // float
   $("#thetextangle").val(this.thetextangle); // float
+  $("#thetextangleOutput").val(this.thetextangle); // float
   $("#thefontsize").val(this.thefontsize); // int
+  $("#thefontsizeOutput").val(this.thefontsize); // int
   $("#thenodesize").val(this.thenodesize); // float
+  $("#thenodesizeOutput").val(this.thenodesize); // float
   $("#thelinewidth").val(this.thelinewidth); // float
+  $("#thelinewidthOutput").val(this.thelinewidth); // float
   $("#transparencybutton").prop("checked",(this.transparencybutton?true:false)); // boolean
   $("#automorph1").val(this.automorph1); // float
   $("#automorph2").val(this.automorph2); // float
   $("#thearrowsize").val(this.thearrowsize); // float
+  $("#thearrowsizeOutput").val(this.thearrowsize); // float
   $("#thearrowratio").val(this.thearrowratio); // float
+  $("#thearrowratioOutput").val(this.thearrowratio); // float
   $("#thearrowoffset").val(this.thearrowoffset); // float
+  $("#thearrowoffsetOutput").val(this.thearrowoffset); // float
   $("#filledarrowsbutton").prop("checked",(this.filledarrowsbutton?true:false)); // boolean
   $("#reversedarrowsbutton").prop("checked",(this.reversedarrowsbutton?true:false)); // boolean
   $("#fadedarrowsbutton").prop("checked",(this.fadedarrosbutton?true:false)); // boolean
   $("#theaxislinewidth").val(this.theaxislinewidth); // float
+  $("#theaxislinewidthOutput").val(this.theaxislinewidth); // float
 
-  setup(this.themodeltype);
+//  setup(this.themodeltype);
+  drawgraph();
  }
 
  // a method to save the current set-up to a FocusModel object:
@@ -137,7 +155,7 @@ automorph1, automorph2, thearrowsize, thearrowratio, thearrowoffset, filledarrow
 
   // some universal defaults
   if (allowedModels.indexOf(this.themodeltype)==-1){ // not a known model type
-   this.themodeltype = 'vertex';
+   this.themodeltype = 'vertex'; // make it a vertex-focused model then
   }
 
   this.initialfocus = [""];
@@ -195,10 +213,9 @@ automorph1, automorph2, thearrowsize, thearrowratio, thearrowoffset, filledarrow
    case "monoray":
     this.thevalency = 8; // int
     this.thescaling = 2.0; // float
-    this.thespread = 0.9; // float
+    this.thespread = 0.5; // float
     break;
   }
-
  }
 
 }

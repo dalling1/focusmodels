@@ -26,11 +26,11 @@
  <div class="navigation">
   <ul>
    <li><a href="./">home</a></li>
-   <li><span class="navspan" onClick='document.getElementById("themodeltype").value="vertex";drawgraph();'>vertex</span></li>
-   <li><span class="navspan" onClick='document.getElementById("themodeltype").value="edge";drawgraph();'>edge</span></li>
-   <li><span class="navspan" onClick='document.getElementById("themodeltype").value="axis";drawgraph();'>axis</span></li>
-   <li><span class="navspan" onClick='document.getElementById("themodeltype").value="newaxis";drawgraph();'>axis(ii)</span></li>
-   <li><span class="navspan" onClick='document.getElementById("themodeltype").value="monoray";drawgraph();'>monoray</span></li>
+   <li><span class="navspan" onClick='document.getElementById("themodeltype").value="vertex";switchmodel();'>vertex</span></li>
+   <li><span class="navspan" onClick='document.getElementById("themodeltype").value="edge";switchmodel();'>edge</span></li>
+   <li><span class="navspan" onClick='document.getElementById("themodeltype").value="axis";switchmodel();'>axis</span></li>
+   <li><span class="navspan" onClick='document.getElementById("themodeltype").value="newaxis";switchmodel();'>axis(ii)</span></li>
+   <li><span class="navspan" onClick='document.getElementById("themodeltype").value="monoray";switchmodel();'>monoray</span></li>
   </ul>
   <div class="navshadow"></div>
  </div>
@@ -42,7 +42,7 @@
 
   <div style="text-align:center;margin:15px 0;">
   <span title="Choose a model type" style="cursor:pointer;font-weight:bold;" onclick="drawgraph();">Model:</span>
-  <select style="width:80px;" id="themodeltype" oninput="drawgraph();" />
+  <select style="width:80px;" id="themodeltype" onchange="switchmodel();" />
    <option value="vertex">Vertex</option>
    <option value="edge">Edge</option>
    <option value="axis">Axis</option>
@@ -102,31 +102,31 @@
 
   <hr/>
 
-  <span title="Click to reset" style="cursor:pointer;" onclick="theoffsetX.value=0; offsetXOutput.value = theoffsetX.value; drawgraph();" id="theoffsetXLabel">Offset X:</span>
-  <input type="range" style="width:100px;" min="-500" max="500" step="50" value="0" id="theoffsetX" oninput="offsetXOutput.value = theoffsetX.value; drawgraph();" />
-  <output style="width:20px;vertical-align:middle;" name="offsetXOutputName" id="offsetXOutput">999</output><br/>
-  <span title="Click to reset" style="cursor:pointer;" onclick="theoffsetY.value=0; offsetYOutput.value = theoffsetY.value; drawgraph();" id="theoffsetYLabel">Offset Y:</span>
-  <input type="range" style="width:100px;" min="-500" max="500" step="50" value="0" id="theoffsetY" oninput="offsetYOutput.value = theoffsetY.value; drawgraph();" />
-  <output style="width:20px;vertical-align:middle;" name="offsetYOutputName" id="offsetYOutput">999</output><br/>
+  <span title="Click to reset" style="cursor:pointer;" onclick="theoffsetX.value=0; theoffsetXOutput.value = theoffsetX.value; drawgraph();" id="theoffsetXLabel">Offset X:</span>
+  <input type="range" style="width:100px;" min="-500" max="500" step="50" value="0" id="theoffsetX" oninput="theoffsetXOutput.value = theoffsetX.value; drawgraph();" />
+  <output style="width:20px;vertical-align:middle;" name="theoffsetXOutputName" id="theoffsetXOutput">999</output><br/>
+  <span title="Click to reset" style="cursor:pointer;" onclick="theoffsetY.value=0; theoffsetYOutput.value = theoffsetY.value; drawgraph();" id="theoffsetYLabel">Offset Y:</span>
+  <input type="range" style="width:100px;" min="-500" max="500" step="50" value="0" id="theoffsetY" oninput="theoffsetYOutput.value = theoffsetY.value; drawgraph();" />
+  <output style="width:20px;vertical-align:middle;" name="theoffsetYOutputName" id="theoffsetYOutput">999</output><br/>
 
-  <span title="Click to reset" style="cursor:pointer;" onclick="thelabeloffsetX.value=10; labeloffsetXOutput.value = thelabeloffsetX.value; drawgraph();" id="thelabeloffsetXLabel">Label offset X:</span>
-  <input type="range" style="width:100px;" min="-100" max="100" step="1" value="10" id="thelabeloffsetX" oninput="labeloffsetXOutput.value = thelabeloffsetX.value; drawgraph();" />
-  <output style="width:20px;vertical-align:middle;" name="labeloffsetXOutputName" id="labeloffsetXOutput">999</output><br/>
-  <span title="Click to reset" style="cursor:pointer;" onclick="thelabeloffsetY.value=10; labeloffsetYOutput.value = thelabeloffsetY.value; drawgraph();" id="thelabeloffsetYLabel">Label offset Y:</span>
-  <input type="range" style="width:100px;" min="-100" max="100" step="1" value="10" id="thelabeloffsetY" oninput="labeloffsetYOutput.value = thelabeloffsetY.value; drawgraph();" />
-  <output style="width:20px;vertical-align:middle;" name="labeloffsetYOutputName" id="labeloffsetYOutput">999</output><br/>
+  <span title="Click to reset" style="cursor:pointer;" onclick="thelabeloffsetX.value=10; thelabeloffsetXOutput.value = thelabeloffsetX.value; drawgraph();" id="thelabeloffsetXLabel">Label offset X:</span>
+  <input type="range" style="width:100px;" min="-100" max="100" step="1" value="10" id="thelabeloffsetX" oninput="thelabeloffsetXOutput.value = thelabeloffsetX.value; drawgraph();" />
+  <output style="width:20px;vertical-align:middle;" name="thelabeloffsetXOutputName" id="thelabeloffsetXOutput">999</output><br/>
+  <span title="Click to reset" style="cursor:pointer;" onclick="thelabeloffsetY.value=10; thelabeloffsetYOutput.value = thelabeloffsetY.value; drawgraph();" id="thelabeloffsetYLabel">Label offset Y:</span>
+  <input type="range" style="width:100px;" min="-100" max="100" step="1" value="10" id="thelabeloffsetY" oninput="thelabeloffsetYOutput.value = thelabeloffsetY.value; drawgraph();" />
+  <output style="width:20px;vertical-align:middle;" name="thelabeloffsetYOutputName" id="thelabeloffsetYOutput">999</output><br/>
 
   <span title="Click to reset" style="cursor:pointer;" onclick="thetextangle.value='0'; thetextangleOutput.value = thetextangle.value; drawgraph();" id="thetextangleLabel">Label angle:</span>
   <input type="range" style="width:100px;" min="-90" max="90" step="15" value="0" id="thetextangle" oninput="thetextangleOutput.value = thetextangle.value; drawgraph();" />
   <output style="width:14px;vertical-align:middle;" name="thetextangleOutputName" id="thetextangleOutput">999</output><sup>o</sup><br/>
 
-  <span title="Click to reset" style="cursor:pointer;" onclick="thefontsize.value=15; fontsizeOutput.value = thefontsize.value; drawgraph();" id="thefontsizeLabel">Label size:</span>
-  <input type="range" style="width:100px;" min="10" max="30" step="5" value="15" id="thefontsize" oninput="fontsizeOutput.value = thefontsize.value; drawgraph();" />
-  <output style="width:20px;vertical-align:middle;" name="fontsizeOutputName" id="fontsizeOutput">999</output><br/>
+  <span title="Click to reset" style="cursor:pointer;" onclick="thefontsize.value=15; thefontsizeOutput.value = thefontsize.value; drawgraph();" id="thefontsizeLabel">Label size:</span>
+  <input type="range" style="width:100px;" min="10" max="30" step="5" value="15" id="thefontsize" oninput="thefontsizeOutput.value = thefontsize.value; drawgraph();" />
+  <output style="width:20px;vertical-align:middle;" name="thefontsizeOutputName" id="thefontsizeOutput">999</output><br/>
 
-  <span title="Click to reset" style="cursor:pointer;" onclick="thenodesize.value=3; nodesizeOutput.value = thenodesize.value; drawgraph();" id="thenodesizeLabel">Node size:</span>
-  <input type="range" style="width:100px;" min="0" max="20" step="1" value="3" id="thenodesize" oninput="nodesizeOutput.value = thenodesize.value; drawgraph();" />
-  <output style="width:20px;vertical-align:middle;" name="nodesizeOutputName" id="nodesizeOutput">999</output><br/>
+  <span title="Click to reset" style="cursor:pointer;" onclick="thenodesize.value=3; thenodesizeOutput.value = thenodesize.value; drawgraph();" id="thenodesizeLabel">Node size:</span>
+  <input type="range" style="width:100px;" min="0" max="20" step="1" value="3" id="thenodesize" oninput="thenodesizeOutput.value = thenodesize.value; drawgraph();" />
+  <output style="width:20px;vertical-align:middle;" name="thenodesizeOutputName" id="thenodesizeOutput">999</output><br/>
 
   <span title="Click to reset" style="cursor:pointer;" onclick="thelinewidth.value=0.2; linewidthOutput.value = thelinewidth.value; drawgraph();" id="thelinewidthLabel">Line width:</span>
   <input type="range" style="width:100px;" min="0" max="4" step="0.1" value="0.2" id="thelinewidth" oninput="linewidthOutput.value = thelinewidth.value; drawgraph();" />
