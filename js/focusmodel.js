@@ -5,6 +5,7 @@ function setup(){
  var okay = false;
  wipeCanvas();
 
+ // create an array of FocusModel objects, which will be used to store the different models' parameters:
  allowedModels = ['vertex','edge','axis','newaxis','monoray']; // global
  allparams = new Array(); // global
  for (var m in allowedModels){
@@ -15,7 +16,7 @@ function setup(){
  }
 
  var params = new FocusModel;
- params.saveCurrent();
+ params.getCurrent();
 
  // look for an anchor in the URL and switch to that model type (if it is an allowed one):
  var hashmodel = location.hash.split("#");
@@ -23,6 +24,8 @@ function setup(){
  console.log("Requested urlmodel: "+urlmodel);
  if (allowedModels.indexOf(urlmodel)>-1){
   document.getElementById("themodeltype").value=urlmodel;
+  params = allparams[allowedModels.indexOf(urlmodel)]; // switch to the model specified in the URL anchor
+  params.setCurrent();
  }
 
  // make sure the control displays (labels) are the same as the controls' values:
@@ -44,9 +47,8 @@ function setup(){
  thearrowsizeOutput.value = thearrowsize.value;
  thearrowoffsetOutput.value = thearrowoffset.value;
  thearrowratioOutput.value = thearrowratio.value;
-// axislinewidthOutput.value = theaxislinewidth.value;
- axislinewidthOutput.value = thelinewidth.value; // on load, set the axis line width to the normal line width
- theaxislinewidth.value = thelinewidth.value;
+ theaxislinewidthOutput.value = theaxislinewidth.value;
+ theaxislinewidth.value = theaxislinewidth.value;
 
  // change the canvas cursor to "alias" when pressing control (for picking automorphism nodes)
  $(document).on("keydown", function (event) {
@@ -415,10 +417,10 @@ function drawgraph(){
 
  // get the current settings for all the page controls:
  var params = new FocusModel;
- params.saveCurrent();
+ params.getCurrent();
 
  // store them away into the "allparams" array, for switching between models:
- allparams[allowedModels.indexOf(params.themodeltype)].saveCurrent();
+ allparams[allowedModels.indexOf(params.themodeltype)].getCurrent();
 
  enableLevelsControl();
  switch (params.themodeltype){

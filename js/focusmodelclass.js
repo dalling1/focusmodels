@@ -46,7 +46,7 @@ theaxislinewidth){
 
  // a method to draw a given model object:
  // set the page controls and then call setup, which reads those values and draws the graph
- drawModel(){
+ setCurrent(){
   $("#themodeltype").val(this.themodeltype); // string, only one of {'vertex','edge','axis','newaxis','monoray'}
   $("#thevalency").val(this.thevalency); // int
   $("#thevalencyOutput").val(this.thevalency); // int
@@ -101,13 +101,15 @@ theaxislinewidth){
   $("#fadedarrowsbutton").prop("checked",(this.fadedarrosbutton?true:false)); // boolean
   $("#theaxislinewidth").val(this.theaxislinewidth); // float
   $("#theaxislinewidthOutput").val(this.theaxislinewidth); // float
+ }
 
-//  setup(this.themodeltype);
+ drawModel(){
+  this.setCurrent();
   drawgraph();
  }
 
  // a method to save the current set-up to a FocusModel object:
- saveCurrent(){
+ getCurrent(){
   this.themodeltype = $("#themodeltype").val(); // string, only one of {'vertex','edge','axis','newaxis','monoray'}
   this.thevalency = parseInt($("#thevalency").val()); // int
   this.thewidth = parseInt($("#thewidth").val()); // int
@@ -228,7 +230,7 @@ theaxislinewidth){
     this.showarrowsbutton = true; // boolean
     this.reversedarrowsbutton = true; // boolean
     this.thearrowoffset = 0.7; // float; between 0 and 1
-    this.theaxislinewidth = 3; // float
+    this.theaxislinewidth = 3.0; // float
     break;
   }
  }
@@ -240,7 +242,7 @@ theaxislinewidth){
 // function to save the current controls to a file (this is related to the FocusModel class, so is going here)
 function saveToFile(){
  var params = new FocusModel;
- params.saveCurrent();
+ params.getCurrent();
  var modeltype = $("#themodeltype").val();
  var thejson = JSON.stringify(params);
  var theblob = new Blob([thejson], {type: "application/json"}); // reinforces the idea that this is json data (not just text to mess around with)
