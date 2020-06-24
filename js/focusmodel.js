@@ -12,7 +12,7 @@ function setup(){
   tmpmodel.themodeltype = allowedModels[m];
   tmpmodel.setDefaults();
   allparams.push(tmpmodel);
- } 
+ }
 
  var params = new FocusModel;
  params.saveCurrent();
@@ -65,11 +65,10 @@ function setup(){
   $(".midptlabel").css("display","none");
  });
 
- // turn off the "width" control (it will be enabled only for newaxis):
- $("#thewidth").prop("disabled","disabled");
- $("#thewidth").addClass("disabledcontrol");
- $("#thewidthLabel").addClass("disabledcontrol");
- $("#thewidthOutput").addClass("disabledcontrol");
+ // turn off the "width" control (it will be enabled only for newaxis and monoray):
+ disableWidthControl();
+ // turn on the "levels" control (it will be disabled only for monoray):
+ enableLevelsControl();
 
  if (urlmodel.length & urlmodel!=params.themodeltype){
   console.log("URL model anchor ("+urlmodel+") and user controls ("+params.themodeltype+") do not agree");
@@ -92,14 +91,13 @@ function setup(){
   case "newaxis":
    console.log("graphtype = "+params.themodeltype);
    if (newaxismodel(params.initialfocus)) okay = true;
-   $("#thewidth").removeProp("disabled");
-   $("#thewidth").removeClass("disabledcontrol");
-   $("#thewidthLabel").removeClass("disabledcontrol");
-   $("#thewidthOutput").removeClass("disabledcontrol");
+   enableWidthControl();
    break;
   case "monoray":
    console.log("graphtype = "+params.themodeltype);
    if (monoraymodel(params.initialfocus)) okay = true;
+   enableWidthControl();
+   disableLevelsControl();
    break;
   default:
    console.log("graphtype = "+params.themodeltype);
@@ -421,21 +419,28 @@ function drawgraph(){
  // store them away into the "allparams" array, for switching between models:
  allparams[allowedModels.indexOf(params.themodeltype)].saveCurrent();
 
+ enableLevelsControl();
  switch (params.themodeltype){
   case "vertex":
    if (vertexmodel(params.initialfocus)) okay = true;
+   disableWidthControl();
    break;
   case "edge":
    if (edgemodel(params.initialfocus)) okay = true;
+   disableWidthControl();
    break;
   case "axis":
    if (axismodel(params.initialfocus)) okay = true;
+   disableWidthControl();
    break;
   case "newaxis":
    if (newaxismodel(params.initialfocus)) okay = true;
+   enableWidthControl();
    break;
   case "monoray":
    if (monoraymodel(params.initialfocus)) okay = true;
+   enableWidthControl();
+   disableLevelsControl();
    break;
   default:
    alert("Set-up must be called with a focus type");
@@ -1138,4 +1143,33 @@ function canvasScale(pos=[0,0]){
   }
  }
  return newpos;
+}
+
+
+/* ********************************************************************************************* */
+/* ********************************************************************************************* */
+/* ********************************************************************************************* */
+function disableLevelsControl(){
+ $("#thelevels").prop("disabled","disabled");
+ $("#thelevels").addClass("disabledcontrol");
+ $("#thelevelsLabel").addClass("disabledcontrol");
+ $("#thelevelsOutput").addClass("disabledcontrol");
+}
+function enableLevelsControl(){
+ $("#thelevels").removeProp("disabled");
+ $("#thelevels").removeClass("disabledcontrol");
+ $("#thelevelsLabel").removeClass("disabledcontrol");
+ $("#thelevelsOutput").removeClass("disabledcontrol");
+}
+function disableWidthControl(){
+ $("#thewidth").prop("disabled","disabled");
+ $("#thewidth").addClass("disabledcontrol");
+ $("#thewidthLabel").addClass("disabledcontrol");
+ $("#thewidthOutput").addClass("disabledcontrol");
+}
+function enableWidthControl(){
+ $("#thewidth").removeProp("disabled");
+ $("#thewidth").removeClass("disabledcontrol");
+ $("#thewidthLabel").removeClass("disabledcontrol");
+ $("#thewidthOutput").removeClass("disabledcontrol");
 }

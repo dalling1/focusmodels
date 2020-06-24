@@ -1,14 +1,16 @@
 class FocusModel {
- constructor(themodeltype, initialfocus, thevalency, thelevels, thescaling, thelength, thespread, plainedgesbutton, edgepicker,
-nodepicker, whichlabel, labelpicker, axesbutton, axespicker, fadeleavesbutton, showarrowsbutton, theoffsetX, theoffsetY,
-thelabeloffsetX, thelabeloffsetY, thetextangle, thefontsize, thenodesize, thelinewidth, transparencybutton,
-automorph1, automorph2, thearrowsize, thearrowratio, thearrowoffset, filledarrowsbutton, reversedarrowsbutton, fadedarrowsbutton, theaxislinewidth){
+ constructor(themodeltype, initialfocus, thevalency, thelevels, thewidth, thescaling, thelength, thespread, plainedgesbutton,
+edgepicker, nodepicker, whichlabel, labelpicker, axesbutton, axespicker, fadeleavesbutton, showarrowsbutton, theoffsetX,
+theoffsetY, thelabeloffsetX, thelabeloffsetY, thetextangle, thefontsize, thenodesize, thelinewidth, transparencybutton,
+automorph1, automorph2, thearrowsize, thearrowratio, thearrowoffset, filledarrowsbutton, reversedarrowsbutton, fadedarrowsbutton,
+theaxislinewidth){
 
   this.name = 'FocusModel';
   this.themodeltype = themodeltype; // string, only one of {'vertex','edge','axis','newaxis','monoray'}
   this.initialfocus = initialfocus; // formerly "V0", the initial focus vertex, edge, etc.
   this.thevalency = thevalency; // int
   this.thelevels = thelevels; // int
+  this.thewidth = thewidth; // int
   this.thescaling = thescaling; // float
   this.thelength = thelength; // float
   this.thespread = thespread; // float
@@ -48,8 +50,12 @@ automorph1, automorph2, thearrowsize, thearrowratio, thearrowoffset, filledarrow
   $("#themodeltype").val(this.themodeltype); // string, only one of {'vertex','edge','axis','newaxis','monoray'}
   $("#thevalency").val(this.thevalency); // int
   $("#thevalencyOutput").val(this.thevalency); // int
+  $("#thewidth").val(this.thewidth); // int
+  $("#thewidthOutput").val(this.thewidth); // int
   $("#thelevels").val(this.thelevels); // int
   $("#thelevelsOutput").val(this.thelevels); // int
+  $("#thewidth").val(this.thewidth); // int
+  $("#thewidthOutput").val(this.thewidth); // int
   $("#thescaling").val(this.thescaling); // float
   $("#thescalingOutput").val(this.thescaling); // float
   $("#thelength").val(this.thelength); // float
@@ -105,6 +111,7 @@ automorph1, automorph2, thearrowsize, thearrowratio, thearrowoffset, filledarrow
   this.themodeltype = $("#themodeltype").val(); // string, only one of {'vertex','edge','axis','newaxis','monoray'}
   this.thevalency = parseInt($("#thevalency").val()); // int
   this.thelevels = parseInt($("#thelevels").val()); // int
+  this.thewidth = parseInt($("#thewidth").val()); // int
   this.thescaling = parseFloat($("#thescaling").val()); // float
   this.thelength = parseFloat($("#thelength").val()); // float
   this.thespread = parseFloat($("#thespread").val()); // float
@@ -208,12 +215,18 @@ automorph1, automorph2, thearrowsize, thearrowratio, thearrowoffset, filledarrow
     break;
    case "newaxis":
     this.thelevels = 3; // int; "depth"
+    this.thewidth = 3; // int
     this.thespread = 0.9; // float
     break;
    case "monoray":
-    this.thevalency = 8; // int
-    this.thescaling = 2.0; // float
+    this.thevalency = 6; // int
+    this.thewidth = 2; // int
+    this.thescaling = 0.5; // float
+    this.thelength = 3.0; // float
     this.thespread = 0.5; // float
+    this.showarrowsbutton = true; // boolean
+    this.reversedarrowsbutton = true; // boolean
+    this.thearrowoffset = 0.7; // float; between 0 and 1
     break;
   }
  }
