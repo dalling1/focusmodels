@@ -228,6 +228,7 @@ theaxislinewidth){
     this.showarrowsbutton = true; // boolean
     this.reversedarrowsbutton = true; // boolean
     this.thearrowoffset = 0.7; // float; between 0 and 1
+    this.theaxislinewidth = 3; // float
     break;
   }
  }

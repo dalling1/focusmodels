@@ -16,18 +16,18 @@ function setup(){
 
  var params = new FocusModel;
  params.saveCurrent();
-// graphtype = params.themodeltype;
 
- // testing: look for an anchor in the URL (later, we might switch models based on this,
- //          but need to play nicely with existing model setups...)
- // -- if setup() only gets called on load, maybe we can just switch models: need to check
+ // look for an anchor in the URL and switch to that model type (if it is an allowed one):
  var hashmodel = location.hash.split("#");
  if (hashmodel.length==2) urlmodel = hashmodel[1]; else urlmodel="";
+ console.log("Requested urlmodel: "+urlmodel);
+ if (allowedModels.indexOf(urlmodel)>-1){
+  document.getElementById("themodeltype").value=urlmodel;
+ }
 
  // make sure the control displays (labels) are the same as the controls' values:
  thevalencyOutput.value = thevalency.value;
  thewidthOutput.value = thewidth.value;
-// if (graphtype=="newaxis"|graphtype=="monoray") thewidthOutput.value = thewidth.value;
  thelevelsOutput.value = thelevels.value;
  theedgescalingOutput.value = theedgescaling.value;
  theoverallscaleOutput.value = theoverallscale.value;
@@ -77,31 +77,31 @@ function setup(){
  // do some conditional set-up:
  switch (params.themodeltype){
   case "vertex":
-   console.log("graphtype = "+params.themodeltype);
+   console.log("graph type = "+params.themodeltype);
    if (vertexmodel(params.initialfocus)) okay = true;
    break;
   case "edge":
-   console.log("graphtype = "+params.themodeltype);
+   console.log("graph type = "+params.themodeltype);
    if (edgemodel(params.initialfocus)) okay = true;
    break;
   case "axis":
-   console.log("graphtype = "+params.themodeltype);
+   console.log("graph type = "+params.themodeltype);
    if (axismodel(params.initialfocus)) okay = true;
    break;
   case "newaxis":
-   console.log("graphtype = "+params.themodeltype);
+   console.log("graph type = "+params.themodeltype);
    if (newaxismodel(params.initialfocus)) okay = true;
    enableWidthControl();
    break;
   case "monoray":
-   console.log("graphtype = "+params.themodeltype);
+   console.log("graph type = "+params.themodeltype);
    if (monoraymodel(params.initialfocus)) okay = true;
    enableWidthControl();
    disableLevelsControl();
    break;
   default:
-   console.log("graphtype = "+params.themodeltype);
-   alert("Set-up must be called with a focus type");
+   console.log("graph type = "+params.themodeltype);
+   alert("Set-up must be called with an allowed focus model type");
    okay = false;
  }
 
@@ -402,6 +402,7 @@ function collapseAddress(str=""){
 /* ********************************************************************************************* */
 function switchmodel(){
  var thismodeltype = $("#themodeltype").val(); // string, only one of {'vertex','edge','axis','newaxis','monoray'}
+ location.hash = thismodeltype; // append the model type to the URL (this lets people bookmark/share particular model types)
  allparams[allowedModels.indexOf(thismodeltype)].drawModel();
 }
 
