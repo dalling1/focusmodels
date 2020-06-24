@@ -24,8 +24,8 @@ function edgemodel(initialEdge){
  var tmpvalency = eval($("#thevalency").val());
  var tmpNlevels = eval($("#thelevels").val());
  var tmpgamma1 = eval($("#gamma1field").val());
- var tmpedgelength = eval($("#thelength").val());
- var tmpedgescaling = eval($("#thescaling").val());
+ var tmpedgelength = eval($("#theoverallscale").val());
+ var tmpedgescaling = eval($("#theedgescaling").val());
  var tmpbranchspread = eval($("#thespread").val());
  var printinfo = $("#infobutton").prop('checked'); // undefined if infobutton does not exist, which is fine
  var fadeleaves = $("#fadeleavesbutton").prop("checked");

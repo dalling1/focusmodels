@@ -3,8 +3,8 @@ function demoOne(){
  $("#themodeltype").val("edge");
  $("#thevalency").val(3);
  $("#thelevels").val(6);
- $("#thescaling").val(0.8);
- $("#thelength").val(1.3);
+ $("#theedgescaling").val(0.8);
+ $("#theoverallscale").val(1.3);
  $("#thespread").val(1.8);
  $("#plainedgesbutton").prop("checked",true);
  $("#edgepicker").spectrum("set","#000000");
@@ -40,8 +40,8 @@ function demoTwo(rundemo = false){
  demo2.themodeltype = "edge";
  demo2.thevalency = 4;
  demo2.thelevels = 5;
- demo2.thescaling = 0.8;
- demo2.thelength = 1.3;
+ demo2.theedgescaling = 0.8;
+ demo2.theoverallscale = 1.3;
  demo2.thespread = 1.8;
  demo2.plainedgesbutton = true;
  demo2.edgepicker = "#ffcc00";

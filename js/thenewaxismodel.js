@@ -23,8 +23,8 @@ function newaxismodel(initialVertex){
  var tmpvalency = eval($("#thevalency").val());
  var tmpdepth = eval($("#thelevels").val()); // we won't change the underlying control element ID in the HTML file, just its label
  var tmpWidth = eval($("#thewidth").val());
- var tmpdepthscaling = eval($("#thescaling").val());
- var tmpedgelength = eval($("#thelength").val()); // "overall scale" on the web page
+ var tmpdepthscaling = eval($("#theedgescaling").val());
+ var tmpedgelength = eval($("#theoverallscale").val()); // "overall scale" on the web page
  var tmpgroupspread = eval($("#thespread").val());
  printinfo = $("#infobutton").prop('checked');
  var fadeleaves = $("#fadeleavesbutton").prop("checked");

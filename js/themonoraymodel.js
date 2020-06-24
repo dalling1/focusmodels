@@ -18,8 +18,8 @@ function monoraymodel(initialVertex){
  var valency = parseInt($("#thevalency").val());
  var depth = parseInt($("#thelevels").val());
  var width = parseInt($("#thewidth").val());
- var edgelength = parseFloat($("#thelength").val()); // "overall scale" on the web page
- var raylength = parseFloat($("#thescaling").val());
+ var edgelength = parseFloat($("#theoverallscale").val()); // "overall scale" on the web page
+ var raylength = parseFloat($("#theedgescaling").val());
  var rayspread = parseFloat($("#thespread").val())*pi;
  printinfo = $("#infobutton").prop('checked');
  var fadeleaves = $("#fadeleavesbutton").prop("checked");

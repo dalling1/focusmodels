@@ -29,8 +29,8 @@ function vertexmodel(initialVertex){
  var tmpvalency = eval($("#thevalency").val());
  var tmpNlevels = eval($("#thelevels").val());
 // var tmpgamma1 = eval($("#gamma1field").val());
- var tmpedgelength = eval($("#thelength").val());
- var tmpedgescaling = eval($("#thescaling").val());
+ var tmpedgelength = eval($("#theoverallscale").val());
+ var tmpedgescaling = eval($("#theedgescaling").val());
 // var tmpbranchspread = eval($("#thespread").val());
  printinfo = $("#infobutton").prop("checked");
  var fadeleaves = $("#fadeleavesbutton").prop("checked");
