@@ -29,7 +29,7 @@ function setup(){
  thewidthOutput.value = thewidth.value;
 // if (graphtype=="newaxis"|graphtype=="monoray") thewidthOutput.value = thewidth.value;
  thelevelsOutput.value = thelevels.value;
- theedgescalingOutput.value = thesedgescaling.value;
+ theedgescalingOutput.value = theedgescaling.value;
  theoverallscaleOutput.value = theoverallscale.value;
  thespreadOutput.value = thespread.value;
  theoffsetXOutput.value = theoffsetX.value;
