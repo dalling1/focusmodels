@@ -997,7 +997,7 @@ function canvasClick(evt){
 //   if (currentaddress.length==0) currentaddress="\u{d8}";
    var currentlabel = midpointLabel[usemidpoint];
    // request the new label; give the current custom label (if any) as default
-   newlabel = prompt("Set midpoint label");
+   newlabel = prompt("Set midpoint label",currentlabel);
    if (newlabel===null){
     // if the user clicked cancel hide the midpoints
     $("#thecanvas").css("cursor", "pointer");
@@ -1007,7 +1007,6 @@ function canvasClick(evt){
     drawgraph();
    }
   } // end check for null node
-
 
 
 
