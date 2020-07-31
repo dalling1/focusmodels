@@ -60,7 +60,6 @@ function edgemodel(initialEdge){
  }
 
  // angle between branches
-//works alpha = 2*pi/(valency);
  alpha = gamma1/(valency);
  gamma2 = pi/2-gamma1/2;      // offset to centre the branch edges (use different values to tilt the whole tree)
  // angles affecting the overall layout:
@@ -146,46 +145,30 @@ function edgemodel(initialEdge){
      var newnode = nodeIndex[nodeIndex.length-1]; // ... and grab that label for convenience
      // from here on, "thisnode" is the parent and "newnode" is the leaf:
      nodeParent[newnode] = nodeIndex[thisnode];
-//     nodeK[newnode] = k;
      nodeK[newnode] = (k+nodeK[nodeParent[newnode]]) % valency; // need to do it this way if we persist in using the "k>0" condition above.
      nodeAddress[newnode] = collapseAddress(nodeAddress[nodeParent[newnode]] + colournames[nodeK[newnode]]);
      nodeLevel[newnode] = nodeLevel[nodeParent[newnode]]+1; // "normal" (ie. non-root) vertex
-//almost     nodeAngle[newnode] = nodeAngle[nodeParent[newnode]] + pi/2 + k*alpha; // was (k-1)*alpha in the MATLAB code (1-indexed)
      if (nodeLevel[newnode]==1){
-//works      nodeAngle[newnode] = nodeAngle[nodeParent[newnode]] + pi + k*(alpha); // was (k-1)*alpha in the MATLAB code (1-indexed)
       nodeAngle[newnode] = nodeAngle[nodeParent[newnode]] + pi + gamma2 + k*(alpha); // was (k-1)*alpha in the MATLAB code (1-indexed)
      } else {
-//works      nodeAngle[newnode] = nodeAngle[nodeParent[newnode]] - pi/2 + k*(alpha); // was (k-1)*alpha in the MATLAB code (1-indexed)
       nodeAngle[newnode] = nodeAngle[nodeParent[newnode]] + pi/2 + pi + gamma2 + k*(alpha); // was (k-1)*alpha in the MATLAB code (1-indexed)
      }
-//     nodeIgnore[newnode] = false; // default
      nodeIgnore[newnode] = (fadeleaves?true:false); // false, unless we are fading leaf nodes (user control): then, set this to true but make it false later if we add children
 
      nodePosition[newnode]=new Array(2); // initialise
      nodePosition[newnode][0] = nodePosition[thisnode][0] + calcEdgeLength(1+nodeLevel[newnode],valency,edgelength,edgescaling)*Math.sin(nodeAngle[newnode])
      nodePosition[newnode][1] = nodePosition[thisnode][1] + calcEdgeLength(1+nodeLevel[newnode],valency,edgelength,edgescaling)*Math.cos(nodeAngle[newnode])
 
-//     if (debug) console.log('DEBUG: made a child with address *'+nodeAddress[newnode]+'* (kk='+kk+',k='+k+') with parent '+nodeParent[newnode]);
-//     if (debug) $('#info').append('<p class="debug">made a child with address *'+nodeAddress[newnode]+'* (kk='+kk+',k='+k+') with parent '+nodeParent[newnode]);
-//     console.log('  The position for node '+nodeAddress[newnode]+' is ('+nodePosition[newnode][0]+', '+nodePosition[newnode][1]+')')
+     if (debug) console.log('DEBUG: made a child with address *'+nodeAddress[newnode]+'* (kk='+kk+',k='+k+') with parent '+nodeParent[newnode]);
+     if (debug) $('#info').append('<p class="debug">made a child with address *'+nodeAddress[newnode]+'* (kk='+kk+',k='+k+') with parent '+nodeParent[newnode]);
+     if (debug) console.log('  The position for node '+nodeAddress[newnode]+' is ('+nodePosition[newnode][0]+', '+nodePosition[newnode][1]+')')
     } else {
      if (debug) console.log('Not creating "duplicate" parent node');
     } // if k>0
    } // loop over valency (ie. k)
   } // loop over nodes at each level
-//  fprintf(' Level = %g: %g nodes\n',L,length(nodeIndex));
+  if (debug) fprintf(' Level = %g: %g nodes\n',L,length(nodeIndex));
  } // loop over Nlevels
-
- // do some reporting for debugging:
-// for (var vv=0;vv<nodeAngle.length;vv++){
-//  $('#info').append('<p class="debug">'+vv+'] angle '+nodeAngle[vv].toFixed(3)+'   parent '+nodeParent[vv]+'</p>');
-//  console.log(vv+'] angle '+nodeAngle[vv].toFixed(3)+'   parent '+nodeParent[vv]);
-// }
-
-// return nodePosition;
-
-
-
 
  /* calculate the edgeLabelPositions of all edges (these are used for edge labelling) */
  // (this code was copied from the showarrows() function, and these edgeLabelPositions could be re-used there with a little editing)
@@ -203,7 +186,6 @@ function edgemodel(initialEdge){
    edgeLabelPosition[i] = [NaN, NaN];
   }
  } // end loop over edges
-
 
 
  return 1; // success

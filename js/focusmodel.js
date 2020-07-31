@@ -111,26 +111,7 @@ function setup(){
    okay = false;
  }
 
-/* zzzz
- if (okay){
-  if (typeof nodeLabel == 'object'){ // check if the custom label array exists
-   // yes? then do nothing
-  } else {
-   // no? create it *once*
-   createNodeLabels();
-  }
-  if (typeof edgeLabel == 'object'){ // check if the custom edge label array exists
-   // yes? then do nothing
-  } else {
-   // no? create it *once*
-   createEdgeLabels();
-  }
-  drawgraph();
- } else {
-  alert("Graph set-up failed");
- }
-*/
- if (okay){
+ if (okay){ // previously we were testing the models before running drawgraph(), but not anymore
   createNodeLabels();
   createEdgeLabels();
   drawgraph();
@@ -200,13 +181,8 @@ function saveDot(){
  var dot = "";
  var lastsource = "";
  var lasttarget = "";
- // loop through the nodes and define their colours
-//  nodes.forEach(function(d) {
-//   dot += d.myindex+"{color:"+document.getElementById("picker"+d.group).value+", label:Node "+d.myindex+"}\n";
-//  });
-//  dot += "\n";
 
- // instead: loop through the groups and add their nodes (and colours):
+ // loop through the groups and add their nodes (and colours):
  for (g=0;g<Ngroups;g++){
   dot += "{color:"+document.getElementById("picker"+g).value+"}\n";
   nodes.forEach(function(d) {
@@ -473,10 +449,6 @@ function drawgraph(){
  if (nodeLabel.length != nodeIndex.length) createNodeLabels();
 
  // Set some default values (which the user might change with the controls):
-//MOVETOCLASS var axesColour = '#555';
-//MOVETOCLASS var nodeColour = '#000';
-//MOVETOCLASS var edgeColour = '#000';
-//MOVETOCLASS var labelColour = '#f00';
  var ignoreNodeColour = ''; // set empty to not draw ignored nodes; was '#0f0'
  var ignoreEdgeColour = '#888'; // set empty to not draw edges for ignored nodes; was '#0f0'
  var ignoreLabelColour = ''; // set empty to not label ignored nodes; was '#0f0'
@@ -947,7 +919,7 @@ function canvasClick(evt){
 
  var x = Math.round(evt.clientX - dim.left);
  var y = Math.round(evt.clientY - dim.top);
-// console.log("CLICKED x: "+x+" y:"+y);
+ if (debug) console.log("CLICKED x: "+x+" y:"+y);
 
  var clickRadius = 100; // effective range of clicks: nodes further than this will not, in effect, be clicked
 
@@ -976,7 +948,7 @@ function canvasClick(evt){
 
 
  } else if (evt.shiftKey) {
-//  alert("Clicked while pressing SHIFT key");
+  if (debug) alert("Clicked while pressing SHIFT key");
 
   //
   // SHIFT-click: set edge labels
@@ -988,7 +960,7 @@ function canvasClick(evt){
 
   var usemidpoint = nearestMidpoint(x,y,clickRadius);
   if (usemidpoint === null){
-   //  No midpoint is within a distance of clickRadius
+   //  No edge midpoint is within a distance of clickRadius
    if (debug) console.log("Click was too far from any node to be used");
   } else {
 

@@ -103,20 +103,7 @@ function newaxismodel(initialVertex){
   nodeIgnore[i] = false;
  }
 
-/* [not right for this new model]
- if (valency>2){
-  var Ntotal = width*(valency*Math.pow(valency-1,depth)-2)/(valency-2);
- } else {
-  var Ntotal = width*(depth*valency+1);
- }
- console.log('Number of nodes will be '+Ntotal); // report
- if (printinfo & $('#info').html().length>0) $('#info').append('<hr width="88%"/>'); // after the first RUN, separate output with a line
- if (printinfo) $('#info').append('<p>Number of nodes is '+Ntotal+'</p>');
-*/
-
  // set up the spacing of nodes in the lower levels:
-// var groupSpacing = edgelength*groupspread*0.9; // say
-// var groupWidth = edgelength-2*groupSpacing; // edgelength minus the group spacing buffer
  var groupWidth = edgelength*groupspread*0.5;
  var depthSpacing = depthscaling*edgelength; // vertical distance between levels...
 
@@ -154,7 +141,6 @@ function newaxismodel(initialVertex){
     nodeSpacing=0;
     groupOrigin = nodePosition[parentnode][0];
    } else {
-//    var thisGroupWidth = 0.45*groupWidth*((depth-L+1)/(depth+1)); // scale the group width according to depth (to prevent overlap)
     var thisGroupWidth = Math.pow(0.95,L+1)*groupWidth*((depth-L+1)/(depth+1)); // scale the group width according to depth (to prevent overlap)
     nodeSpacing = thisGroupWidth/(groupNodeCount-1);
     groupOrigin = nodePosition[parentnode][0] - thisGroupWidth/2; // left-hand edge of this group (based on parent's x-coordinate)
@@ -170,7 +156,6 @@ function newaxismodel(initialVertex){
     // thus, now "parentnode" is the parent and "newnode" is the leaf
 
     nodePosition[newnode] = [groupOrigin + nodeSpacing*kk, -(L-1)*depthSpacing];
-//    nodeAddress[newnode] = nodeAddress[parentnode]+k;
     nodeAddress[newnode] = nodeAddress[parentnode]+colournames[k];
     nodeParent[newnode] = nodeIndex[parentnode];
     nodeDepth[newnode] = L; // depth ("level" in the other focus models) of this node

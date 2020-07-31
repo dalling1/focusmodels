@@ -100,9 +100,6 @@ function monoraymodel(initialVertex){
  // Add Nrays nodes entering into each root node
  for (var r=0;r<rootList.length;r++){
   var parentnode = rootList[r]; // this root (on-axis) node is the parent of each ray
-//  if (fadeleaves){ // if we are fading the leaves, parentnode is no longer a leaf ("thisnode" in the other models)
-//   nodeIgnore[parentnode] = false;
-//  }
   groupKlist = circshift(Klist,-nodeK[parentnode]-1); // clockwise order for this group (ie. start with the "next" colour after the parent's one)
   for (var kk=0;kk<Nrays;kk++){ // start loop over valency (kk is a dummy variable, indexing into the circshifted list)
    k = groupKlist[kk]; // "colour" of the new node
@@ -116,7 +113,6 @@ function monoraymodel(initialVertex){
    var y0 = nodePosition[parentnode][1];
    var thisangle = kk*deltaangle; // not kk-1 because kk is zero-indexed
    var baseangle = angle0 + pi*0.5;
-//   console.log(Math.abs((baseangle+thisangle)/pi));
    if (debug) if (Math.abs((baseangle+thisangle)/pi)==1.5) console.log("There is an on-axis ray attached to node "+parentnode);
    var x = x0 + edgelength*raylength*Math.sin(baseangle+thisangle); // set the angles so that the default is "fanned out to the left"
    var y = y0 + edgelength*raylength*Math.cos(baseangle+thisangle);

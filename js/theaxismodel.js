@@ -29,11 +29,8 @@ function axismodel(initialVertex){
  }
 
  // GET INPUTS FROM THE WEB PAGE:
-// var tmpvalency = eval($("#valencyfield").val());
-// var tmpNlevels = eval($("#depthfield").val());
  var tmpvalency = eval($("#thevalency").val());
  var tmpNlevels = eval($("#thelevels").val());
-//xxx var tmpWidth = eval($("#thewidth").val());
  var tmpgamma1 = eval($("#gamma1field").val());
  var tmpedgelength = eval($("#theoverallscale").val());
  var tmpedgescaling = eval($("#theedgescaling").val());
@@ -142,7 +139,7 @@ function axismodel(initialVertex){
   if (debug) console.log('qqq Level '+L+': nodeList = '+nodeList);
 
   for (var ii=0;ii<nodeList.length;ii++){
-//   if (debug) console.log('DEBUG: Making children of node '+nodeList[ii]);
+   if (debug) console.log('DEBUG: Making children of node '+nodeList[ii]);
    var thisnode = nodeList[ii]; // get the label for convenience
    if (fadeleaves){ // if we are fading the leaves, thisnode is no longer a leaf
     nodeIgnore[thisnode] = false;
@@ -161,7 +158,7 @@ function axismodel(initialVertex){
      nodeAddress[newnode] = collapseAddress(nodeAddress[nodeParent[newnode]] + colournames[nodeK[newnode]]);
      nodeIgnore[newnode] = (fadeleaves?true:false); // false, unless we are fading leaf nodes (user control): then, set this to true but make it false later if we add children
      nodeLevel[newnode] = nodeLevel[nodeParent[newnode]]+1; // "normal" (ie. non-root) vertex
-//     if (debug) console.log('DEBUG: making a child (kk='+kk+',k='+k+') with parent '+nodeParent[newnode]);
+     if (debug) console.log('DEBUG: making a child (kk='+kk+',k='+k+') with parent '+nodeParent[newnode]);
 
      if (L==0){
       if (debug) $('#info').append('<p class="debug">NODE '+newnode+': k='+k+' and valency='+valency+'</p>'); // qqq
@@ -194,7 +191,7 @@ function axismodel(initialVertex){
          alphaMultiplier = nodeKK[newnode];
         } else {
          alphaMultiplier = nodeKK[newnode]-1;
-//       error('oops'); // should not actually ever get to here...
+         error('oops'); // should not actually ever get to here...
         }
         nodeAngle[newnode] = pi/2 + alphaMultiplier*alpha1 + gamma2 + delta1; // alpha1 applies when the parent *is* on-axis xxx
        }
@@ -206,29 +203,24 @@ function axismodel(initialVertex){
      }
 
      nodePosition[newnode]=new Array(2); // initialise
-//     nodePosition[newnode][0] = nodePosition[thisnode][0] + edgeLengthAF(nodeLevel[newnode],valency,edgelength)*Math.sin(nodeAngle[newnode])
-//     nodePosition[newnode][1] = nodePosition[thisnode][1] + edgeLengthAF(nodeLevel[newnode],valency,edgelength)*Math.cos(nodeAngle[newnode])
      nodePosition[newnode][0] = nodePosition[thisnode][0] + calcEdgeLength(nodeLevel[newnode],valency,edgelength,edgescaling)*Math.sin(nodeAngle[newnode])
      nodePosition[newnode][1] = nodePosition[thisnode][1] + calcEdgeLength(nodeLevel[newnode],valency,edgelength,edgescaling)*Math.cos(nodeAngle[newnode])
      if (debug) console.log('DEBUG: made a child with address *'+nodeAddress[newnode]+'* (kk='+kk+',k='+k+') with parent '+nodeParent[newnode]);
      if (debug) $('#info').append('<p class="debug">made a child with address *'+nodeAddress[newnode]+'* (kk='+kk+',k='+k+') with parent '+nodeParent[newnode]);
-//     console.log('  The position for node '+nodeAddress[newnode]+' is ('+nodePosition[newnode][0]+', '+nodePosition[newnode][1]+')')
+     if (debug) console.log('  The position for node '+nodeAddress[newnode]+' is ('+nodePosition[newnode][0]+', '+nodePosition[newnode][1]+')')
     } else {
      if (debug) console.log('Not creating "duplicate" parent node');
     } // if k>1 or L==1
    } // loop over valency (ie. kk)
   } // loop over nodes at each level
-//  fprintf(' Level = %g: %g nodes\n',L,length(nodeIndex));
+  if (debug) fprintf(' Level = %g: %g nodes\n',L,length(nodeIndex));
  } // loop over Nlevels
 
  // do some reporting for debugging:
- for (var vv=0;vv<nodeAngle.length;vv++){
-//  $('#info').append('<p class="debug">'+vv+'] angle '+nodeAngle[vv].toFixed(3)+'   parent '+nodeParent[vv]+'</p>');
-//  console.log(vv+'] angle '+nodeAngle[vv].toFixed(3)+'   parent '+nodeParent[vv]);
+ if (debug) for (var vv=0;vv<nodeAngle.length;vv++){
+  $('#info').append('<p class="debug">'+vv+'] angle '+nodeAngle[vv].toFixed(3)+'   parent '+nodeParent[vv]+'</p>');
+  console.log(vv+'] angle '+nodeAngle[vv].toFixed(3)+'   parent '+nodeParent[vv]);
  }
-
-// return nodePosition;
-
 
  /* calculate the midpoints of all edges (these are used for edge labelling) */
  // (this code was copied from the showarrows() function, and these midpoints could be re-used there with a little editing)
