@@ -3,7 +3,7 @@ class FocusModel {
 edgepicker, nodepicker, whichlabel, labelpicker, axesbutton, axespicker, fadeleavesbutton, showarrowsbutton, theoffsetX,
 theoffsetY, thelabeloffsetX, thelabeloffsetY, thetextangle, thefontsize, thenodesize, thelinewidth, transparencybutton,
 automorph1, automorph2, thearrowsize, thearrowratio, thearrowoffset, filledarrowsbutton, reversedarrowsbutton, fadedarrowsbutton,
-theaxislinewidth){
+theaxislinewidth, nodeLabel, midpointLabel){
 
   this.name = 'FocusModel';
   this.themodeltype = themodeltype; // string, only one of {'vertex','edge','axis','newaxis','monoray'}
@@ -41,7 +41,16 @@ theaxislinewidth){
   this.reversedarrowsbutton = reversedarrowsbutton; // boolean
   this.fadedarrowsbutton = fadedarrowsbutton; // boolean
   this.theaxislinewidth = theaxislinewidth; // float
-
+  if (typeof nodeLabel == 'object'){ // check if the custom label array exists
+   this.nodeLabel = nodeLabel; // array
+  } else {
+   this.nodeLabel = new Array; // array
+  }
+  if (typeof midpointLabel == 'object'){ // check if the edge midpoint label array exists
+   this.midpointLabel = midpointLabel; // array
+  } else {
+   this.midpointLabel = new Array; // array
+  }
  }
 
  // a method to draw a given model object:
@@ -101,6 +110,8 @@ theaxislinewidth){
   $("#fadedarrowsbutton").prop("checked",(this.fadedarrosbutton?true:false)); // boolean
   $("#theaxislinewidth").val(this.theaxislinewidth); // float
   $("#theaxislinewidthOutput").val(this.theaxislinewidth); // float
+  nodeLabel = this.nodeLabel;
+  midpointLabel = this.midpointLabel;
  }
 
  drawModel(){
@@ -145,6 +156,16 @@ theaxislinewidth){
   this.fadedarrosbutton = $("#fadedarrowsbutton").prop("checked"); // boolean
   this.theaxislinewidth = parseFloat($("#theaxislinewidth").val()); // float
 
+  if (typeof nodeLabel == 'object'){ // check if the custom label array exists
+   this.nodeLabel = nodeLabel; // array
+  } else {
+   this.nodeLabel = new Array; // array
+  }
+  if (typeof midpointLabel == 'object'){ // check if the edge midpoint label array exists
+   this.midpointLabel = midpointLabel; // array
+  } else {
+   this.midpointLabel = new Array; // array
+  }
 
   this.initialfocus = ""; // should this be stored on the HTML page somewhere?
 

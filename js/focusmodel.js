@@ -5,6 +5,10 @@ function setup(){
  var okay = false;
  wipeCanvas();
 
+ // initialise labels for the purposes of creating the FocusModel objects
+ nodeLabel = new Array;
+ midpointLabel = new Array;
+
  // create an array of FocusModel objects, which will be used to store the different models' parameters:
  allowedModels = ['vertex','edge','axis','newaxis','monoray']; // global
  allparams = new Array(); // global
@@ -107,6 +111,7 @@ function setup(){
    okay = false;
  }
 
+/* zzzz
  if (okay){
   if (typeof nodeLabel == 'object'){ // check if the custom label array exists
    // yes? then do nothing
@@ -120,6 +125,14 @@ function setup(){
    // no? create it *once*
    createMidpointLabel();
   }
+  drawgraph();
+ } else {
+  alert("Graph set-up failed");
+ }
+*/
+ if (okay){
+  createNodeLabel();
+  createMidpointLabel();
   drawgraph();
  } else {
   alert("Graph set-up failed");
@@ -922,6 +935,7 @@ function canvasClick(evt){
  // or on an SVG element (node, line, etc.). In the latter case, get the bounding
  // box of the parent element (ie. the SVG object itself), not the clicked object.
  var debug = false;
+ evt.preventDefault();
  var e = evt.target;
  if (e.ownerSVGElement === null){ // clicked on the canvas
   var dim = e.getBoundingClientRect();
@@ -966,6 +980,10 @@ function canvasClick(evt){
   // SHIFT-click: set edge labels
   //
 
+  if (midpointLabel.length!=midpointPosition.length){ // need to initialise the midpoint labels
+   createMidpointLabel();
+  }
+
   var usemidpoint = nearestMidpoint(x,y,clickRadius);
   if (usemidpoint === null){
    //  No midpoint is within a distance of clickRadius
@@ -1009,6 +1027,11 @@ function canvasClick(evt){
    //
    var currentaddress = nodeAddress[usenode];
    if (currentaddress.length==0) currentaddress="\u{d8}";
+
+   if (nodeLabel.length!=nodePosition.length){ // need to initialise the node custom labels
+    createNodeLabel();
+   }
+
    var currentlabel = nodeLabel[usenode];
    // request the new label; give the current custom label (if any) as default, and tell the user the node's address
    newlabel = prompt("Set node label for "+currentaddress,currentlabel);
@@ -1021,6 +1044,7 @@ function canvasClick(evt){
   } // end check for null node
 
  }
+
  return 1;
 }
 
