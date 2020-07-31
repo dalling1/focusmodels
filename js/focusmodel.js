@@ -648,6 +648,7 @@ function drawgraph(){
      "y": nodeScreenPosition[vv][1] + labelOffsetY,
      "transform": "rotate("+textAngle+","+(nodeScreenPosition[vv][0]+labelOffsetX)+","+(nodeScreenPosition[vv][1]+labelOffsetY)+")",
      "style": "dominant-baseline:middle; text-anchor:"+(showlabels==3?"left":"middle")+";",
+     "class": "nodelabel",
     });
     // the text node has been created, so insert the node's label
     var textNode = document.createTextNode(thislabel);
@@ -673,6 +674,7 @@ function drawgraph(){
      "y": edgeLabelPosition[i][1] + labelOffsetY,
      "transform": "rotate("+textAngle+","+(edgeLabelPosition[i][0]+labelOffsetX)+","+(edgeLabelPosition[i][1]+labelOffsetY)+")",
      "style": "dominant-baseline:middle; text-anchor: middle;",
+     "class": "edgelabel",
     });
     // the text node has been created, so insert the node's label
     var textNode = document.createTextNode(thislabel);
