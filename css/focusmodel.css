@@ -1,4 +1,4 @@
-body {background-color: #ddd; padding-right: 150px;}
+body {background-color: #ddd; padding-right: 150px; font-family:"Montserrat",sans-serif;}
 button {font-size: 18px; background-color: #0003; margin: 2px 0;}
 hr {margin: 10px 0;}
 .mybutton {font-size: 24px; background-color: #0003; padding: 2px; box-shadow:1px 1px 1px #0007, -1px -1px 1px #000f;}
@@ -74,3 +74,5 @@ input, output {display: inline-block; vertical-align: middle;}
 .extracontrolpanel {display:inline-block; width:230px;}
 .midptlabel {display:none;}
 .demobutton {font-size: 12px; border-radius:4px;}
+
+.instructions {font-size: 12px; color:#777; float:right;}
