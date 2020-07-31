@@ -107,7 +107,7 @@ theaxislinewidth, nodeLabel, midpointLabel){
   $("#thearrowoffsetOutput").val(this.thearrowoffset); // float
   $("#filledarrowsbutton").prop("checked",(this.filledarrowsbutton?true:false)); // boolean
   $("#reversedarrowsbutton").prop("checked",(this.reversedarrowsbutton?true:false)); // boolean
-  $("#fadedarrowsbutton").prop("checked",(this.fadedarrosbutton?true:false)); // boolean
+  $("#fadedarrowsbutton").prop("checked",(this.fadedarrowsbutton?true:false)); // boolean
   $("#theaxislinewidth").val(this.theaxislinewidth); // float
   $("#theaxislinewidthOutput").val(this.theaxislinewidth); // float
   nodeLabel = this.nodeLabel;
@@ -153,7 +153,7 @@ theaxislinewidth, nodeLabel, midpointLabel){
   this.thearrowoffset = parseFloat($("#thearrowoffset").val()); // float
   this.filledarrowsbutton = $("#filledarrowsbutton").prop("checked"); // boolean
   this.reversedarrowsbutton = $("#reversedarrowsbutton").prop("checked"); // boolean
-  this.fadedarrosbutton = $("#fadedarrowsbutton").prop("checked"); // boolean
+  this.fadedarrowsbutton = $("#fadedarrowsbutton").prop("checked"); // boolean
   this.theaxislinewidth = parseFloat($("#theaxislinewidth").val()); // float
 
   if (typeof nodeLabel == 'object'){ // check if the custom label array exists
