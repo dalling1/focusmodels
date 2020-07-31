@@ -3,7 +3,7 @@ class FocusModel {
 edgepicker, nodepicker, whichlabel, labelpicker, axesbutton, axespicker, fadeleavesbutton, showarrowsbutton, theoffsetX,
 theoffsetY, thelabeloffsetX, thelabeloffsetY, thetextangle, thefontsize, thenodesize, thelinewidth, transparencybutton,
 automorph1, automorph2, thearrowsize, thearrowratio, thearrowoffset, filledarrowsbutton, reversedarrowsbutton, fadedarrowsbutton,
-theaxislinewidth, nodeLabel, midpointLabel){
+theaxislinewidth, nodeLabel, edgeLabel){
 
   this.name = 'FocusModel';
   this.themodeltype = themodeltype; // string, only one of {'vertex','edge','axis','newaxis','monoray'}
@@ -46,10 +46,10 @@ theaxislinewidth, nodeLabel, midpointLabel){
   } else {
    this.nodeLabel = new Array; // array
   }
-  if (typeof midpointLabel == 'object'){ // check if the edge midpoint label array exists
-   this.midpointLabel = midpointLabel; // array
+  if (typeof edgeLabel == 'object'){ // check if the edge midpoint label array exists
+   this.edgeLabel = edgeLabel; // array
   } else {
-   this.midpointLabel = new Array; // array
+   this.edgeLabel = new Array; // array
   }
  }
 
@@ -111,7 +111,7 @@ theaxislinewidth, nodeLabel, midpointLabel){
   $("#theaxislinewidth").val(this.theaxislinewidth); // float
   $("#theaxislinewidthOutput").val(this.theaxislinewidth); // float
   nodeLabel = this.nodeLabel;
-  midpointLabel = this.midpointLabel;
+  edgeLabel = this.edgeLabel;
  }
 
  drawModel(){
@@ -161,10 +161,10 @@ theaxislinewidth, nodeLabel, midpointLabel){
   } else {
    this.nodeLabel = new Array; // array
   }
-  if (typeof midpointLabel == 'object'){ // check if the edge midpoint label array exists
-   this.midpointLabel = midpointLabel; // array
+  if (typeof edgeLabel == 'object'){ // check if the edge midpoint label array exists
+   this.edgeLabel = edgeLabel; // array
   } else {
-   this.midpointLabel = new Array; // array
+   this.edgeLabel = new Array; // array
   }
 
   this.initialfocus = ""; // should this be stored on the HTML page somewhere?

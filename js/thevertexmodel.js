@@ -187,7 +187,7 @@ function vertexmodel(initialVertex){
 
  /* calculate the midpoints of all edges (these are used for edge labelling) */
  // (this code was copied from the showarrows() function, and these midpoints could be re-used there with a little editing)
- midpointPosition = Array(nodeIndex.length); // initialise global variable
+ edgeLabelPosition = Array(nodeIndex.length); // initialise global variable
  for (var i=0;i<nodeIndex.length;i++){
   var fromNode = nodeParent[i];
   var toNode = nodeIndex[i];
@@ -196,9 +196,9 @@ function vertexmodel(initialVertex){
    toNode = nodeParent[i];
   }
   if (fromNode>=0 & toNode>=0){ // skip it if this node has no parent; faded edges can be labelled
-   midpointPosition[i] = canvasScale(lineMidPoint(nodePosition[fromNode],nodePosition[toNode],0.5));
+   edgeLabelPosition[i] = canvasScale(lineMidPoint(nodePosition[fromNode],nodePosition[toNode],0.5));
   } else {
-   midpointPosition[i] = [NaN, NaN];
+   edgeLabelPosition[i] = [NaN, NaN];
   }
  } // end loop over edges
 

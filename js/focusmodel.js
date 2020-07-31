@@ -7,7 +7,7 @@ function setup(){
 
  // initialise labels for the purposes of creating the FocusModel objects
  nodeLabel = new Array;
- midpointLabel = new Array;
+ edgeLabel = new Array;
 
  // create an array of FocusModel objects, which will be used to store the different models' parameters:
  allowedModels = ['vertex','edge','axis','newaxis','monoray']; // global
@@ -117,13 +117,13 @@ function setup(){
    // yes? then do nothing
   } else {
    // no? create it *once*
-   createNodeLabel();
+   createNodeLabels();
   }
-  if (typeof midpointLabel == 'object'){ // check if the custom edge label array exists
+  if (typeof edgeLabel == 'object'){ // check if the custom edge label array exists
    // yes? then do nothing
   } else {
    // no? create it *once*
-   createMidpointLabel();
+   createEdgeLabels();
   }
   drawgraph();
  } else {
@@ -131,8 +131,8 @@ function setup(){
  }
 */
  if (okay){
-  createNodeLabel();
-  createMidpointLabel();
+  createNodeLabels();
+  createEdgeLabels();
   drawgraph();
  } else {
   alert("Graph set-up failed");
@@ -145,7 +145,7 @@ function setup(){
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
-function createNodeLabel(){
+function createNodeLabels(){
  // make enough blank labels for every node
  nodeLabel = new Array(nodeIndex.length);
  nodeLabel.fill("");
@@ -154,10 +154,10 @@ function createNodeLabel(){
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
-function createMidpointLabel(){
+function createEdgeLabels(){
  // make enough blank labels for every edge
- midpointLabel = new Array(midpointPosition.length);
- midpointLabel.fill("");
+ edgeLabel = new Array(edgeLabelPosition.length);
+ edgeLabel.fill("");
 }
 
 
@@ -470,7 +470,7 @@ function drawgraph(){
  if (debug) $('#info').append('Drawing the graph....');
 
  // make sure the custom node labels are up to date with the number of nodes:
- if (nodeLabel.length != nodeIndex.length) createNodeLabel();
+ if (nodeLabel.length != nodeIndex.length) createNodeLabels();
 
  // Set some default values (which the user might change with the controls):
 //MOVETOCLASS var axesColour = '#555';
@@ -516,14 +516,14 @@ function drawgraph(){
  var centreY = Math.round(canvasheight/2) + offsetY;
 
  // Add markers for the edge midpoints (drawing yellow dots) but hide them for now:
- for (var i=0;i<midpointPosition.length;i++){
-  if (!(isNaN(midpointPosition[i][0]) | isNaN(midpointPosition[i][1]))){
+ for (var i=0;i<edgeLabelPosition.length;i++){
+  if (!(isNaN(edgeLabelPosition[i][0]) | isNaN(edgeLabelPosition[i][1]))){
    $(document.createElementNS("http://www.w3.org/2000/svg","circle")).attr({
     "fill": "#ff0",
     "stroke": "none",
     "r": 5,
-    "cx": midpointPosition[i][0],
-    "cy": midpointPosition[i][1],
+    "cx": edgeLabelPosition[i][0],
+    "cy": edgeLabelPosition[i][1],
     "class": "midptlabel",
    }).appendTo("#thecanvas");
   }
@@ -661,17 +661,17 @@ function drawgraph(){
 
  var showedgelabels = true; // make this a user control
  if (showedgelabels){
-  for (var i=0;i<midpointLabel.length;i++){
-   thislabel = midpointLabel[i]+"";
+  for (var i=0;i<edgeLabel.length;i++){
+   thislabel = edgeLabel[i]+"";
 
    if (thislabel.length>0){ // don't create (empty) labels with blank text
     var newText = document.createElementNS("http://www.w3.org/2000/svg","text");
     $(newText).attr({
      "fill": labelColour,
      "font-size": fontSize,
-     "x": midpointPosition[i][0] + labelOffsetX,
-     "y": midpointPosition[i][1] + labelOffsetY,
-     "transform": "rotate("+textAngle+","+(midpointPosition[i][0]+labelOffsetX)+","+(midpointPosition[i][1]+labelOffsetY)+")",
+     "x": edgeLabelPosition[i][0] + labelOffsetX,
+     "y": edgeLabelPosition[i][1] + labelOffsetY,
+     "transform": "rotate("+textAngle+","+(edgeLabelPosition[i][0]+labelOffsetX)+","+(edgeLabelPosition[i][1]+labelOffsetY)+")",
      "style": "dominant-baseline:middle; text-anchor: middle;",
     });
     // the text node has been created, so insert the node's label
@@ -911,8 +911,8 @@ function nearestMidpoint(x,y,maxDistance=-1){
  // If maxDistance is negative, it is ignored (the nearest midpoint then is returned, at *any* distance from (x,y))
  var themidpoint = -1;
  var dist = 10000000;
- for (var i=0;i<midpointPosition.length;i++){
-  var thisdist = Math.pow(Math.pow(midpointPosition[i][0] - x,2) + Math.pow(midpointPosition[i][1] - y,2),0.5);
+ for (var i=0;i<edgeLabelPosition.length;i++){
+  var thisdist = Math.pow(Math.pow(edgeLabelPosition[i][0] - x,2) + Math.pow(edgeLabelPosition[i][1] - y,2),0.5);
   if (thisdist<dist & (thisdist<=maxDistance | maxDistance<0)){
    dist = thisdist;
    themidpoint = i;
@@ -980,8 +980,8 @@ function canvasClick(evt){
   // SHIFT-click: set edge labels
   //
 
-  if (midpointLabel.length!=midpointPosition.length){ // need to initialise the midpoint labels
-   createMidpointLabel();
+  if (edgeLabel.length!=edgeLabelPosition.length){ // need to initialise the edge labels
+   createEdgeLabels();
   }
 
   var usemidpoint = nearestMidpoint(x,y,clickRadius);
@@ -991,19 +991,17 @@ function canvasClick(evt){
   } else {
 
    //
-   // set an edge's midpoint custom label
+   // set an edge's custom label
    //
-//   var currentaddress = midpointLabel[usemidpoint];
-//   if (currentaddress.length==0) currentaddress="\u{d8}";
-   var currentlabel = midpointLabel[usemidpoint];
+   var currentlabel = edgeLabel[usemidpoint];
    // request the new label; give the current custom label (if any) as default
-   newlabel = prompt("Set midpoint label",currentlabel);
+   newlabel = prompt("Set edge label",currentlabel);
    if (newlabel===null){
-    // if the user clicked cancel hide the midpoints
+    // if the user clicked cancel then hide the midpoint markers
     $("#thecanvas").css("cursor", "pointer");
     $(".midptlabel").css("display","none");
    } else {
-    midpointLabel[usemidpoint] = newlabel;
+    edgeLabel[usemidpoint] = newlabel;
     drawgraph();
    }
   } // end check for null node
@@ -1028,7 +1026,7 @@ function canvasClick(evt){
    if (currentaddress.length==0) currentaddress="\u{d8}";
 
    if (nodeLabel.length!=nodePosition.length){ // need to initialise the node custom labels
-    createNodeLabel();
+    createNodeLabels();
    }
 
    var currentlabel = nodeLabel[usenode];
