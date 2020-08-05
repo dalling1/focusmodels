@@ -75,6 +75,8 @@ function setup(){
  disableWidthControl();
  // turn on the "levels" control (it will be disabled only for monoray):
  enableLevelsControl();
+ // turn on the "axis line width" control (it will be disabled only for vertex and edge):
+ enableAxisLineWidthControl();
 
  if (urlmodel.length & urlmodel!=params.themodeltype){
   console.log("URL model anchor ("+urlmodel+") and user controls ("+params.themodeltype+") do not agree");
@@ -85,10 +87,12 @@ function setup(){
   case "vertex":
    console.log("graph type = "+params.themodeltype);
    if (vertexmodel(params.initialfocus)) okay = true;
+   disableAxisLineWidthControl();
    break;
   case "edge":
    console.log("graph type = "+params.themodeltype);
    if (edgemodel(params.initialfocus)) okay = true;
+   disableAxisLineWidthControl();
    break;
   case "axis":
    console.log("graph type = "+params.themodeltype);
@@ -128,8 +132,10 @@ function setup(){
 /* ********************************************************************************************* */
 function createNodeLabels(){
  // make enough blank labels for every node
- nodeLabel = new Array(nodeIndex.length);
+ nodeLabel = new Array(nodeIndex.length); // this will hold the label strings
  nodeLabel.fill("");
+ nodeLabelOffset = new Array(nodeLabel.length); // this will hold position offsets on a per-label basis
+ nodeLabelOffset.fill([0,0]); // default individual offset is zero
 }
 
 /* ********************************************************************************************* */
@@ -137,8 +143,10 @@ function createNodeLabels(){
 /* ********************************************************************************************* */
 function createEdgeLabels(){
  // make enough blank labels for every edge
- edgeLabel = new Array(edgeMidpointPosition.length);
+ edgeLabel = new Array(edgeMidpointPosition.length); // this will hold the label strings
  edgeLabel.fill("");
+ edgeLabelOffset = new Array(edgeLabel.length); // this will hold position offsets on a per-label basis
+ edgeLabelOffset.fill([0,0]); // default individual offset is zero
 }
 
 
@@ -416,23 +424,28 @@ function drawgraph(){
   case "vertex":
    if (vertexmodel(params.initialfocus)) okay = true;
    disableWidthControl();
+   disableAxisLineWidthControl();
    break;
   case "edge":
    if (edgemodel(params.initialfocus)) okay = true;
    disableWidthControl();
+   disableAxisLineWidthControl();
    break;
   case "axis":
    if (axismodel(params.initialfocus)) okay = true;
    disableWidthControl();
+   enableAxisLineWidthControl();
    break;
   case "newaxis":
    if (newaxismodel(params.initialfocus)) okay = true;
    enableWidthControl();
+   enableAxisLineWidthControl();
    break;
   case "monoray":
    if (monoraymodel(params.initialfocus)) okay = true;
    enableWidthControl();
    disableLevelsControl();
+   enableAxisLineWidthControl();
    break;
   default:
    alert("Set-up must be called with a focus type");
@@ -611,14 +624,16 @@ function drawgraph(){
      thislabel = "";
    }
 
-   if (thislabel.length>0){ // don't create (empty) labels with blank text
+   if (thislabel.length>0){ // don't create (empty) node labels with blank text
     var newText = document.createElementNS("http://www.w3.org/2000/svg","text");
+    var thispositionX = nodeScreenPosition[vv][0] + labelOffsetX + nodeLabelOffset[vv][0];
+    var thispositionY = nodeScreenPosition[vv][1] + labelOffsetY + nodeLabelOffset[vv][1];
     $(newText).attr({
      "fill": (nodeIgnore[vv]?(ignoreLabelColour.length?ignoreLabelColour:"none"):labelColour),
      "font-size": fontSize,
-     "x": nodeScreenPosition[vv][0] + labelOffsetX,
-     "y": nodeScreenPosition[vv][1] + labelOffsetY,
-     "transform": "rotate("+textAngle+","+(nodeScreenPosition[vv][0]+labelOffsetX)+","+(nodeScreenPosition[vv][1]+labelOffsetY)+")",
+     "x": thispositionX,
+     "y": thispositionY,
+     "transform": "rotate("+textAngle+","+String(thispositionX)+","+String(thispositionY)+")",
      "style": "dominant-baseline:middle; text-anchor:"+(showlabels==3?"left":"middle")+";",
      "class": "nodelabel",
     });
@@ -632,19 +647,22 @@ function drawgraph(){
 
  } // end loop over nodes
 
- var showedgelabels = true; // make this a user control
+ var showedgelabels = true; // make this a user control? Edge labels are blank by default and on if the user adds text to them.
+ var thislabel = "";
  if (showedgelabels){
   for (var i=0;i<edgeLabel.length;i++){
    thislabel = edgeLabel[i]+"";
 
-   if (thislabel.length>0){ // don't create (empty) labels with blank text
+   if (thislabel.length>0){ // don't create (empty) edge labels with blank text
     var newText = document.createElementNS("http://www.w3.org/2000/svg","text");
+    var thispositionX = edgeMidpointPosition[vv][0] + labelOffsetX + edgeLabelOffset[vv][0];
+    var thispositionY = edgeMidpointPosition[vv][1] + labelOffsetY + edgeLabelOffset[vv][1];
     $(newText).attr({
      "fill": labelColour,
      "font-size": fontSize,
-     "x": edgeMidpointPosition[i][0] + labelOffsetX,
-     "y": edgeMidpointPosition[i][1] + labelOffsetY,
-     "transform": "rotate("+textAngle+","+(edgeMidpointPosition[i][0]+labelOffsetX)+","+(edgeMidpointPosition[i][1]+labelOffsetY)+")",
+     "x": thispositionX,
+     "y": thispositionY,
+     "transform": "rotate("+textAngle+","+String(thispositionX)+","+String(thispositionY)+")",
      "style": "dominant-baseline:middle; text-anchor: middle;",
      "class": "edgelabel",
     });
@@ -1159,6 +1177,7 @@ function enableLevelsControl(){
  $("#thelevelsLabel").removeClass("disabledcontrol");
  $("#thelevelsOutput").removeClass("disabledcontrol");
 }
+
 function disableWidthControl(){
  $("#thewidth").prop("disabled","disabled");
  $("#thewidth").addClass("disabledcontrol");
@@ -1171,3 +1190,17 @@ function enableWidthControl(){
  $("#thewidthLabel").removeClass("disabledcontrol");
  $("#thewidthOutput").removeClass("disabledcontrol");
 }
+
+function disableAxisLineWidthControl(){
+ $("#theaxislinewidth").prop("disabled","disabled");
+ $("#theaxislinewidth").addClass("disabledcontrol");
+ $("#theaxislinewidthLabel").addClass("disabledcontrol");
+ $("#theaxislinewidthOutput").addClass("disabledcontrol");
+}
+function enableAxisLineWidthControl(){
+ $("#theaxislinewidth").removeProp("disabled");
+ $("#theaxislinewidth").removeClass("disabledcontrol");
+ $("#theaxislinewidthLabel").removeClass("disabledcontrol");
+ $("#theaxislinewidthOutput").removeClass("disabledcontrol");
+}
+
