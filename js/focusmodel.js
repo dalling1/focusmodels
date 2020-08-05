@@ -636,6 +636,7 @@ function drawgraph(){
      "transform": "rotate("+textAngle+","+String(thispositionX)+","+String(thispositionY)+")",
      "style": "dominant-baseline:middle; text-anchor:"+(showlabels==3?"left":"middle")+";",
      "class": "nodelabel alabel",
+     "id": "nodelabel"+String(vv),
     });
     // the text node has been created, so insert the node's label
     var textNode = document.createTextNode(thislabel);
@@ -665,6 +666,7 @@ function drawgraph(){
      "transform": "rotate("+textAngle+","+String(thispositionX)+","+String(thispositionY)+")",
      "style": "dominant-baseline:middle; text-anchor: middle;",
      "class": "edgelabel alabel",
+     "id": "edgelabel"+String(i),
     });
     // the text node has been created, so insert the node's label
     var textNode = document.createTextNode(thislabel);
