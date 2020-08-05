@@ -635,7 +635,7 @@ function drawgraph(){
      "y": thispositionY,
      "transform": "rotate("+textAngle+","+String(thispositionX)+","+String(thispositionY)+")",
      "style": "dominant-baseline:middle; text-anchor:"+(showlabels==3?"left":"middle")+";",
-     "class": "nodelabel",
+     "class": "nodelabel alabel",
     });
     // the text node has been created, so insert the node's label
     var textNode = document.createTextNode(thislabel);
@@ -655,8 +655,8 @@ function drawgraph(){
 
    if (thislabel.length>0){ // don't create (empty) edge labels with blank text
     var newText = document.createElementNS("http://www.w3.org/2000/svg","text");
-    var thispositionX = edgeMidpointPosition[vv][0] + labelOffsetX + edgeLabelOffset[vv][0];
-    var thispositionY = edgeMidpointPosition[vv][1] + labelOffsetY + edgeLabelOffset[vv][1];
+    var thispositionX = edgeMidpointPosition[i][0] + labelOffsetX + edgeLabelOffset[i][0];
+    var thispositionY = edgeMidpointPosition[i][1] + labelOffsetY + edgeLabelOffset[i][1];
     $(newText).attr({
      "fill": labelColour,
      "font-size": fontSize,
@@ -664,7 +664,7 @@ function drawgraph(){
      "y": thispositionY,
      "transform": "rotate("+textAngle+","+String(thispositionX)+","+String(thispositionY)+")",
      "style": "dominant-baseline:middle; text-anchor: middle;",
-     "class": "edgelabel",
+     "class": "edgelabel alabel",
     });
     // the text node has been created, so insert the node's label
     var textNode = document.createTextNode(thislabel);
@@ -1203,4 +1203,3 @@ function enableAxisLineWidthControl(){
  $("#theaxislinewidthLabel").removeClass("disabledcontrol");
  $("#theaxislinewidthOutput").removeClass("disabledcontrol");
 }
-
