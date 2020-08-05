@@ -544,8 +544,8 @@ function drawgraph(){
  for (var vv=0;vv<nodePosition.length;vv++){
   nodeScreenPosition[vv] = canvasScale(nodePosition[vv]);
 
-  if (nodeParent[vv]>=0){ // use only non-root nodes
-   var position0 = canvasScale(nodePosition[nodeParent[vv]]);
+  if (nodeParent[vv]>=0){ // draw edges only for non-root nodes
+   var position0 = canvasScale(nodePosition[nodeParent[vv]]); // this is the other end of the edge
   }
 
 //  if (debug) $("#info").append("<p class="debug">"+vv+"] "+xx.toFixed(2)+", "+yy.toFixed(2));
@@ -602,10 +602,10 @@ function drawgraph(){
      thislabel = (nodeAddress[vv]==""?"\u{d8}":nodeAddress[vv]); // address or o-slash for the empty node
      break;
     case 2: // label is the node index
-     thislabel = nodeIndex[vv]+""; // cast to a string
+     thislabel = String(nodeIndex[vv]); // convert to a string
      break;
     case 3: // label is some custom text which the user can change
-     thislabel = nodeLabel[vv]+"";
+     thislabel = String(nodeLabel[vv]); // covert to a string
      break;
     default:
      thislabel = "";
