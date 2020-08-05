@@ -170,9 +170,9 @@ function edgemodel(initialEdge){
   if (debug) fprintf(' Level = %g: %g nodes\n',L,length(nodeIndex));
  } // loop over Nlevels
 
- /* calculate the edgeLabelPositions of all edges (these are used for edge labelling) */
- // (this code was copied from the showarrows() function, and these edgeLabelPositions could be re-used there with a little editing)
- edgeLabelPosition = Array(nodeIndex.length); // initialise global variable
+ /* calculate the edgeMidpointPositions of all edges (these are used for edge labelling) */
+ // (this code was copied from the showarrows() function, and these edgeMidpointPositions could be re-used there with a little editing)
+ edgeMidpointPosition = Array(nodeIndex.length); // initialise global variable
  for (var i=0;i<nodeIndex.length;i++){
   var fromNode = nodeParent[i];
   var toNode = nodeIndex[i];
@@ -181,9 +181,9 @@ function edgemodel(initialEdge){
    toNode = nodeParent[i];
   }
   if (fromNode>=0 & toNode>=0){ // skip it if this node has no parent; faded edges can be labelled
-   edgeLabelPosition[i] = canvasScale(lineMidPoint(nodePosition[fromNode],nodePosition[toNode],0.5));
+   edgeMidpointPosition[i] = canvasScale(lineMidPoint(nodePosition[fromNode],nodePosition[toNode],0.5));
   } else {
-   edgeLabelPosition[i] = [NaN, NaN];
+   edgeMidpointPosition[i] = [NaN, NaN];
   }
  } // end loop over edges
 

@@ -224,7 +224,7 @@ function axismodel(initialVertex){
 
  /* calculate the midpoints of all edges (these are used for edge labelling) */
  // (this code was copied from the showarrows() function, and these midpoints could be re-used there with a little editing)
- edgeLabelPosition = Array(nodeIndex.length); // initialise global variable
+ edgeMidpointPosition = Array(nodeIndex.length); // initialise global variable
  for (var i=0;i<nodeIndex.length;i++){
   var fromNode = nodeParent[i];
   var toNode = nodeIndex[i];
@@ -233,9 +233,9 @@ function axismodel(initialVertex){
    toNode = nodeParent[i];
   }
   if (fromNode>=0 & toNode>=0){ // skip it if this node has no parent; faded edges can be labelled
-   edgeLabelPosition[i] = canvasScale(lineMidPoint(nodePosition[fromNode],nodePosition[toNode],0.5));
+   edgeMidpointPosition[i] = canvasScale(lineMidPoint(nodePosition[fromNode],nodePosition[toNode],0.5));
   } else {
-   edgeLabelPosition[i] = [NaN, NaN];
+   edgeMidpointPosition[i] = [NaN, NaN];
   }
  } // end loop over edges
 

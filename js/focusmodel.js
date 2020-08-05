@@ -137,7 +137,7 @@ function createNodeLabels(){
 /* ********************************************************************************************* */
 function createEdgeLabels(){
  // make enough blank labels for every edge
- edgeLabel = new Array(edgeLabelPosition.length);
+ edgeLabel = new Array(edgeMidpointPosition.length);
  edgeLabel.fill("");
 }
 
@@ -488,14 +488,14 @@ function drawgraph(){
  var centreY = Math.round(canvasheight/2) + offsetY;
 
  // Add markers for the edge midpoints (drawing yellow dots) but hide them for now:
- for (var i=0;i<edgeLabelPosition.length;i++){
-  if (!(isNaN(edgeLabelPosition[i][0]) | isNaN(edgeLabelPosition[i][1]))){
+ for (var i=0;i<edgeMidpointPosition.length;i++){
+  if (!(isNaN(edgeMidpointPosition[i][0]) | isNaN(edgeMidpointPosition[i][1]))){
    $(document.createElementNS("http://www.w3.org/2000/svg","circle")).attr({
     "fill": "#ff0",
     "stroke": "none",
     "r": 5,
-    "cx": edgeLabelPosition[i][0],
-    "cy": edgeLabelPosition[i][1],
+    "cx": edgeMidpointPosition[i][0],
+    "cy": edgeMidpointPosition[i][1],
     "class": "midptlabel",
    }).appendTo("#thecanvas");
   }
@@ -642,9 +642,9 @@ function drawgraph(){
     $(newText).attr({
      "fill": labelColour,
      "font-size": fontSize,
-     "x": edgeLabelPosition[i][0] + labelOffsetX,
-     "y": edgeLabelPosition[i][1] + labelOffsetY,
-     "transform": "rotate("+textAngle+","+(edgeLabelPosition[i][0]+labelOffsetX)+","+(edgeLabelPosition[i][1]+labelOffsetY)+")",
+     "x": edgeMidpointPosition[i][0] + labelOffsetX,
+     "y": edgeMidpointPosition[i][1] + labelOffsetY,
+     "transform": "rotate("+textAngle+","+(edgeMidpointPosition[i][0]+labelOffsetX)+","+(edgeMidpointPosition[i][1]+labelOffsetY)+")",
      "style": "dominant-baseline:middle; text-anchor: middle;",
      "class": "edgelabel",
     });
@@ -885,8 +885,8 @@ function nearestMidpoint(x,y,maxDistance=-1){
  // If maxDistance is negative, it is ignored (the nearest midpoint then is returned, at *any* distance from (x,y))
  var themidpoint = -1;
  var dist = 10000000;
- for (var i=0;i<edgeLabelPosition.length;i++){
-  var thisdist = Math.pow(Math.pow(edgeLabelPosition[i][0] - x,2) + Math.pow(edgeLabelPosition[i][1] - y,2),0.5);
+ for (var i=0;i<edgeMidpointPosition.length;i++){
+  var thisdist = Math.pow(Math.pow(edgeMidpointPosition[i][0] - x,2) + Math.pow(edgeMidpointPosition[i][1] - y,2),0.5);
   if (thisdist<dist & (thisdist<=maxDistance | maxDistance<0)){
    dist = thisdist;
    themidpoint = i;
@@ -954,7 +954,7 @@ function canvasClick(evt){
   // SHIFT-click: set edge labels
   //
 
-  if (edgeLabel.length!=edgeLabelPosition.length){ // need to initialise the edge labels
+  if (edgeLabel.length!=edgeMidpointPosition.length){ // need to initialise the edge labels
    createEdgeLabels();
   }
 
