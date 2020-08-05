@@ -184,10 +184,10 @@
 
     <label for="filledarrowsbutton" id="filledarrowsbuttonLabel">Filled arrows? <input type="checkbox" id="filledarrowsbutton" checked="checked" onclick="drawgraph();" /></label><br/>
     <label for="reversedarrowsbutton" id="reversedarrowsbuttonLabel">Reversed arrows? <input type="checkbox" id="reversedarrowsbutton" onclick="drawgraph();" /></label><br/>
-    <label for="fadedarrowsbutton" id="fadedarrowsbuttonLabel">Show arrows on faded edges? <input type="checkbox" id="fadedarrowsbutton" checked="checked" onclick="drawgraph();" /></label><br/>
+    <label for="fadedarrowsbutton" id="fadedarrowsbuttonLabel">Arrows on faded edges? <input type="checkbox" id="fadedarrowsbutton" checked="checked" onclick="drawgraph();" /></label><br/>
 
     <span title="Click to reset" style="cursor:pointer;" onclick="theaxislinewidth.value=0.2; theaxislinewidthOutput.value = theaxislinewidth.value; drawgraph();" id="theaxislinewidthLabel">Axis line width:</span>
-    <input type="range" style="width:100px;" min="0" max="10" step="0.1" value="0.2" id="theaxislinewidth" oninput="theaxislinewidthOutput.value = theaxislinewidth.value; drawgraph();" />
+    <input type="range" style="width:80px;" min="0" max="10" step="0.1" value="0.2" id="theaxislinewidth" oninput="theaxislinewidthOutput.value = theaxislinewidth.value; drawgraph();" />
     <output style="width:20px;vertical-align:middle;" name="theaxislinewidthOutputName" id="theaxislinewidthOutput">999</output><br/>
    </div>
 
