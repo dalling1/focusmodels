@@ -224,6 +224,8 @@ function axismodel(initialVertex){
 
  /* calculate the midpoints of all edges (these are used for edge labelling) */
  // (this code was copied from the showarrows() function, and these midpoints could be re-used there with a little editing)
+ // Note: the edge from each node *to its parent* is drawn, so there are one more nodes than edges (the root node has no parent)
+ //       Thus, edgeMidpointPosition array has more elements than there are edges, but this is okay
  edgeMidpointPosition = Array(nodeIndex.length); // initialise global variable
  for (var i=0;i<nodeIndex.length;i++){
   var fromNode = nodeParent[i];
