@@ -1,3 +1,10 @@
+
+debugdrag = true;
+
+selectedLabel = null; // initialise
+selectedLabelPosition = [null,null]; // initialise
+dragOffset = [0,0]; // initialise
+
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
@@ -263,6 +270,13 @@ function wipeCanvas(){
  <path id="rayarrowbase" d="M-'+arrowSize+',0 L0,'+(arrowSize*arrowratio)+' L'+arrowSize+',0'+(filledarrows?' z" fill="'+edgeColour+'"':'"')+' stroke-width="0.5" fill="none" stroke="'+edgeColour+'" />\
  <path id="rayarrowbasefaded" d="M-'+arrowSize+',0 L0,'+(arrowSize*arrowratio)+' L'+arrowSize+',0'+(filledarrows?' z" fill="'+edgeColour+'55"':'"')+' stroke-width="0.5" fill="none" stroke="'+edgeColour+'55" />\
 </defs>');
+
+ // also create the groups which will hold some of the drawn elements
+ $(document.createElementNS("http://www.w3.org/2000/svg","g")).attr({"id": "nodegroup",}).appendTo("#thecanvas");
+ $(document.createElementNS("http://www.w3.org/2000/svg","g")).attr({"id": "edgegroup",}).appendTo("#thecanvas");
+ $(document.createElementNS("http://www.w3.org/2000/svg","g")).attr({"id": "nodelabelgroup",}).appendTo("#thecanvas");
+ $(document.createElementNS("http://www.w3.org/2000/svg","g")).attr({"id": "edgelabelgroup",}).appendTo("#thecanvas");
+
  return 1;
 }
 // <path id="rayarrowbase" d="M-4,0 L0,6 L4,0 " stroke-width="0.5" fill="none" stroke="'+edgeColour+'" />\
@@ -455,11 +469,13 @@ function drawgraph(){
 
  // clear the canvas:
  wipeCanvas();
+ makeLabelsDraggable();
 
  if (debug) $('#info').append('Drawing the graph....');
 
- // make sure the custom node labels are up to date with the number of nodes:
+ // make sure the custom node and edge labels are up to date with the number of nodes and edges:
  if (nodeLabel.length != nodeIndex.length) createNodeLabels();
+ if (edgeLabel.length != edgeMidpointPosition.length) createEdgeLabels();
 
  // Set some default values (which the user might change with the controls):
  var ignoreNodeColour = ''; // set empty to not draw ignored nodes; was '#0f0'
@@ -570,7 +586,8 @@ function drawgraph(){
    "r": nodeRadius,
    "cx": nodeScreenPosition[vv][0],
    "cy": nodeScreenPosition[vv][1],
-  }).appendTo("#thecanvas");
+  }).appendTo("#nodegroup");
+//  }).appendTo("#thecanvas");
 
   // usual way: all edges are the same (user-selected) colour
   var thisEdgeColour = edgeColour;
@@ -601,7 +618,8 @@ function drawgraph(){
     "y2": nodeScreenPosition[vv][1],
     // give the extensions an id just in case we need to find them:
     "id": (nodeAddress[vv]=="RR"|nodeAddress[nodeParent[vv]]=="RR"|nodeAddress[vv]=="LL"|nodeAddress[nodeParent[vv]]=="LL"?nodeAddress[vv]:""),
-   }).appendTo("#thecanvas");
+   }).appendTo("#edgegroup");
+//   }).appendTo("#thecanvas");
   }
 
   var thislabel = "";
@@ -626,8 +644,8 @@ function drawgraph(){
 
    if (thislabel.length>0){ // don't create (empty) node labels with blank text
     var newText = document.createElementNS("http://www.w3.org/2000/svg","text");
-    var thispositionX = nodeScreenPosition[vv][0] + labelOffsetX + nodeLabelOffset[vv][0];
-    var thispositionY = nodeScreenPosition[vv][1] + labelOffsetY + nodeLabelOffset[vv][1];
+    var thispositionX = Math.round(nodeScreenPosition[vv][0] + labelOffsetX + nodeLabelOffset[vv][0]);
+    var thispositionY = Math.round(nodeScreenPosition[vv][1] + labelOffsetY + nodeLabelOffset[vv][1]);
     $(newText).attr({
      "fill": (nodeIgnore[vv]?(ignoreLabelColour.length?ignoreLabelColour:"none"):labelColour),
      "font-size": fontSize,
@@ -641,23 +659,24 @@ function drawgraph(){
     // the text node has been created, so insert the node's label
     var textNode = document.createTextNode(thislabel);
     newText.appendChild(textNode);
-    document.getElementById("thecanvas").appendChild(newText);
+//    document.getElementById("thecanvas").appendChild(newText);
+    document.getElementById("nodelabelgroup").appendChild(newText);
    }
   } // end if showlabels
 
 
  } // end loop over nodes
 
+ /* edge labels */
  var showedgelabels = true; // make this a user control? Edge labels are blank by default and on if the user adds text to them.
- var thislabel = "";
  if (showedgelabels){
   for (var i=0;i<edgeLabel.length;i++){
-   thislabel = edgeLabel[i]+"";
+   var thislabel = String(edgeLabel[i]);
 
    if (thislabel.length>0){ // don't create (empty) edge labels with blank text
     var newText = document.createElementNS("http://www.w3.org/2000/svg","text");
-    var thispositionX = edgeMidpointPosition[i][0] + labelOffsetX + edgeLabelOffset[i][0];
-    var thispositionY = edgeMidpointPosition[i][1] + labelOffsetY + edgeLabelOffset[i][1];
+    var thispositionX = Math.round(edgeMidpointPosition[i][0] + labelOffsetX + edgeLabelOffset[i][0]);
+    var thispositionY = Math.round(edgeMidpointPosition[i][1] + labelOffsetY + edgeLabelOffset[i][1]);
     $(newText).attr({
      "fill": labelColour,
      "font-size": fontSize,
@@ -671,7 +690,8 @@ function drawgraph(){
     // the text node has been created, so insert the node's label
     var textNode = document.createTextNode(thislabel);
     newText.appendChild(textNode);
-    document.getElementById("thecanvas").appendChild(newText);
+//    document.getElementById("thecanvas").appendChild(newText);
+    document.getElementById("edgelabelgroup").appendChild(newText);
    }
 
   } // end loop over edgelabels
@@ -920,6 +940,32 @@ function nearestMidpoint(x,y,maxDistance=-1){
 }
 
 
+/* ********************************************************************************************* */
+/* ********************************************************************************************* */
+/* ********************************************************************************************* */
+function nearestLabel(x,y,maxDistance=-1){
+ // Returns the closest label to the provided x and y coordinates, within a range of maxDistance
+ // If maxDistance is negative, it is ignored (the nearest label is then returned, at *any* distance from (x,y))
+ var nearestIndex = -1;
+ var dist = 10000000;
+ var allLabels = document.getElementsByClassName("alabel");
+ for (var i=0;i<allLabels.length;i++){
+  var labelX = allLabels[i].getAttribute("x");
+  var labelY = allLabels[i].getAttribute("y");
+  var thisdist = Math.pow(Math.pow(labelX - x,2) + Math.pow(labelY - y,2),0.5);
+  if (thisdist<dist & (thisdist<=maxDistance | maxDistance<0)){
+   dist = thisdist;
+   nearestIndex = i;
+  }
+ }
+ if (nearestIndex>=0){
+  var thelabel = allLabels[nearestIndex].getAttribute("id");
+  return thelabel;
+ } else {
+  return null;
+ }
+}
+
 
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
@@ -948,6 +994,7 @@ function canvasClick(evt){
   if (usenode === null){
    //  No node is within a distance of clickRadius
    if (debug) console.log("Click was too far from any node to be used");
+   if (debugdrag) console.log("[1] Click was too far from any node to be used");
   } else {
 
    //
@@ -982,6 +1029,7 @@ function canvasClick(evt){
   if (usemidpoint === null){
    //  No edge midpoint is within a distance of clickRadius
    if (debug) console.log("Click was too far from any node to be used");
+   if (debugdrag) console.log("[2] Click was too far from any node to be used");
   } else {
 
    //
@@ -1002,15 +1050,15 @@ function canvasClick(evt){
 
 
 
-
-
-
-
  } else {
+  /*
+    plain click (no shift or ctrl key held)
+  */
   var usenode = nearestNode(x,y,clickRadius);
   if (usenode === null){
    //  No node is within a distance of clickRadius
    if (debug) console.log("Click was too far from any node to be used");
+   if (debugdrag) console.log("[3] Click was too far from any node to be used");
   } else {
 
    //
@@ -1036,7 +1084,6 @@ function canvasClick(evt){
 
  }
 
- return 1;
 }
 
 
@@ -1204,4 +1251,90 @@ function enableAxisLineWidthControl(){
  $("#theaxislinewidth").removeClass("disabledcontrol");
  $("#theaxislinewidthLabel").removeClass("disabledcontrol");
  $("#theaxislinewidthOutput").removeClass("disabledcontrol");
+}
+
+
+/* ********************************************************************************************* */
+/* ********************************************************************************************* */
+/* ********************************************************************************************* */
+function makeLabelsDraggable(){
+ var thecanvas = $("#thecanvas")[0];
+ thecanvas.addEventListener('mousedown', startLabelDrag);
+ thecanvas.addEventListener('mousemove', dragLabel);
+ thecanvas.addEventListener('mouseup', endLabelDrag);
+
+ function startLabelDrag(event){
+  event.preventDefault();
+  event.stopPropagation();
+
+  // disable the canvas's onclick
+  var thecanvas = $("#thecanvas")[0];
+//  thecanvas.addEventListener('onclick', null);
+  thecanvas.setAttribute("onclick",null)
+
+  if (selectedLabel===null){
+   // where are we?
+   var dx = document.getElementById("thecanvas").getBoundingClientRect().x;
+   var dy = document.getElementById("thecanvas").getBoundingClientRect().y;
+   var mouseX = Math.round(event.clientX-dx);
+   var mouseY = Math.round(event.clientY-dy);
+
+   var dragRadius = 10; // only drag a label if we are this close to it
+   var thelabel = nearestLabel(mouseX,mouseY,dragRadius);
+   if (thelabel != null){
+    selectedLabel = thelabel;
+    selectedLabelPosition = [document.getElementById(selectedLabel).getAttribute("x"),document.getElementById(selectedLabel).getAttribute("y")];
+if (debugdrag) console.log("++++++++++++++++++++++++++++++++++++++++++++++++ "+selectedLabel+" +++++++++++++++++++++++++++++++++");
+if (debugdrag) console.log("DRAG ORIGINAL POSITION = "+selectedLabelPosition[0]+","+selectedLabelPosition[1]);
+    var dragIndex = parseInt(selectedLabel.substr(9));
+
+    var dx = document.getElementById("thecanvas").getBoundingClientRect().x;
+    var dy = document.getElementById("thecanvas").getBoundingClientRect().y;
+    var mouseX = Math.round(event.clientX-dx);
+    var mouseY = Math.round(event.clientY-dy);
+
+    // record the original position in case we need to put it back:
+    selectedLabelPosition = [$(selectedLabel).attr("x"), $(selectedLabel).attr("y")];
+    // check the offset of the mouse position from the svg element
+    dragOffset[0] = Math.round(event.clientX - document.getElementById(selectedLabel).getBoundingClientRect().x);
+    dragOffset[1] = Math.round(event.clientY - document.getElementById(selectedLabel).getBoundingClientRect().y);
+if (debugdrag) console.log("DRAG START OFFSET = "+dragOffset[0]+","+dragOffset[1]);
+   }
+  }
+ }
+
+ function dragLabel(event){
+  if (selectedLabel) {
+   event.preventDefault();
+   event.stopPropagation();
+
+   // move the label along with the mouse:
+   var dx = document.getElementById("thecanvas").getBoundingClientRect().x;
+   var dy = document.getElementById("thecanvas").getBoundingClientRect().y;
+   var mouseX = Math.round(event.clientX-dx);
+   var mouseY = Math.round(event.clientY-dy);
+
+   document.getElementById(selectedLabel).setAttribute("x",mouseX-dragOffset[0]);
+   document.getElementById(selectedLabel).setAttribute("y",mouseY-dragOffset[1]);
+  }
+ }
+
+
+ function endLabelDrag(event){
+  selectedLabel = null; // reset
+  dragOffset = [0,0]; // reset
+
+  event.preventDefault();
+  event.stopPropagation();
+
+  // reinstate the canvas's onclick
+  var thecanvas = $("#thecanvas")[0];
+//  thecanvas.addEventListener('onclick', canvasClick);
+  thecanvas.setAttribute("onclick","canvasClick(event);")
+if (debugdrag) console.log("reinstated canvas onclick")
+
+if (debugdrag) console.log("----------------------- END DRAG -----------------------------------------");
+  console.log("STILL NEED TO SET THE DRAGGED LABEL'S OFFSET VARIABLE");
+ }
+
 }
