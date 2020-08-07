@@ -1,5 +1,5 @@
 
-debugdrag = true;
+debugdrag = false;
 
 selectedLabel = null; // initialise
 selectedLabelPosition = [null,null]; // initialise
@@ -15,6 +15,8 @@ function setup(){
  // initialise labels for the purposes of creating the FocusModel objects
  nodeLabel = new Array;
  edgeLabel = new Array;
+ nodeLabelOffsets = new Array;
+ edgeLabelOffsets = new Array;
 
  // create an array of FocusModel objects, which will be used to store the different models' parameters:
  allowedModels = ['vertex','edge','axis','newaxis','monoray']; // global
@@ -141,8 +143,8 @@ function createNodeLabels(){
  // make enough blank labels for every node
  nodeLabel = new Array(nodeIndex.length); // this will hold the label strings
  nodeLabel.fill("");
- nodeLabelOffset = new Array(nodeLabel.length); // this will hold position offsets on a per-label basis
- nodeLabelOffset.fill([0,0]); // default individual offset is zero
+ nodeLabelOffsets = new Array(nodeIndex.length); // this will hold the label strings
+ nodeLabelOffsets.fill([0,0]);
 }
 
 /* ********************************************************************************************* */
@@ -152,8 +154,8 @@ function createEdgeLabels(){
  // make enough blank labels for every edge
  edgeLabel = new Array(edgeMidpointPosition.length); // this will hold the label strings
  edgeLabel.fill("");
- edgeLabelOffset = new Array(edgeLabel.length); // this will hold position offsets on a per-label basis
- edgeLabelOffset.fill([0,0]); // default individual offset is zero
+ edgeLabelOffsets = new Array(edgeMidpointPosition.length); // this will hold the label strings
+ edgeLabelOffsets.fill([0,0]);
 }
 
 
@@ -281,6 +283,7 @@ function wipeCanvas(){
 }
 // <path id="rayarrowbase" d="M-4,0 L0,6 L4,0 " stroke-width="0.5" fill="none" stroke="'+edgeColour+'" />\
 
+
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
@@ -288,6 +291,7 @@ function wipeInfo(){
  $('#info').html('');
  return 1;
 }
+
 
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
@@ -310,6 +314,7 @@ function nodeDistance(a,b){
  var dist = a.length+b.length;
  return dist;
 }
+
 
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
@@ -334,8 +339,8 @@ function edgeDistance(a,b,c,d){
   dist=minL+1;
  }
  return dist;
-
 }
+
 
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
@@ -348,6 +353,7 @@ function edgeLengthVF(level,valency,baselength=2){
 // return = baselength./s.^(valency/valency);
 }
 
+
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
@@ -358,6 +364,7 @@ function edgeLengthEF(level,valency,baselength=2){
 // return baselength*Math.pow(6/7,level);
 // return baselength;
 }
+
 
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
@@ -370,6 +377,7 @@ function edgeLengthAF(level,valency,baselength=2){
 // return baselength*Math.pow(6/7,level);
 // return baselength;
 }
+
 
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
@@ -391,6 +399,7 @@ function circshift(input,shiftsize){
  }
  return output;
 }
+
 
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
@@ -418,6 +427,7 @@ function switchmodel(){
  location.hash = thismodeltype; // append the model type to the URL (this lets people bookmark/share particular model types)
  allparams[allowedModels.indexOf(thismodeltype)].drawModel();
 }
+
 
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
@@ -570,56 +580,49 @@ function drawgraph(){
  var moreColours = ["#F0A3FF", "#0075DC", "#993F00", "#4C005C", "#191919", "#005C31", "#2BCE48", "#FFCC99", "#808080", "#94FFB5", "#8F7C00", "#9DCC00", "#C20088", "#003380", "#FFA455", "#FFA8BB", "#426600", "#FF0010", "#5EF1F2", "#00998F", "#E0FF66", "#74AAFF", "#990000", "#FFFF80", "#FFFF00", "#FF5055"];
  someColours = someColours.concat(moreColours);
 
- for (var vv=0;vv<nodePosition.length;vv++){
-  nodeScreenPosition[vv] = canvasScale(nodePosition[vv]);
+ for (var i=0;i<nodePosition.length;i++){
+  nodeScreenPosition[i] = canvasScale(nodePosition[i]);
 
-  if (nodeParent[vv]>=0){ // draw edges only for non-root nodes
-   var position0 = canvasScale(nodePosition[nodeParent[vv]]); // this is the other end of the edge
+  if (nodeParent[i]>=0){ // draw edges only for non-root nodes
+   var position0 = canvasScale(nodePosition[nodeParent[i]]); // this is the other end of the edge
   }
 
-//  if (debug) $("#info").append("<p class="debug">"+vv+"] "+xx.toFixed(2)+", "+yy.toFixed(2));
-//  if (debug) $("#info").append("<p class="debug">"+nodeAngle[vv]/pi+"  "+nodePosition[vv][0].toFixed(3)+", "+nodePosition[vv][1].toFixed(3));
-
   $(document.createElementNS("http://www.w3.org/2000/svg","circle")).attr({
-   "fill": (nodeIgnore[vv]?(ignoreNodeColour.length?ignoreNodeColour:"none"):nodeColour),
+   "fill": (nodeIgnore[i]?(ignoreNodeColour.length?ignoreNodeColour:"none"):nodeColour),
    "stroke": "none",
    "r": nodeRadius,
-   "cx": nodeScreenPosition[vv][0],
-   "cy": nodeScreenPosition[vv][1],
-  }).appendTo("#nodegroup");
-//  }).appendTo("#thecanvas");
+   "cx": nodeScreenPosition[i][0],
+   "cy": nodeScreenPosition[i][1],
+  }).appendTo("#nodegroup"); // formerly appendTo("#thecanvas");
 
   // usual way: all edges are the same (user-selected) colour
   var thisEdgeColour = edgeColour;
 
-  if (nodeParent[vv]>=0){  // for now, connect sequential nodes (only non-root nodes)
+  if (nodeParent[i]>=0){  // for now, connect sequential nodes (only non-root nodes)
    //  instead of the usual way: colour the edge according to the child suffix:
    if (plainedges){
     thisEdgeColour = edgeColour;
    } else {
-    var edgeFlavour = nodeAddress[vv].substr(nodeAddress[vv].length-1);
+    var edgeFlavour = nodeAddress[i].substr(nodeAddress[i].length-1);
     if (edgeFlavour.length==0){ // for the empty node, we need the edge flavour of its parent (this will happen after automorphisms are applied)
-     edgeFlavour = nodeAddress[nodeParent[vv]].substr(nodeAddress[nodeParent[vv]].length-1);
+     edgeFlavour = nodeAddress[nodeParent[i]].substr(nodeAddress[nodeParent[i]].length-1);
     }
     thisEdgeColour = someColours[colournames.indexOf(edgeFlavour)];
    }
 
-
    $(document.createElementNS("http://www.w3.org/2000/svg","line")).attr({
-    "stroke": (nodeIgnore[vv]?(ignoreEdgeColour.length?ignoreEdgeColour:"none"):thisEdgeColour),
-//old    "stroke-dasharray": (nodeIgnore[vv]?ignoreDash:"none"),
-    "stroke-dasharray": (nodeIgnore[vv]?(nodeOnAxis[vv]?Math.max(ignoreDash,axisLineWidth*0.3*ignoreDash):ignoreDash):"none"),
-    "stroke-width": (nodeOnAxis[vv]?Math.max(axisLineWidth,lineWidth):lineWidth),
+    "stroke": (nodeIgnore[i]?(ignoreEdgeColour.length?ignoreEdgeColour:"none"):thisEdgeColour),
+    "stroke-dasharray": (nodeIgnore[i]?(nodeOnAxis[i]?Math.max(ignoreDash,axisLineWidth*0.3*ignoreDash):ignoreDash):"none"),
+    "stroke-width": (nodeOnAxis[i]?Math.max(axisLineWidth,lineWidth):lineWidth),
     "stroke-linecap": "round",
 //    "marker-end": "url(#axesarrow)", // we probably don't want these
     "x1": position0[0],
     "y1": position0[1],
-    "x2": nodeScreenPosition[vv][0],
-    "y2": nodeScreenPosition[vv][1],
+    "x2": nodeScreenPosition[i][0],
+    "y2": nodeScreenPosition[i][1],
     // give the extensions an id just in case we need to find them:
-    "id": (nodeAddress[vv]=="RR"|nodeAddress[nodeParent[vv]]=="RR"|nodeAddress[vv]=="LL"|nodeAddress[nodeParent[vv]]=="LL"?nodeAddress[vv]:""),
-   }).appendTo("#edgegroup");
-//   }).appendTo("#thecanvas");
+    "id": (nodeAddress[i]=="RR"|nodeAddress[nodeParent[i]]=="RR"|nodeAddress[i]=="LL"|nodeAddress[nodeParent[i]]=="LL"?nodeAddress[i]:""),
+   }).appendTo("#edgegroup"); // formerly appendTo("#thecanvas");
   }
 
   var thislabel = "";
@@ -630,13 +633,13 @@ function drawgraph(){
      thislabel = ""; // should not happen but define this here in case we change things in the future
      break;
     case 1: // label is the node address
-     thislabel = (nodeAddress[vv]==""?"\u{d8}":nodeAddress[vv]); // address or o-slash for the empty node
+     thislabel = (nodeAddress[i]==""?"\u{d8}":nodeAddress[i]); // address or o-slash for the empty node
      break;
     case 2: // label is the node index
-     thislabel = String(nodeIndex[vv]); // convert to a string
+     thislabel = String(nodeIndex[i]); // convert to a string
      break;
     case 3: // label is some custom text which the user can change
-     thislabel = String(nodeLabel[vv]); // covert to a string
+     thislabel = String(nodeLabel[i]); // covert to a string
      break;
     default:
      thislabel = "";
@@ -644,26 +647,27 @@ function drawgraph(){
 
    if (thislabel.length>0){ // don't create (empty) node labels with blank text
     var newText = document.createElementNS("http://www.w3.org/2000/svg","text");
-    var thispositionX = Math.round(nodeScreenPosition[vv][0] + labelOffsetX + nodeLabelOffset[vv][0]);
-    var thispositionY = Math.round(nodeScreenPosition[vv][1] + labelOffsetY + nodeLabelOffset[vv][1]);
+    var thisID = "nodelabel"+String(i);
+
+    var thisoffset = nodeLabelOffsets[i];
+    var thispositionX = Math.round(nodeScreenPosition[i][0] + labelOffsetX + thisoffset[0]);
+    var thispositionY = Math.round(nodeScreenPosition[i][1] + labelOffsetY + thisoffset[1]);
     $(newText).attr({
-     "fill": (nodeIgnore[vv]?(ignoreLabelColour.length?ignoreLabelColour:"none"):labelColour),
+     "fill": (nodeIgnore[i]?(ignoreLabelColour.length?ignoreLabelColour:"none"):labelColour),
      "font-size": fontSize,
      "x": thispositionX,
      "y": thispositionY,
      "transform": "rotate("+textAngle+","+String(thispositionX)+","+String(thispositionY)+")",
      "style": "dominant-baseline:middle; text-anchor:"+(showlabels==3?"left":"middle")+";",
      "class": "nodelabel alabel",
-     "id": "nodelabel"+String(vv),
+     "id": thisID,
     });
     // the text node has been created, so insert the node's label
     var textNode = document.createTextNode(thislabel);
     newText.appendChild(textNode);
-//    document.getElementById("thecanvas").appendChild(newText);
-    document.getElementById("nodelabelgroup").appendChild(newText);
+    document.getElementById("nodelabelgroup").appendChild(newText); // formerly appended to thecanvas instead of nodelabelgroup
    }
   } // end if showlabels
-
 
  } // end loop over nodes
 
@@ -675,8 +679,10 @@ function drawgraph(){
 
    if (thislabel.length>0){ // don't create (empty) edge labels with blank text
     var newText = document.createElementNS("http://www.w3.org/2000/svg","text");
-    var thispositionX = Math.round(edgeMidpointPosition[i][0] + labelOffsetX + edgeLabelOffset[i][0]);
-    var thispositionY = Math.round(edgeMidpointPosition[i][1] + labelOffsetY + edgeLabelOffset[i][1]);
+    var thisID = "edgelabel"+String(i);
+    var thisoffset = edgeLabelOffsets[i];
+    var thispositionX = Math.round(edgeMidpointPosition[i][0] + labelOffsetX + thisoffset[0]);
+    var thispositionY = Math.round(edgeMidpointPosition[i][1] + labelOffsetY + thisoffset[1]);
     $(newText).attr({
      "fill": labelColour,
      "font-size": fontSize,
@@ -690,8 +696,7 @@ function drawgraph(){
     // the text node has been created, so insert the node's label
     var textNode = document.createTextNode(thislabel);
     newText.appendChild(textNode);
-//    document.getElementById("thecanvas").appendChild(newText);
-    document.getElementById("edgelabelgroup").appendChild(newText);
+    document.getElementById("edgelabelgroup").appendChild(newText); // formerly appended to thecanvas instead of nodelabelgroup
    }
 
   } // end loop over edgelabels
@@ -709,6 +714,7 @@ function drawgraph(){
  return 1;
 }
 
+
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
@@ -717,6 +723,7 @@ function drawgraph(){
 function matrixXY(m,x,y) {
  return { x: x * m.a + y * m.c + m.e, y: x * m.b + y * m.d + m.f };
 }
+
 
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
@@ -750,6 +757,7 @@ function getTransformedBBox(obj){
 
  return bbox1;
 }
+
 
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
@@ -817,6 +825,7 @@ function bounds() {
  return {minX, maxX, minY, maxY};
 }
 
+
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
@@ -845,6 +854,7 @@ function savePDF(){
  return 0;
 }
 
+
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
@@ -868,6 +878,7 @@ function savePNG(){
  saveSvgAsPng(document.getElementById("thecanvas"), "graph.png", saveOptions);
 }
 
+
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
@@ -888,12 +899,14 @@ function deleteChildren(a){
  }
 }
 
+
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
 function countOnAxis(){
  return nodeOnAxis.filter(function(s) { return s; }).length;
 }
+
 
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
@@ -916,6 +929,7 @@ function nearestNode(x,y,maxDistance=-1){
   return null;
  }
 }
+
 
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
@@ -1000,7 +1014,6 @@ function canvasClick(evt){
    //
    // CTRL-click: set the automorphism nodes
    //
-
    var addr = nodeAddress[usenode];
    if (addr.length==0) addr = "0";
    if (debug) console.log("Chose nearest node: "+nodeAddress[usenode]);
@@ -1051,9 +1064,9 @@ function canvasClick(evt){
 
 
  } else {
-  /*
-    plain click (no shift or ctrl key held)
-  */
+  //
+  //  plain click (no shift or ctrl key held)
+  //
   var usenode = nearestNode(x,y,clickRadius);
   if (usenode === null){
    //  No node is within a distance of clickRadius
@@ -1108,6 +1121,7 @@ function lineMidPoint(start,end,factor=0.5){
  var alongY = start[1]+factor*(end[1]-start[1]);
  return [alongX,alongY];
 }
+
 
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
@@ -1178,6 +1192,7 @@ function addArrows(){
  return 1;
 
 }
+
 
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
@@ -1267,10 +1282,12 @@ function makeLabelsDraggable(){
   event.preventDefault();
   event.stopPropagation();
 
+/*
   // disable the canvas's onclick
   var thecanvas = $("#thecanvas")[0];
 //  thecanvas.addEventListener('onclick', null);
   thecanvas.setAttribute("onclick",null)
+*/
 
   if (selectedLabel===null){
    // where are we?
@@ -1286,16 +1303,13 @@ function makeLabelsDraggable(){
     selectedLabelPosition = [document.getElementById(selectedLabel).getAttribute("x"),document.getElementById(selectedLabel).getAttribute("y")];
 if (debugdrag) console.log("++++++++++++++++++++++++++++++++++++++++++++++++ "+selectedLabel+" +++++++++++++++++++++++++++++++++");
 if (debugdrag) console.log("DRAG ORIGINAL POSITION = "+selectedLabelPosition[0]+","+selectedLabelPosition[1]);
-    var dragIndex = parseInt(selectedLabel.substr(9));
 
     var dx = document.getElementById("thecanvas").getBoundingClientRect().x;
     var dy = document.getElementById("thecanvas").getBoundingClientRect().y;
     var mouseX = Math.round(event.clientX-dx);
     var mouseY = Math.round(event.clientY-dy);
 
-    // record the original position in case we need to put it back:
-    selectedLabelPosition = [$(selectedLabel).attr("x"), $(selectedLabel).attr("y")];
-    // check the offset of the mouse position from the svg element
+    // check the "local" offset of the mouse position from the svg element (drags start where the mouse is, not at the element's position)
     dragOffset[0] = Math.round(event.clientX - document.getElementById(selectedLabel).getBoundingClientRect().x);
     dragOffset[1] = Math.round(event.clientY - document.getElementById(selectedLabel).getBoundingClientRect().y);
 if (debugdrag) console.log("DRAG START OFFSET = "+dragOffset[0]+","+dragOffset[1]);
@@ -1309,13 +1323,29 @@ if (debugdrag) console.log("DRAG START OFFSET = "+dragOffset[0]+","+dragOffset[1
    event.stopPropagation();
 
    // move the label along with the mouse:
-   var dx = document.getElementById("thecanvas").getBoundingClientRect().x;
-   var dy = document.getElementById("thecanvas").getBoundingClientRect().y;
+   var dx = Math.round(document.getElementById("thecanvas").getBoundingClientRect().x);
+   var dy = Math.round(document.getElementById("thecanvas").getBoundingClientRect().y);
    var mouseX = Math.round(event.clientX-dx);
    var mouseY = Math.round(event.clientY-dy);
 
-   document.getElementById(selectedLabel).setAttribute("x",mouseX-dragOffset[0]);
-   document.getElementById(selectedLabel).setAttribute("y",mouseY-dragOffset[1]);
+   document.getElementById(selectedLabel).setAttribute("x",mouseX);
+   document.getElementById(selectedLabel).setAttribute("y",mouseY);
+
+   var saveOffset = [0,0];
+   saveOffset[0] = Math.round(mouseX-selectedLabelPosition[0]);
+   saveOffset[1] = Math.round(mouseY-selectedLabelPosition[1]);
+
+   // store the new offset for this label
+   var labeltype = selectedLabel.substring(0,4);
+   var thislabel = parseInt(selectedLabel.substring(9)); // both types of label have IDs which are 8 characters followed by digits
+   if (labeltype=='node'){
+    nodeLabelOffsets[thislabel] = saveOffset;
+   } else if (labeltype=='edge'){
+    edgeLabelOffsets[thislabel] = saveOffset;
+   } else {
+    console.log("WARNING: unknown label type encountered");
+   }
+
   }
  }
 
@@ -1327,14 +1357,15 @@ if (debugdrag) console.log("DRAG START OFFSET = "+dragOffset[0]+","+dragOffset[1
   event.preventDefault();
   event.stopPropagation();
 
+/*
   // reinstate the canvas's onclick
   var thecanvas = $("#thecanvas")[0];
 //  thecanvas.addEventListener('onclick', canvasClick);
   thecanvas.setAttribute("onclick","canvasClick(event);")
 if (debugdrag) console.log("reinstated canvas onclick")
+*/
 
 if (debugdrag) console.log("----------------------- END DRAG -----------------------------------------");
-  console.log("STILL NEED TO SET THE DRAGGED LABEL'S OFFSET VARIABLE");
  }
 
 }

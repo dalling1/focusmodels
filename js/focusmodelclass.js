@@ -3,7 +3,7 @@ class FocusModel {
 edgepicker, nodepicker, whichlabel, labelpicker, axesbutton, axespicker, fadeleavesbutton, showarrowsbutton, theoffsetX,
 theoffsetY, thelabeloffsetX, thelabeloffsetY, thetextangle, thefontsize, thenodesize, thelinewidth, transparencybutton,
 automorph1, automorph2, thearrowsize, thearrowratio, thearrowoffset, filledarrowsbutton, reversedarrowsbutton, fadedarrowsbutton,
-theaxislinewidth, nodeLabel, edgeLabel){
+theaxislinewidth, nodeLabel, edgeLabel, nodeLabelOffsets, edgeLabelOffsets){
 
   this.name = 'FocusModel';
   this.themodeltype = themodeltype; // string, only one of {'vertex','edge','axis','newaxis','monoray'}
@@ -51,6 +51,17 @@ theaxislinewidth, nodeLabel, edgeLabel){
   } else {
    this.edgeLabel = new Array; // array
   }
+  if (typeof nodeLabelOffsets == 'object'){ // check if the node label offsets array exists
+   this.nodeLabelOffsets = nodeLabelOffsets; // array
+  } else {
+   this.nodeLabel = new Array; // array
+  }
+  if (typeof edgeLabelOffsets == 'object'){ // check if the edge label offsets array exists
+   this.edgeLabelOffsets = edgeLabelOffsets; // array
+  } else {
+   this.edgeLabelOffsets = new Array; // array
+  }
+
  }
 
  // a method to draw a given model object:
@@ -112,6 +123,8 @@ theaxislinewidth, nodeLabel, edgeLabel){
   $("#theaxislinewidthOutput").val(this.theaxislinewidth); // float
   nodeLabel = this.nodeLabel;
   edgeLabel = this.edgeLabel;
+  nodeLabelOffsets = this.nodeLabelOffsets;
+  edgeLabelOffsets = this.edgeLabelOffsets;
  }
 
  drawModel(){
@@ -165,6 +178,16 @@ theaxislinewidth, nodeLabel, edgeLabel){
    this.edgeLabel = edgeLabel; // array
   } else {
    this.edgeLabel = new Array; // array
+  }
+  if (typeof nodeLabelOffsets == 'object'){ // check if the node label offsets array exists
+   this.nodeLabelOffsets = nodeLabelOffsets; // array
+  } else {
+   this.nodeLabel = new Array; // array
+  }
+  if (typeof edgeLabelOffsets == 'object'){ // check if the edge label offsets array exists
+   this.edgeLabelOffsets = edgeLabelOffsets; // array
+  } else {
+   this.edgeLabelOffsets = new Array; // array
   }
 
   this.initialfocus = ""; // should this be stored on the HTML page somewhere?
@@ -276,9 +299,9 @@ function saveToFile(){
 function readFromFile(e){
  // Tutorial at https://web.dev/read-files/
  var fileList = e.target.files;
- for (var i=0;i<fileList.length;i++){
-  console.log(fileList[i].type); // want application/json
- }
+// for (var i=0;i<fileList.length;i++){
+//  console.log(fileList[i].type); // want application/json
+// }
  if (fileList.length==1){
   thefile = fileList[0];
   // read the contents
