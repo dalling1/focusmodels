@@ -274,10 +274,12 @@ function wipeCanvas(){
 </defs>');
 
  // also create the groups which will hold some of the drawn elements
- $(document.createElementNS("http://www.w3.org/2000/svg","g")).attr({"id": "nodegroup",}).appendTo("#thecanvas");
- $(document.createElementNS("http://www.w3.org/2000/svg","g")).attr({"id": "edgegroup",}).appendTo("#thecanvas");
- $(document.createElementNS("http://www.w3.org/2000/svg","g")).attr({"id": "nodelabelgroup",}).appendTo("#thecanvas");
- $(document.createElementNS("http://www.w3.org/2000/svg","g")).attr({"id": "edgelabelgroup",}).appendTo("#thecanvas");
+ $(document.createElementNS("http://www.w3.org/2000/svg","g")).attr({"id":"nodegroup",}).appendTo("#thecanvas");
+ $(document.createElementNS("http://www.w3.org/2000/svg","g")).attr({"id":"edgegroup",}).appendTo("#thecanvas");
+ $(document.createElementNS("http://www.w3.org/2000/svg","g")).attr({"id":"nodelabelgroup",}).appendTo("#thecanvas");
+ $(document.createElementNS("http://www.w3.org/2000/svg","g")).attr({"id":"edgelabelgroup",}).appendTo("#thecanvas");
+ $(document.createElementNS("http://www.w3.org/2000/svg","g")).attr({"id":"midptlabelmarkergroup",}).appendTo("#thecanvas"); // line midpoint markers
+ $(document.createElementNS("http://www.w3.org/2000/svg","g")).attr({"id":"admingroup",}).appendTo("#thecanvas"); // axis lines, etc.
 
  return 1;
 }
@@ -536,7 +538,7 @@ function drawgraph(){
     "cx": edgeMidpointPosition[i][0],
     "cy": edgeMidpointPosition[i][1],
     "class": "midptlabel",
-   }).appendTo("#thecanvas");
+   }).appendTo("#midptlabelmarkergroup");
   }
  }
 
@@ -554,7 +556,7 @@ function drawgraph(){
    "y1": canvasheight - centreY,
    "x2": centreX + canvaswidth/2 - offsetX,
    "y2": canvasheight - centreY,
-  }).appendTo("#thecanvas");
+  }).appendTo("#admingroup");
 
   $(document.createElementNS("http://www.w3.org/2000/svg","line")).attr({
    "id": "vaxis",
@@ -568,7 +570,7 @@ function drawgraph(){
    "y1": canvasheight, // orient the axis line towards the top of the screen (in case we have arrows on the end)
    "x2": centreX,
    "y2": 0,
-  }).appendTo("#thecanvas");
+  }).appendTo("#admingroup");
  } // end if showaxes
 
  // edge-colouring way: pick a colour (https://medialab.github.io/iwanthue/) from the list
@@ -774,48 +776,53 @@ function bounds() {
 
  var svgchildren=document.getElementById("thecanvas").children;
  for (var i=0;i<svgchildren.length;i++){
-  switch (svgchildren[i].nodeName){
-   case "circle": // node
-    if (svgchildren[i].className.baseVal!="midptlabel"){ // ignore the midpoint markers
-     var bbox = getTransformedBBox(svgchildren[i]);
-     var circleX = parseFloat(bbox.x); // left
-     var circleY = parseFloat(bbox.y); // top (on screen)
-     var circleW = parseFloat(bbox.width);
-     var circleH = parseFloat(bbox.height);
-     if ((circleX)<minX)         minX=(circleX);
-     if ((circleX+circleW)>maxX) maxX=(circleX+circleW);
-     if ((circleY)<minY)         minY=(circleY);
-     if ((circleY+circleH)>maxY) maxY=(circleY+circleH);
-    }
-    break;
-   case "text": // label
-    if (showlabels>0){
-     var bbox = getTransformedBBox(svgchildren[i]);
-     var textX = parseFloat(bbox.x); // left
-     var textY = parseFloat(bbox.y); // top (on screen)
-     var textW = parseFloat(bbox.width);
-     var textH = parseFloat(bbox.height);
-     if ((textX)<minX)       minX=(textX);
-     if ((textX+textW)>maxX) maxX=(textX+textW);
-     if ((textY)<minY)       minY=(textY);
-     if ((textY+textH)>maxY) maxY=(textY+textH);
-    }
-    break;
-   case "use": // arrow
-    if (showarrows>0){
-     var bbox = getTransformedBBox(svgchildren[i]);
-     var textX = parseFloat(bbox.x); // left
-     var textY = parseFloat(bbox.y); // top (on screen)
-     var textW = parseFloat(bbox.width);
-     var textH = parseFloat(bbox.height);
-     if ((textX)<minX)       minX=(textX);
-     if ((textX+textW)>maxX) maxX=(textX+textW);
-     if ((textY)<minY)       minY=(textY);
-     if ((textY+textH)>maxY) maxY=(textY+textH);
-    }
-    break;
-  }
- }
+  if (svgchildren[i].nodeName=="g"){
+   for (var j=0;j<svgchildren[i].children.length;j++){
+    var thischild = svgchildren[i].children[j];
+    switch (thischild.nodeName){
+     case "circle": // node
+      if (thischild.className.baseVal!="midptlabel"){ // ignore the midpoint markers
+       var bbox = getTransformedBBox(svgchildren[i]);
+       var circleX = parseFloat(bbox.x); // left
+       var circleY = parseFloat(bbox.y); // top (on screen)
+       var circleW = parseFloat(bbox.width);
+       var circleH = parseFloat(bbox.height);
+       if ((circleX)<minX)         minX=(circleX);
+       if ((circleX+circleW)>maxX) maxX=(circleX+circleW);
+       if ((circleY)<minY)         minY=(circleY);
+       if ((circleY+circleH)>maxY) maxY=(circleY+circleH);
+      }
+      break;
+     case "text": // label
+      if (showlabels>0){
+       var bbox = getTransformedBBox(svgchildren[i]);
+       var textX = parseFloat(bbox.x); // left
+       var textY = parseFloat(bbox.y); // top (on screen)
+       var textW = parseFloat(bbox.width);
+       var textH = parseFloat(bbox.height);
+       if ((textX)<minX)       minX=(textX);
+       if ((textX+textW)>maxX) maxX=(textX+textW);
+       if ((textY)<minY)       minY=(textY);
+       if ((textY+textH)>maxY) maxY=(textY+textH);
+      }
+      break;
+     case "use": // arrow
+      if (showarrows>0){
+       var bbox = getTransformedBBox(svgchildren[i]);
+       var textX = parseFloat(bbox.x); // left
+       var textY = parseFloat(bbox.y); // top (on screen)
+       var textW = parseFloat(bbox.width);
+       var textH = parseFloat(bbox.height);
+       if ((textX)<minX)       minX=(textX);
+       if ((textX+textW)>maxX) maxX=(textX+textW);
+       if ((textY)<minY)       minY=(textY);
+       if ((textY+textH)>maxY) maxY=(textY+textH);
+      }
+      break;
+    } // end switch
+   } // end for j
+  } // end if "g"
+ } // end for i
 
  minX=Math.floor(minX);
  maxX=Math.ceil(maxX);
