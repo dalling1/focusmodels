@@ -1383,3 +1383,15 @@ if (debugdrag) console.log("----------------------- END DRAG -------------------
  }
 
 }
+
+
+/* ********************************************************************************************* */
+/* ********************************************************************************************* */
+/* ********************************************************************************************* */
+function reset(){
+ // function to reset the current focus model to its default values
+ var tmpmodel = new FocusModel;
+ tmpmodel.getCurrent();
+ tmpmodel.setDefaults();
+ tmpmodel.drawModel();
+}
