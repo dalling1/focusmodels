@@ -3,7 +3,7 @@ class FocusModel {
 edgepicker, nodepicker, whichlabel, labelpicker, axesbutton, axespicker, fadeleavesbutton, showarrowsbutton, theoffsetX,
 theoffsetY, thelabeloffsetX, thelabeloffsetY, thetextangle, thefontsize, thenodesize, thelinewidth, transparencybutton,
 automorph1, automorph2, thearrowsize, thearrowratio, thearrowoffset, filledarrowsbutton, reversedarrowsbutton, fadedarrowsbutton,
-theaxislinewidth, nodeLabel, edgeLabel, nodeLabelOffsets, edgeLabelOffsets){
+theaxislinewidth, nodesontopbutton, nodeLabel, edgeLabel, nodeLabelOffsets, edgeLabelOffsets){
 
   this.name = 'FocusModel';
   this.themodeltype = themodeltype; // string, only one of {'vertex','edge','axis','newaxis','monoray'}
@@ -41,6 +41,8 @@ theaxislinewidth, nodeLabel, edgeLabel, nodeLabelOffsets, edgeLabelOffsets){
   this.reversedarrowsbutton = reversedarrowsbutton; // boolean
   this.fadedarrowsbutton = fadedarrowsbutton; // boolean
   this.theaxislinewidth = theaxislinewidth; // float
+  this.nodesontopbutton = nodesontopbutton; // boolean
+
   if (typeof nodeLabel == 'object'){ // check if the custom label array exists
    this.nodeLabel = nodeLabel; // array
   } else {
@@ -121,6 +123,7 @@ theaxislinewidth, nodeLabel, edgeLabel, nodeLabelOffsets, edgeLabelOffsets){
   $("#fadedarrowsbutton").prop("checked",(this.fadedarrowsbutton?true:false)); // boolean
   $("#theaxislinewidth").val(this.theaxislinewidth); // float
   $("#theaxislinewidthOutput").val(this.theaxislinewidth); // float
+  $("#nodesontopbutton").prop("checked",(this.nodesontopbutton?true:false)); // boolean
   nodeLabel = this.nodeLabel;
   edgeLabel = this.edgeLabel;
   nodeLabelOffsets = this.nodeLabelOffsets;
@@ -168,6 +171,7 @@ theaxislinewidth, nodeLabel, edgeLabel, nodeLabelOffsets, edgeLabelOffsets){
   this.reversedarrowsbutton = $("#reversedarrowsbutton").prop("checked"); // boolean
   this.fadedarrowsbutton = $("#fadedarrowsbutton").prop("checked"); // boolean
   this.theaxislinewidth = parseFloat($("#theaxislinewidth").val()); // float
+  this.nodesontopbutton = $("#nodesontopbutton").prop("checked"); // boolean
 
   if (typeof nodeLabel == 'object'){ // check if the custom label array exists
    this.nodeLabel = nodeLabel; // array
@@ -246,6 +250,7 @@ theaxislinewidth, nodeLabel, edgeLabel, nodeLabelOffsets, edgeLabelOffsets){
   this.reversedarrowsbutton = false; // boolean
   this.fadedarrowsbutton = true; // boolean
   this.theaxislinewidth = 0.2; // float
+  this.nodesontopbutton = true; // boolean
 
   // make some conditional changes to the default values:
   switch (this.themodeltype){

@@ -255,6 +255,7 @@ function wipeCanvas(){
  var arrowSize = parseFloat($("#thearrowsize").val());
  var filledarrows = $("#filledarrowsbutton").prop("checked");
  var arrowratio = Math.pow(parseFloat($("#thearrowratio").val()),2.0);
+ var nodesontop = $("#nodesontopbutton").prop("checked");
 
  $("#thecanvas").empty();
  // after clearing the canvas we need to insert the marker definition:
@@ -273,13 +274,19 @@ function wipeCanvas(){
  <path id="rayarrowbasefaded" d="M-'+arrowSize+',0 L0,'+(arrowSize*arrowratio)+' L'+arrowSize+',0'+(filledarrows?' z" fill="'+edgeColour+'55"':'"')+' stroke-width="0.5" fill="none" stroke="'+edgeColour+'55" />\
 </defs>');
 
- // also create the groups which will hold some of the drawn elements
- $(document.createElementNS("http://www.w3.org/2000/svg","g")).attr({"id":"nodegroup",}).appendTo("#thecanvas");
- $(document.createElementNS("http://www.w3.org/2000/svg","g")).attr({"id":"edgegroup",}).appendTo("#thecanvas");
+ // Create the groups which will hold some of the drawn elements.
+ // Note that the drawing order is such that the first of these is on the bottom and the last is on the top:
+ $(document.createElementNS("http://www.w3.org/2000/svg","g")).attr({"id":"admingroup",}).appendTo("#thecanvas"); // axis lines, etc.
+ if (nodesontop){ // nodes on top:
+  $(document.createElementNS("http://www.w3.org/2000/svg","g")).attr({"id":"edgegroup",}).appendTo("#thecanvas");
+  $(document.createElementNS("http://www.w3.org/2000/svg","g")).attr({"id":"nodegroup",}).appendTo("#thecanvas");
+ } else { // edges on top:
+  $(document.createElementNS("http://www.w3.org/2000/svg","g")).attr({"id":"nodegroup",}).appendTo("#thecanvas");
+  $(document.createElementNS("http://www.w3.org/2000/svg","g")).attr({"id":"edgegroup",}).appendTo("#thecanvas");
+ }
  $(document.createElementNS("http://www.w3.org/2000/svg","g")).attr({"id":"nodelabelgroup",}).appendTo("#thecanvas");
  $(document.createElementNS("http://www.w3.org/2000/svg","g")).attr({"id":"edgelabelgroup",}).appendTo("#thecanvas");
  $(document.createElementNS("http://www.w3.org/2000/svg","g")).attr({"id":"midptlabelmarkergroup",}).appendTo("#thecanvas"); // line midpoint markers
- $(document.createElementNS("http://www.w3.org/2000/svg","g")).attr({"id":"admingroup",}).appendTo("#thecanvas"); // axis lines, etc.
 
  return 1;
 }
