@@ -17,6 +17,8 @@ function demoOne(){
  $("#showarrowsbutton").prop("checked",false);
  $("#theoffsetX").val(0);
  $("#theoffsetY").val(0);
+ $("#thelabeloffsetX").val(11);
+ $("#thelabeloffsetY").val(8);
  $("#thetextangle").val(0);
  $("#thefontsize").val(10);
  $("#thenodesize").val(4);
@@ -31,7 +33,8 @@ function demoOne(){
  $("#reversedarrowsbutton").prop("checked",false);
  $("#fadedarrowsbutton").prop("checked",false);
  $("#theaxislinewidth").val(0.2);
- setup("edge");
+ $("#nodesontopbutton").prop("checked",true);
+ drawgraph();
 }
 
 function demoTwo(rundemo = false){
@@ -54,6 +57,8 @@ function demoTwo(rundemo = false){
  demo2.showarrowsbutton = true;
  demo2.theoffsetX = 0;
  demo2.theoffsetY = 0;
+ demo2.thelabeloffsetX = 0;
+ demo2.thelabeloffsetY = 0;
  demo2.thetextangle = 0;
  demo2.thefontsize = 10;
  demo2.thenodesize = 4;
@@ -68,6 +73,7 @@ function demoTwo(rundemo = false){
  demo2.reversedarrowsbutton = false;
  demo2.fadedarrowsbutton = false;
  demo2.theaxislinewidth = 0.2;
+ demo2.nodesontopbutton = true;
 
  // actually draw the example graph?
  if (rundemo){
