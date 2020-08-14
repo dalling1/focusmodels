@@ -1392,6 +1392,9 @@ function reset(){
  // function to reset the current focus model to its default values
  var tmpmodel = new FocusModel;
  tmpmodel.getCurrent();
- tmpmodel.setDefaults();
- tmpmodel.drawModel();
+ var doreset = confirm("This will reset the "+tmpmodel.themodeltype+" model. Are you sure?");
+ if (doreset){
+  tmpmodel.setDefaults();
+  tmpmodel.drawModel();
+ }
 }
