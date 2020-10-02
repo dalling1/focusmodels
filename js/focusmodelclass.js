@@ -3,7 +3,7 @@ class FocusModel {
 edgepicker, nodepicker, whichlabel, labelpicker, axesbutton, axespicker, fadeleavesbutton, showarrowsbutton, theoffsetX,
 theoffsetY, thelabeloffsetX, thelabeloffsetY, thetextangle, thefontsize, thenodesize, thelinewidth, transparencybutton,
 automorph1, automorph2, thearrowsize, thearrowratio, thearrowoffset, filledarrowsbutton, reversedarrowsbutton, fadedarrowsbutton,
-theaxislinewidth, nodesontopbutton, nodeLabel, edgeLabel, nodeLabelOffsets, edgeLabelOffsets){
+theaxislinewidth, nodesontopbutton, nodeLabel, edgeLabel, nodeLabelOffsets, edgeLabelOffsets, theskipnodes, theskipstart ){
 
   this.name = 'FocusModel';
   this.themodeltype = themodeltype; // string, only one of {'vertex','edge','axis','newaxis','monoray'}
@@ -42,6 +42,8 @@ theaxislinewidth, nodesontopbutton, nodeLabel, edgeLabel, nodeLabelOffsets, edge
   this.fadedarrowsbutton = fadedarrowsbutton; // boolean
   this.theaxislinewidth = theaxislinewidth; // float
   this.nodesontopbutton = nodesontopbutton; // boolean
+  this.theskipstart = theskipstart; // int
+  this.theskipnodes = theskipnodes; // int
 
   if (typeof nodeLabel == 'object'){ // check if the custom label array exists
    this.nodeLabel = nodeLabel; // array
@@ -76,8 +78,6 @@ theaxislinewidth, nodesontopbutton, nodeLabel, edgeLabel, nodeLabelOffsets, edge
   $("#thewidthOutput").val(this.thewidth); // int
   $("#thelevels").val(this.thelevels); // int
   $("#thelevelsOutput").val(this.thelevels); // int
-  $("#thewidth").val(this.thewidth); // int
-  $("#thewidthOutput").val(this.thewidth); // int
   $("#theedgescaling").val(this.theedgescaling); // float
   $("#theedgescalingOutput").val(this.theedgescaling); // float
   $("#theoverallscale").val(this.theoverallscale); // float
@@ -124,6 +124,11 @@ theaxislinewidth, nodesontopbutton, nodeLabel, edgeLabel, nodeLabelOffsets, edge
   $("#theaxislinewidth").val(this.theaxislinewidth); // float
   $("#theaxislinewidthOutput").val(this.theaxislinewidth); // float
   $("#nodesontopbutton").prop("checked",(this.nodesontopbutton?true:false)); // boolean
+  $("#theskipstart").val(this.theskipstart); // int
+  $("#theskipstartOutput").val(this.theskipstart); // int
+  $("#theskipnodes").val(this.theskipnodes); // int
+  $("#theskipnodesOutput").val(this.theskipnodes); // int
+
   nodeLabel = this.nodeLabel;
   edgeLabel = this.edgeLabel;
   nodeLabelOffsets = this.nodeLabelOffsets;
@@ -172,6 +177,8 @@ theaxislinewidth, nodesontopbutton, nodeLabel, edgeLabel, nodeLabelOffsets, edge
   this.fadedarrowsbutton = $("#fadedarrowsbutton").prop("checked"); // boolean
   this.theaxislinewidth = parseFloat($("#theaxislinewidth").val()); // float
   this.nodesontopbutton = $("#nodesontopbutton").prop("checked"); // boolean
+  this.theskipstart = parseInt($("#theskipstart").val()); // int
+  this.theskipnodes = parseInt($("#theskipnodes").val()); // int
 
   if (typeof nodeLabel == 'object'){ // check if the custom label array exists
    this.nodeLabel = nodeLabel; // array
@@ -251,6 +258,8 @@ theaxislinewidth, nodesontopbutton, nodeLabel, edgeLabel, nodeLabelOffsets, edge
   this.fadedarrowsbutton = true; // boolean
   this.theaxislinewidth = 0.2; // float
   this.nodesontopbutton = true; // boolean
+  this.theskipstart = 0; // int
+  this.theskipnodes = 0; // int
 
   // make some conditional changes to the default values:
   switch (this.themodeltype){

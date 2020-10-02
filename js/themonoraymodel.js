@@ -21,6 +21,8 @@ function monoraymodel(initialVertex){
  var edgelength = parseFloat($("#theoverallscale").val()); // "overall scale" on the web page
  var raylength = parseFloat($("#theedgescaling").val());
  var rayspread = parseFloat($("#thespread").val())*pi;
+ var skipstart = parseInt($("#theskipstart").val());
+ var skipnodes = parseInt($("#theskipnodes").val());
  printinfo = $("#infobutton").prop('checked');
  var fadeleaves = $("#fadeleavesbutton").prop("checked");
 
@@ -62,6 +64,9 @@ function monoraymodel(initialVertex){
  nodeK = new Array(width);
  var nodeKK = new Array(width);
  nodeIgnore = new Array(width); // used to stop drawing particular branches (create no child nodes of ignored nodes)
+ ellipsisCentre = new Array(width);
+ ellipsisStart = new Array(width);
+ ellipsisEnd = new Array(width);
  // set values for root (on-axis) nodes:
  var rootSpacing = edgelength;
  var rootOrigin = -(width-1)*rootSpacing/2;
@@ -95,6 +100,7 @@ function monoraymodel(initialVertex){
  // Calculate the ray angles
  var Nrays = valency;
  var angle0 = pi-rayspread*0.5;
+ var baseangle = angle0 + pi*0.5;
  var deltaangle = rayspread/(Nrays-1);
 
  // Add Nrays nodes entering into each root node
@@ -102,30 +108,56 @@ function monoraymodel(initialVertex){
   var parentnode = rootList[r]; // this root (on-axis) node is the parent of each ray
   groupKlist = circshift(Klist,-nodeK[parentnode]-1); // clockwise order for this group (ie. start with the "next" colour after the parent's one)
   for (var kk=0;kk<Nrays;kk++){ // start loop over valency (kk is a dummy variable, indexing into the circshifted list)
-   k = groupKlist[kk]; // "colour" of the new node
+   if (skipnodes>0 & kk>=skipstart & kk<(skipstart+skipnodes)){
+    if (debug) console.log("monoraymodel: Skipping node "+kk);
+    // skip this node, but record some coordinates for putting in an ellipsis
+    if (kk==skipstart){ // first
 
-   // create a new node:
-   nodeIndex[nodeIndex.length] = nodeIndex[nodeIndex.length-1]+1; // label the new node incrementally
-   var newnode = nodeIndex[nodeIndex.length-1]; // ... and grab that label for convenience
-   // thus, now "parentnode" is the parent and "newnode" is the leaf
+     var x0 = nodePosition[parentnode][0];
+     var y0 = nodePosition[parentnode][1];
+     var thisangle = kk*deltaangle; // not kk-1 because kk is zero-indexed
+     var x = x0 + edgelength*raylength*Math.sin(baseangle+thisangle); // set the angles so that the default is "fanned out to the left"
+     var y = y0 + edgelength*raylength*Math.cos(baseangle+thisangle);
+     ellipsisCentre[r] = [x0, y0]
+     ellipsisStart[r] = [x, y];
 
-   var x0 = nodePosition[parentnode][0];
-   var y0 = nodePosition[parentnode][1];
-   var thisangle = kk*deltaangle; // not kk-1 because kk is zero-indexed
-   var baseangle = angle0 + pi*0.5;
-   if (debug) if (Math.abs((baseangle+thisangle)/pi)==1.5) console.log("There is an on-axis ray attached to node "+parentnode);
-   var x = x0 + edgelength*raylength*Math.sin(baseangle+thisangle); // set the angles so that the default is "fanned out to the left"
-   var y = y0 + edgelength*raylength*Math.cos(baseangle+thisangle);
-   nodePosition[newnode] = [x, y];
+    }
+    if (kk==(skipstart+skipnodes-1) | kk==(Nrays-1) ){ // last
 
-   nodeAddress[newnode] = nodeAddress[parentnode]+colournames[k];
-   nodeParent[newnode] = nodeIndex[parentnode];
-   nodeDepth[newnode] = 2; // not needed?
-   nodeAngle[newnode] = 0; // not needed?
-   nodeOnAxis[newnode] = false;
-   nodeK[newnode] = k;
-   nodeKK[newnode] = k; // not needed?
-   nodeIgnore[newnode] = (fadeleaves?true:false); // false, unless we are fading leaf nodes (user control): then, set this to true but make it false later if we add children
+     var x0 = nodePosition[parentnode][0];
+     var y0 = nodePosition[parentnode][1];
+     var thisangle = kk*deltaangle; // not kk-1 because kk is zero-indexed
+     var x = x0 + edgelength*raylength*Math.sin(baseangle+thisangle); // set the angles so that the default is "fanned out to the left"
+     var y = y0 + edgelength*raylength*Math.cos(baseangle+thisangle);
+     ellipsisEnd[r] = [x, y];
+
+    }
+   } else {
+    k = groupKlist[kk]; // "colour" of the new node
+
+    // create a new node:
+    nodeIndex[nodeIndex.length] = nodeIndex[nodeIndex.length-1]+1; // label the new node incrementally
+    var newnode = nodeIndex[nodeIndex.length-1]; // ... and grab that label for convenience
+    // thus, now "parentnode" is the parent and "newnode" is the leaf
+
+    var x0 = nodePosition[parentnode][0];
+    var y0 = nodePosition[parentnode][1];
+    var thisangle = kk*deltaangle; // not kk-1 because kk is zero-indexed
+    if (debug) if (Math.abs((baseangle+thisangle)/pi)==1.5) console.log("There is an on-axis ray attached to node "+parentnode);
+    var x = x0 + edgelength*raylength*Math.sin(baseangle+thisangle); // set the angles so that the default is "fanned out to the left"
+    var y = y0 + edgelength*raylength*Math.cos(baseangle+thisangle);
+    nodePosition[newnode] = [x, y];
+
+    nodeAddress[newnode] = nodeAddress[parentnode]+colournames[k];
+    nodeParent[newnode] = nodeIndex[parentnode];
+    nodeDepth[newnode] = 2; // not needed?
+    nodeAngle[newnode] = 0; // not needed?
+    nodeOnAxis[newnode] = false;
+    nodeK[newnode] = k;
+    nodeKK[newnode] = k; // not needed?
+    nodeIgnore[newnode] = (fadeleaves?true:false); // false, unless we are fading leaf nodes (user control): then, set this to true but make it false later if we add children
+
+   } // end skip test
 
   } // end loop over valency (ie. kk), ie. loop over this group (children of one parent node in the level above)
  } // end loop over root (on-axis) nodes
@@ -172,7 +204,6 @@ function monoraymodel(initialVertex){
  nodeKK[newnode] = -1; // not needed?
  nodeIgnore[newnode] = true; // use this to indicate a fade or whatever to drawgraph()
 
-
  /* calculate the midpoints of all edges (these are used for edge labelling) */
  // (this code was copied from the showarrows() function, and these midpoints could be re-used there with a little editing)
  // Note: the edge from each node *to its parent* is drawn, so there are one more nodes than edges (the root node has no parent)
@@ -181,7 +212,7 @@ function monoraymodel(initialVertex){
  for (var i=0;i<nodeIndex.length;i++){
   var fromNode = nodeParent[i];
   var toNode = nodeIndex[i];
-  if (nodeAddress[i]=="LL"|nodeAddress[nodeParent[i]]=="LL"){ // axis extensions are handled slightly differently (if extant)
+  if (nodeAddress[i]=="LL" | nodeAddress[nodeParent[i]]=="LL"){ // axis extensions are handled slightly differently (if extant)
    fromNode = nodeIndex[i];
    toNode = nodeParent[i];
   }
@@ -191,6 +222,10 @@ function monoraymodel(initialVertex){
    edgeMidpointPosition[i] = [NaN, NaN];
   }
  } // end loop over edges
+
+
+ // lastly, we will remove (ignore) some edges (and nodes) and put in an ellipsis to indicate infinitely many edges
+// nodeIgnore[6] = false;
 
 
  return 1; // success

@@ -104,6 +104,9 @@ function axismodel(initialVertex){
  var nodeK = new Array(Nroots);
  var nodeKK = new Array(Nroots);
  nodeIgnore = new Array(Nroots); // used to stop drawing particular branches (create no child nodes of ignored nodes)
+ ellipsisCentre = new Array(Nroots);
+ ellipsisStart = new Array(Nroots);
+ ellipsisEnd = new Array(Nroots);
  // set values for root nodes:
  var rootSpacing = 2;
  var rootOrigin = -(Nroots-1)*rootSpacing/2;

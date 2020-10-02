@@ -19,7 +19,7 @@ function setup(){
  edgeLabelOffsets = new Array;
 
  // create an array of FocusModel objects, which will be used to store the different models' parameters:
- allowedModels = ['vertex','edge','axis','newaxis','monoray']; // global
+ allowedModels = ['vertex','edge','axis','newaxis','monoray','newmonoray']; // global
  allparams = new Array(); // global
  for (var m in allowedModels){
   var tmpmodel = new FocusModel;
@@ -55,13 +55,16 @@ function setup(){
  thetextangleOutput.value = thetextangle.value;
  thefontsizeOutput.value = thefontsize.value;
  thenodesizeOutput.value = thenodesize.value;
- linewidthOutput.value = thelinewidth.value;
+ thelinewidthOutput.value = thelinewidth.value;
+
  // "more controls":
  thearrowsizeOutput.value = thearrowsize.value;
  thearrowoffsetOutput.value = thearrowoffset.value;
  thearrowratioOutput.value = thearrowratio.value;
  theaxislinewidthOutput.value = theaxislinewidth.value;
  theaxislinewidth.value = theaxislinewidth.value;
+ theskipstartOutput.value = theskipstart.value;
+ theskipnodesOutput.value = theskipnodes.value;
 
  // change the canvas cursor to "alias" when pressing control (for picking automorphism nodes)
  $(document).on("keydown", function (event) {
@@ -80,9 +83,9 @@ function setup(){
   $(".midptlabel").css("display","none");
  });
 
- // turn off the "width" control (it will be enabled only for newaxis and monoray):
+ // turn off the "width" control (it will be enabled only for newaxis, monoray and newmonoray):
  disableWidthControl();
- // turn on the "levels" control (it will be disabled only for monoray):
+ // turn on the "levels" control (it will be disabled only for monoray and newmonoray):
  enableLevelsControl();
  // turn on the "axis line width" control (it will be disabled only for vertex and edge):
  enableAxisLineWidthControl();
@@ -115,6 +118,12 @@ function setup(){
   case "monoray":
    console.log("graph type = "+params.themodeltype);
    if (monoraymodel(params.initialfocus)) okay = true;
+   enableWidthControl();
+   disableLevelsControl();
+   break;
+  case "newmonoray":
+   console.log("graph type = "+params.themodeltype);
+   if (newmonoraymodel(params.initialfocus)) okay = true;
    enableWidthControl();
    disableLevelsControl();
    break;
@@ -432,7 +441,7 @@ function collapseAddress(str=""){
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
 function switchmodel(){
- var thismodeltype = $("#themodeltype").val(); // string, only one of {'vertex','edge','axis','newaxis','monoray'}
+ var thismodeltype = $("#themodeltype").val(); // string, only one of {'vertex','edge','axis','newaxis','monoray','newmonoray'}
  location.hash = thismodeltype; // append the model type to the URL (this lets people bookmark/share particular model types)
  allparams[allowedModels.indexOf(thismodeltype)].drawModel();
 }
@@ -480,6 +489,12 @@ function drawgraph(){
    disableLevelsControl();
    enableAxisLineWidthControl();
    break;
+  case "newmonoray":
+   if (newmonoraymodel(params.initialfocus)) okay = true;
+   enableWidthControl();
+   disableLevelsControl();
+   enableAxisLineWidthControl();
+   break;
   default:
    alert("Set-up must be called with a focus type");
    okay = false;
@@ -501,6 +516,7 @@ function drawgraph(){
  var ignoreEdgeColour = '#888'; // set empty to not draw edges for ignored nodes; was '#0f0'
  var ignoreLabelColour = ''; // set empty to not label ignored nodes; was '#0f0'
  var ignoreDash = '6'; // SVG dash pattern for edges between ignored nodes and their parents
+ var ellipsisDash = '10'; // SVG dash pattern for ellipses
 
  // Get values from user controls on the web page:
  // -- we're not too worried about NaN values here, which could arise if the user fiddles with the page or javascript and breaks something
@@ -547,6 +563,26 @@ function drawgraph(){
     "class": "midptlabel",
    }).appendTo("#midptlabelmarkergroup");
   }
+ }
+
+ // draw ellipses, if they exist
+ for (var i=0;i<ellipsisCentre.length;i++){
+  if (debug) console.log("Drawing ellipsis "+i);
+  var ecentre=canvasScale(ellipsisCentre[i]);
+  var epos1=canvasScale(ellipsisStart[i]);
+  var epos2=canvasScale(ellipsisEnd[i]);
+  var eradius = Math.sqrt(Math.pow(ecentre[0]-epos1[0],2)+Math.pow(ecentre[1]-epos1[1],2));
+  $(document.createElementNS("http://www.w3.org/2000/svg","path")).attr({
+   "fill": "none",
+//   "stroke": "#f70",
+   "stroke": ignoreEdgeColour,
+   "stroke-dasharray": ellipsisDash,
+   "stroke-width": lineWidth,
+   "d": "M "+epos2[0]+" "+epos2[1]+" A "+eradius+" "+eradius+" 0 0 0 "+epos1[0]+" "+epos1[1],
+   "class": "oneellipsis",
+   "id": "ellipsis_"+i,
+  }).appendTo("#edgegroup");
+
  }
 
  // draw the axes, if requested:

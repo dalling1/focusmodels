@@ -34,6 +34,8 @@ function demoOne(){
  $("#fadedarrowsbutton").prop("checked",false);
  $("#theaxislinewidth").val(0.2);
  $("#nodesontopbutton").prop("checked",true);
+ $("#theskipstart").val(0);
+ $("#theskipnodes").val(0);
  drawgraph();
 }
 
@@ -74,6 +76,8 @@ function demoTwo(rundemo = false){
  demo2.fadedarrowsbutton = false;
  demo2.theaxislinewidth = 0.2;
  demo2.nodesontopbutton = true;
+ demo2.theskipstart = 0;
+ demo2.theskipnodes = 0;
 
  // actually draw the example graph?
  if (rundemo){
