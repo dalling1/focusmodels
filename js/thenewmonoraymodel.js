@@ -1,7 +1,7 @@
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
-function monoraymodel(initialVertex){
+function newmonoraymodel(initialVertex){
  var pi = Math.PI;
  var debug = false;
  var edgelength = 2; // base edge length ("overall scale" on the web page)
@@ -16,7 +16,7 @@ function monoraymodel(initialVertex){
 
  // validate the initial vertex:
  var initialexp = RegExp('[a-z]*');
- if (!initialexp.test(initialVertex)){
+ if (!initialexp.test(initialVertex[0])){
   initialVertex[0] = '';
  }
 
@@ -115,7 +115,7 @@ function monoraymodel(initialVertex){
   groupKlist = circshift(Klist,-nodeK[parentnode]-1); // clockwise order for this group (ie. start with the "next" colour after the parent's one)
   for (var kk=0;kk<Nrays;kk++){ // start loop over valency (kk is a dummy variable, indexing into the circshifted list)
    if (skipnodes>0 & kk>=skipstart & kk<(skipstart+skipnodes)){
-    if (debug) console.log("monoraymodel: Skipping node "+kk);
+    if (debug) console.log("newmonoraymodel: Skipping node "+kk);
     // skip this node, but record some coordinates for putting in an ellipsis
     if (kk==skipstart){ // first
 
@@ -235,4 +235,4 @@ function monoraymodel(initialVertex){
 
 
  return 1; // success
-} // end monoraymodel function
+} // end newmonoraymodel function

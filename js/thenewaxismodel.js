@@ -16,7 +16,13 @@ function newaxismodel(initialVertex){
 
  if (initialVertex===undefined){
   initialVertex = Array(1);
-  initialVertex[0] = colournames[0];
+  initialVertex[0] = ''; // was colournames[0];
+ }
+
+ // validate the initial vertex:
+ var initialexp = RegExp('[a-z]*');
+ if (!initialexp.test(initialVertex[0])){
+  initialVertex[0] = '';
  }
 
  // GET INPUTS FROM THE WEB PAGE:

@@ -20,6 +20,15 @@ function edgemodel(initialEdge){
   initialEdge[1] = colournames[0];
  }
 
+ // validate the initial edge:
+ var initialexp = RegExp('[a-z]*');
+ if (!initialexp.test(initialEdge[0])){
+  initialEdge[0] = '';
+ }
+ if (!initialexp.test(initialEdge[1])){
+  initialEdge[1] = colournames[0];
+ }
+
  // GET INPUTS FROM THE WEB PAGE:
  var tmpvalency = eval($("#thevalency").val());
  var tmpNlevels = eval($("#thelevels").val());
