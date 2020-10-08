@@ -11,6 +11,7 @@ dragOffset = [0,0]; // initialise
 function setup(){
  var okay = false;
  wipeCanvas();
+ var debug = false;
 
  // initialise labels for the purposes of creating the FocusModel objects
  nodeLabel = new Array;
@@ -34,7 +35,7 @@ function setup(){
  // look for an anchor in the URL and switch to that model type (if it is an allowed one):
  var hashmodel = location.hash.split("#");
  if (hashmodel.length==2) urlmodel = hashmodel[1]; else urlmodel="";
- console.log("Requested urlmodel: "+urlmodel);
+ if (debug) console.log("Requested urlmodel: "+urlmodel);
  if (allowedModels.indexOf(urlmodel)>-1){
   document.getElementById("themodeltype").value=urlmodel;
   params = allparams[allowedModels.indexOf(urlmodel)]; // switch to the model specified in the URL anchor
