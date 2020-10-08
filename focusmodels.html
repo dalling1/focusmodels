@@ -52,6 +52,11 @@
   </select>
   </div>
 
+  <!-- hidden inputs which hold the initialfocus object (a vertex for all models except the edge-focused model) -->
+  <!-- if these are changed to user inputs, add a modified version of checkValidAddress (see the automorphism fields) -->
+  <input type="hidden" size="10" value="" id="initialfocus1" class="clickentry" />
+  <input type="hidden" size="10" value="" id="initialfocus2" class="clickentry" />
+
   <span title="Click to reset" style="cursor:pointer;" onclick="thevalency.value=5; thevalencyOutput.value = thevalency.value; drawgraph();" id="thevalencyLabel">Valency:</span>
   <input type="range" style="width:80px;" min="2" max="16" step="1" value="5" id="thevalency" oninput="thevalencyOutput.value = thevalency.value; drawgraph();" />
   <output style="width:20px;vertical-align:middle;" name="thevalencyOutputName" id="thevalencyOutput">999</output><br/>

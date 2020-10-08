@@ -17,8 +17,18 @@ function automorphism(node1,node2){
  }
 
  nodeAddress = newaddr;
- V0[0] = nodeAddress[0];
- V0[1] = nodeAddress[1];
+
+ // old way:
+// V0[0] = nodeAddress[0];
+// V0[1] = nodeAddress[1];
+
+ var params = new FocusModel;
+ params.getCurrent();
+ params.initialfocus[0] = nodeAddress[0];
+ if (params.themodeltype=="edge"){
+  params.initialfocus[1] = nodeAddress[1];
+ }
+ params.setCurrent();
 
  drawgraph();
  return 1;

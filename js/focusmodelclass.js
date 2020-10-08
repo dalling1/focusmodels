@@ -32,8 +32,8 @@ theaxislinewidth, nodesontopbutton, nodeLabel, edgeLabel, nodeLabelOffsets, edge
   this.thenodesize = thenodesize; // float
   this.thelinewidth = thelinewidth; // float
   this.transparencybutton = transparencybutton; // boolean
-  this.automorph1 = automorph1; // float
-  this.automorph2 = automorph2; // float
+  this.automorph1 = automorph1; // string
+  this.automorph2 = automorph2; // string
   this.thearrowsize = thearrowsize; // float
   this.thearrowratio = thearrowratio; // float
   this.thearrowoffset = thearrowoffset; // float
@@ -110,8 +110,8 @@ theaxislinewidth, nodesontopbutton, nodeLabel, edgeLabel, nodeLabelOffsets, edge
   $("#thelinewidth").val(this.thelinewidth); // float
   $("#thelinewidthOutput").val(this.thelinewidth); // float
   $("#transparencybutton").prop("checked",(this.transparencybutton?true:false)); // boolean
-  $("#automorph1").val(this.automorph1); // float
-  $("#automorph2").val(this.automorph2); // float
+  $("#automorph1").val(this.automorph1); // string
+  $("#automorph2").val(this.automorph2); // string
   $("#thearrowsize").val(this.thearrowsize); // float
   $("#thearrowsizeOutput").val(this.thearrowsize); // float
   $("#thearrowratio").val(this.thearrowratio); // float
@@ -128,6 +128,9 @@ theaxislinewidth, nodesontopbutton, nodeLabel, edgeLabel, nodeLabelOffsets, edge
   $("#theskipstartOutput").val(this.theskipstart); // int
   $("#theskipnodes").val(this.theskipnodes); // int
   $("#theskipnodesOutput").val(this.theskipnodes); // int
+
+  $("#initialfocus1").val(this.initialfocus[0]); // string
+  $("#initialfocus2").val(this.initialfocus[1]); // string
 
   nodeLabel = this.nodeLabel;
   edgeLabel = this.edgeLabel;
@@ -167,8 +170,8 @@ theaxislinewidth, nodesontopbutton, nodeLabel, edgeLabel, nodeLabelOffsets, edge
   this.thenodesize = parseFloat($("#thenodesize").val()); // float
   this.thelinewidth = parseFloat($("#thelinewidth").val()); // float
   this.transparencybutton = $("#transparencybutton").prop("checked"); // boolean
-  this.automorph1 = parseFloat($("#automorph1").val()); // float
-  this.automorph2 = parseFloat($("#automorph2").val()); // float
+  this.automorph1 = $("#automorph1").val(); // string
+  this.automorph2 = $("#automorph2").val(); // string
   this.thearrowsize = parseFloat($("#thearrowsize").val()); // float
   this.thearrowratio = parseFloat($("#thearrowratio").val()); // float
   this.thearrowoffset = parseFloat($("#thearrowoffset").val()); // float
@@ -201,10 +204,11 @@ theaxislinewidth, nodesontopbutton, nodeLabel, edgeLabel, nodeLabelOffsets, edge
    this.edgeLabelOffsets = new Array; // array
   }
 
-  this.initialfocus = ""; // should this be stored on the HTML page somewhere?
+  this.initialfocus = [$("#initialfocus1").val(), $("#initialfocus2").val()]; // 2-tuple of strings
 
   // can we remove this from here and just use setDefaults()? :
   // set a default initial focus if not given (there is currently no mechanism for the user to specify this)
+/*
   if (this.initialfocus.length==0){
    if (this.themodeltype == "edge"){
     this.initialfocus = ["","a"];
@@ -212,6 +216,19 @@ theaxislinewidth, nodesontopbutton, nodeLabel, edgeLabel, nodeLabelOffsets, edge
     this.initialfocus = [""];
    }
   }
+
+  // validate the initial focus: replace with default values if not valid
+  var initialexp = RegExp('[a-z]*');
+  if (!initialexp.test(initialfocus[0])){
+   initialfocus[0] = '';
+  }
+  if (this.themodeltype == "edge"){
+   if (!initialexp.test(initialfocus[1])){
+    initialfocus[1] = colournames[0];
+   }
+  }
+*/
+
  }
 
  setDefaults(){
@@ -222,7 +239,7 @@ theaxislinewidth, nodesontopbutton, nodeLabel, edgeLabel, nodeLabelOffsets, edge
    this.themodeltype = 'vertex'; // make it a vertex-focused model then
   }
 
-  this.initialfocus = [""];
+  this.initialfocus = [""]; // modified below for the edge model
 
   this.thevalency = 3; // int
   this.thewidth = 3; // int
@@ -248,8 +265,8 @@ theaxislinewidth, nodesontopbutton, nodeLabel, edgeLabel, nodeLabelOffsets, edge
   this.thenodesize = 3.0; // float
   this.thelinewidth = 0.2; // float
   this.transparencybutton = false; // boolean
-  this.automorph1 = ""; // float
-  this.automorph2 = ""; // float
+  this.automorph1 = ""; // string
+  this.automorph2 = ""; // string
   this.thearrowsize = 3.0; // float
   this.thearrowratio = 2.0; // float
   this.thearrowoffset = 0.3; // float; between 0 and 1
@@ -337,6 +354,6 @@ function readFromFile(e){
   }
  } else {
   // don't handle multiple files
-  return -1;
+  return -2;
  }
 }
