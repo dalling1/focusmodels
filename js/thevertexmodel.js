@@ -160,7 +160,7 @@ function vertexmodel(initialVertex){
  for (var i=0;i<nodeIndex.length;i++){
   var fromNode = nodeParent[i];
   var toNode = nodeIndex[i];
-  if (nodeAddress[i]=="LL"|nodeAddress[nodeParent[i]]=="LL"){ // axis extensions are handled slightly differently (if extant)
+  if (nodeAddress[i]=="LL"|nodeAddress[nodeParent[i]]=="LL"){ // axis extensions are handled slightly differently (if extant) [don't collapseAddress these nodes]
    fromNode = nodeIndex[i];
    toNode = nodeParent[i];
   }

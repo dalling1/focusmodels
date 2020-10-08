@@ -85,7 +85,7 @@ function monoraymodel(initialVertex){
   }
   nodeIndex[i] = i;         // "labels" of root (on-axis) nodes
   if (i==0) nodeAddress[i] = collapseAddress(initialVertex[0]);
-  else      nodeAddress[i] = nodeAddress[i-1]+longestname[i-1];
+  else      nodeAddress[i] = collapseAddress(nodeAddress[i-1]+longestname[i-1]);
   nodeParent[i] = i-1;
   nodeDepth[i] = 1; // depth ("level" in the other focus models) of this node [nb. in this model there is no depth 0]
   nodeAngle[i] = 0;
@@ -154,7 +154,7 @@ function monoraymodel(initialVertex){
     var y = y0 + edgelength*raylength*Math.cos(baseangle+thisangle);
     nodePosition[newnode] = [x, y];
 
-    nodeAddress[newnode] = nodeAddress[parentnode]+colournames[k];
+    nodeAddress[newnode] = collapseAddress(nodeAddress[parentnode]+colournames[k]);
     nodeParent[newnode] = nodeIndex[parentnode];
     nodeDepth[newnode] = 2; // not needed?
     nodeAngle[newnode] = 0; // not needed?

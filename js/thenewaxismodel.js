@@ -102,7 +102,7 @@ function newaxismodel(initialVertex){
   nodePosition[i] = [rootOrigin + rootSpacing*i, 0]; // positions of root (on-axis) nodes
   nodeIndex[i] = i;         // "labels" of root (on-axis) nodes
   if (i==0) nodeAddress[i] = collapseAddress(initialVertex[0]);
-  else      nodeAddress[i] = nodeAddress[i-1]+longestname[i-1];
+  else      nodeAddress[i] = collapseAddress(nodeAddress[i-1]+longestname[i-1]);
   nodeParent[i] = i-1;
   nodeDepth[i] = 1; // depth ("level" in the other focus models) of this node [nb. in this model there is no depth 0]
   nodeAngle[i] = 0;
@@ -165,7 +165,7 @@ function newaxismodel(initialVertex){
     // thus, now "parentnode" is the parent and "newnode" is the leaf
 
     nodePosition[newnode] = [groupOrigin + nodeSpacing*kk, -(L-1)*depthSpacing];
-    nodeAddress[newnode] = nodeAddress[parentnode]+colournames[k];
+    nodeAddress[newnode] = collapseAddress(nodeAddress[parentnode]+colournames[k]);
     nodeParent[newnode] = nodeIndex[parentnode];
     nodeDepth[newnode] = L; // depth ("level" in the other focus models) of this node
     nodeAngle[newnode] = 0; // not needed?
