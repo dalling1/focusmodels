@@ -120,6 +120,7 @@ function newaxismodel(initialVertex){
  for (var L=2;L<=depth;L++){
   if (debug) console.log('Running depth '+L);
   if (printinfo) $('#info').append('<p style="text-indent:10px;">Making depth='+L+' children</p>');
+  var levelNodeCount = 0; // count the nodes at this level
 
   // find nodes at the previous depth:
   var nodeList = new Array(0);
@@ -130,8 +131,27 @@ function newaxismodel(initialVertex){
   }
 
   // how many nodes at this depth? use this to determine spacing/spread
-  var depthNodeCount = width*Math.pow(valency-1,L-2); // valid for depth >= 2
+  var depthNodeCount = width*(valency-2)*Math.pow(valency-1,L-2); // valid for depth >= 2; corrected
   if (debug) console.log("   "+depthNodeCount+" nodes at depth "+L);
+  var levelLeftHandSide = -L*(width-1)/2;
+  var levelNodeSpacing = -2*levelLeftHandSide/(depthNodeCount-1);
+
+  // special cases:
+  if (width==1){
+   levelLeftHandSide = -L/2;
+   levelNodeSpacing = -2*levelLeftHandSide/(depthNodeCount-1);
+  }
+  if (depthNodeCount==1){
+   levelLeftHandSide = 0;
+   levelNodeSpacing = 0;
+  }
+
+  // honour the overall and edge scalings:
+  levelLeftHandSide *= edgelength; // *depthscaling ??
+  levelNodeSpacing *= edgelength; // *depthscaling ??
+
+  levelLeftHandSide *= groupspread; // ??
+  levelNodeSpacing *= groupspread; // ??
 
   // add the children (together, the "group") to each parent node in the level above
   for (var ii=0;ii<nodeList.length;ii++){
@@ -157,6 +177,7 @@ function newaxismodel(initialVertex){
 
    groupKlist = circshift(Klist,-nodeK[parentnode]-1); // clockwise order for this group (ie. start with the "next" colour after the parent's one)
    for (var kk=0;kk<groupNodeCount;kk++){ // loop over valency (kk is a dummy variable, indexing into the circshifted list)
+    levelNodeCount += 1; // count the nodes at this level
     k = groupKlist[kk]; // "colour" of the new node
 
     // create a new node:
@@ -164,7 +185,8 @@ function newaxismodel(initialVertex){
     var newnode = nodeIndex[nodeIndex.length-1]; // ... and grab that label for convenience
     // thus, now "parentnode" is the parent and "newnode" is the leaf
 
-    nodePosition[newnode] = [groupOrigin + nodeSpacing*kk, -(L-1)*depthSpacing];
+//    nodePosition[newnode] = [groupOrigin + nodeSpacing*kk, -(L-1)*depthSpacing]; // old way, using "groups" but there was overlapping of the edges/nodes
+    nodePosition[newnode] = [levelLeftHandSide+(levelNodeCount-1)*levelNodeSpacing, -(L-1)*depthSpacing]; // new way, with all nodes at each level evenly spaced horizontally
     nodeAddress[newnode] = collapseAddress(nodeAddress[parentnode]+colournames[k]);
     nodeParent[newnode] = nodeIndex[parentnode];
     nodeDepth[newnode] = L; // depth ("level" in the other focus models) of this node

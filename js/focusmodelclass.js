@@ -293,7 +293,8 @@ theaxislinewidth, nodesontopbutton, nodeLabel, edgeLabel, nodeLabelOffsets, edge
    case "newaxis":
     this.thewidth = 3; // int
     this.thelevels = 3; // int; "depth"
-    this.thespread = 0.9; // float
+    this.thespread = 0.4; // float; was 0.9
+    this.theoffsetY = 200.0; // float
     break;
    case "monoray":
     this.thevalency = 6; // int
