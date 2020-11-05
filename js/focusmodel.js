@@ -97,6 +97,8 @@ function setup(){
  enableLevelsControl();
  // turn on the "axis line width" control (it will be disabled only for vertex and edge):
  enableAxisLineWidthControl();
+ // turn on the "branch spread" control (it will be disabled for vertex):
+ enableSpreadControl();
 
  if (urlmodel.length & urlmodel!=params.themodeltype){
   console.log("URL model anchor ("+urlmodel+") and user controls ("+params.themodeltype+") do not agree");
@@ -108,6 +110,7 @@ function setup(){
    console.log("graph type = "+params.themodeltype);
    if (vertexmodel(params.initialfocus)) okay = true;
    disableAxisLineWidthControl();
+   disableSpreadControl();
    break;
   case "edge":
    console.log("graph type = "+params.themodeltype);
@@ -475,33 +478,39 @@ function drawgraph(){
    if (vertexmodel(params.initialfocus)) okay = true;
    disableWidthControl();
    disableAxisLineWidthControl();
+   disableSpreadControl();
    break;
   case "edge":
    if (edgemodel(params.initialfocus)) okay = true;
    disableWidthControl();
    disableAxisLineWidthControl();
+   enableSpreadControl();
    break;
   case "axis":
    if (axismodel(params.initialfocus)) okay = true;
    disableWidthControl();
    enableAxisLineWidthControl();
+   enableSpreadControl();
    break;
   case "newaxis":
    if (newaxismodel(params.initialfocus)) okay = true;
    enableWidthControl();
    enableAxisLineWidthControl();
+   enableSpreadControl();
    break;
   case "monoray":
    if (monoraymodel(params.initialfocus)) okay = true;
    enableWidthControl();
    disableLevelsControl();
    enableAxisLineWidthControl();
+   enableSpreadControl();
    break;
   case "newmonoray":
    if (newmonoraymodel(params.initialfocus)) okay = true;
    enableWidthControl();
    disableLevelsControl();
    enableAxisLineWidthControl();
+   enableSpreadControl();
    break;
   default:
    alert("Set-up must be called with a focus type");
@@ -1327,6 +1336,18 @@ function enableAxisLineWidthControl(){
  $("#theaxislinewidthOutput").removeClass("disabledcontrol");
 }
 
+function disableSpreadControl(){
+ $("#thespread").prop("disabled","disabled");
+ $("#thespread").addClass("disabledcontrol");
+ $("#thespreadLabel").addClass("disabledcontrol");
+ $("#thespreadOutput").addClass("disabledcontrol");
+}
+function enableSpreadControl(){
+ $("#thespread").removeProp("disabled");
+ $("#thespread").removeClass("disabledcontrol");
+ $("#thespreadLabel").removeClass("disabledcontrol");
+ $("#thespreadOutput").removeClass("disabledcontrol");
+}
 
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */

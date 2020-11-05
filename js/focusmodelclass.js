@@ -206,29 +206,6 @@ theaxislinewidth, nodesontopbutton, nodeLabel, edgeLabel, nodeLabelOffsets, edge
 
   this.initialfocus = [$("#initialfocus1").val(), $("#initialfocus2").val()]; // 2-tuple of strings
 
-  // can we remove this from here and just use setDefaults()? :
-  // set a default initial focus if not given (there is currently no mechanism for the user to specify this)
-/*
-  if (this.initialfocus.length==0){
-   if (this.themodeltype == "edge"){
-    this.initialfocus = ["","a"];
-   } else {
-    this.initialfocus = [""];
-   }
-  }
-
-  // validate the initial focus: replace with default values if not valid
-  var initialexp = RegExp('[a-z]*');
-  if (!initialexp.test(initialfocus[0])){
-   initialfocus[0] = '';
-  }
-  if (this.themodeltype == "edge"){
-   if (!initialexp.test(initialfocus[1])){
-    initialfocus[1] = colournames[0];
-   }
-  }
-*/
-
  }
 
  setDefaults(){
