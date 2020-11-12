@@ -326,6 +326,7 @@ function wipeInfo(){
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
 function nodeDistance(a,b){
+ // path length between two nodes in the graph (not distance in pixels or anything like that)
  a=collapseAddress(a);
  b=collapseAddress(b);
 
@@ -1280,14 +1281,14 @@ function canvasScale(pos=[0,0]){
   // single coordinate given as input:
   var x=pos[0];
   var y=pos[1];
-  var newpos = [centreX + useScale*x, canvasheight - (centreY + useScale*y)];
+  var newpos = [Math.round(centreX + useScale*x), Math.round(canvasheight - (centreY + useScale*y))];
  } else {
   // array of coordinates given as input:
   var newpos = Array(pos.length);
   for (var i=0;i<pos.length;i++){
    var x=pos[i][0];
    var y=pos[i][1];
-   newpos[i] = [centreX + useScale*x, canvasheight - (centreY + useScale*y)];
+   newpos[i] = [Math.round(centreX + useScale*x), Math.round(canvasheight - (centreY + useScale*y))];
   }
  }
  return newpos;
