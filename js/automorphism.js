@@ -25,26 +25,44 @@ async function automorphism(node1,node2){
  // move any label in previousNodeAddress which is also in newaddr
  for (var i=0;i<previousNodeAddress.length;i++){
   indx = nodeAddress.indexOf(previousNodeAddress[i]);
-  if (indx>-1){canvasScale
+  if (indx>-1){//remove: canvasScale
    // found this label in the "before" and "after" sets of nodes, so animate it:
    startPosition = canvasScale(nodePosition[i]);
    endPosition = canvasScale(nodePosition[indx]);
    if (debug) console.log(" ANIMATE address \""+previousNodeAddress[i]+"\" from ("+startPosition[0]+","+startPosition[1]+") to ("+endPosition[0]+","+endPosition[1]+")");
 
+   // helper variables
+   var ABS_PATH = 0;
+   var RELATIVE_PATH = 1;
+   var USE_OFFSET = -1; // -1 gives default curves
+
    // get the ID:
    var thelabelID = "nodelabel"+indx;
    // generate the path that we want
-   var thepathAbs = createPath(endPosition[0],endPosition[1],startPosition[0],startPosition[1],-1,0);
+   var thepathAbs = createPath(endPosition[0],endPosition[1],startPosition[0],startPosition[1],USE_OFFSET,ABS_PATH);
    // the animation motion was wrong, try this: (the path from A to B was being applied to B instead of A):
-   var thepathRel = createPath(endPosition[0],endPosition[1],startPosition[0],startPosition[1],-1,1);
+   var thepathRel = createPath(endPosition[0],endPosition[1],startPosition[0],startPosition[1],USE_OFFSET,RELATIVE_PATH);
    // add the path to the admin group (and so drawing it on the screen; need absolute path):
    addPath(thepathAbs,"admingroup");
    // add the (relative) animation path to the label and run the animation:
    addAnimateMotion(thelabelID,thepathRel);
    // run it!
    document.getElementById("animate_"+thelabelID).beginElement();
+  } else {
+   // this address doesn't appear after the automorphism is applied (?), so fade it out
+/*
+   $(document.createElementNS("http://www.w3.org/2000/svg","animate")).attr({
+    attributeName:"fill",
+    values:"red;blue;red",
+    dur:"5s",
+    repeatCount:"indefinite",
+    id:"fademe",
+   }).appendTo("#nodelabel9");
+*/
+
   }
  }
+
 
 
  var params = new FocusModel;
@@ -109,7 +127,6 @@ function addAnimateMotion(parentID,d){
 /* **************************************************************************/
 /* **************************************************************************/
 /* **************************************************************************/
-//function animatelabel(start,end,offset=0){
 function createPath(startX,startY,endX,endY,offset=0,relativePath=1){
  /*
    PREVIOUSLY: function createPath(mystart,myend,offset=0,relativePath=1)
@@ -123,21 +140,17 @@ function createPath(startX,startY,endX,endY,offset=0,relativePath=1){
  // offset is the maximum distance from the line between them that the path should reach
  //  - use offset = -1 for a default curve
  //  - offset = 0 will be a straight line
- console.log("Making path from "+String(startPos[0])+","+String(startPos[1])+" to "+String(endPos[0])+","+String(endPos[1]));
  var debug = false;
+ if (debug) console.log("Making path from "+String(startPos[0])+","+String(startPos[1])+" to "+String(endPos[0])+","+String(endPos[1]));
+
  if (relativePath){
-//  console.log("Using relative path from "+String(startPos[0])+","+String(startPos[1])+" to "+String(endPos[0])+","+String(endPos[1]));
   for (var d=0;d<startPos.length;d++){ // loop over each dimension
    endPos[d] -= startPos[d]; // subtract the starting coordinate to create a relative path
    startPos[d] = 0;
   }
  } else {
-//  console.log("Using absolute path from "+String(startPos[0])+","+String(startPos[1]));
-//  console.log("Using absolute path from "+String(startPos[0])+","+String(startPos[1])+" to "+String(endPos[0])+","+String(endPos[1]));
+  // else don't subtract the starting point
  }
-// console.log("Using          path from "+String(startPos[0])+","+String(startPos[1]));
-// console.log("Using          path to "+String(endPos[0])+","+String(endPos[1]));
- console.log(" Making path from "+String(startPos[0])+","+String(startPos[1])+" to "+String(endPos[0])+","+String(endPos[1]));
 
 
  // taken from https://stackoverflow.com/a/49286885
@@ -169,9 +182,6 @@ function createPath(startX,startY,endX,endY,offset=0,relativePath=1){
  // construct the command to draw a quadratic curve
  var thepath = "M " + p1x + " " + p1y + " Q " + c1x + " " + c1y + " " + p2x + " " + p2y;
  if (debug) console.log(" PATH: "+thepath);
-//1 console.log("                        "+thepath);
-//1 console.log("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
 
-// addAnimateMotion(nodeId,nodePath);
  return thepath;
 }
