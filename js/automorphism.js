@@ -1,19 +1,24 @@
 /* **************************************************************************/
 /* **************************************************************************/
 /* **************************************************************************/
-async function automorphism(node1,node2){
- /* perform re-labelling of a tree based on moving node1 to node2 [need async to use await] */
+async function automorphism(){
+ /*
+    Perform re-labelling of a tree based on moving node1 to node2 [need async to use await]
+    node1 and node2 are read from the text input fields automorph1 and automorph2
+ */
  var debug = false;
 
  previousNodeAddress = nodeAddress; // save the old addresses
 
+ var oldaddr = [];
  var newaddr = [];
  var fromaddr = $("#automorph1").attr("value");
  var toaddr = $("#automorph2").attr("value");
 
+ // perform the relabelling:
  for (var i=0;i<nodeAddress.length;i++){
-  oldaddr = nodeAddress[i];
-  newaddr[i] = collapseAddress(fromaddr + reverseString(toaddr) + oldaddr);
+  oldaddr[i] = nodeAddress[i];
+  newaddr[i] = collapseAddress(fromaddr + reverseString(toaddr) + oldaddr[i]);
  }
 
  // set the new addresses as the node addresses
@@ -25,40 +30,45 @@ async function automorphism(node1,node2){
  // move any label in previousNodeAddress which is also in newaddr
  for (var i=0;i<previousNodeAddress.length;i++){
   indx = nodeAddress.indexOf(previousNodeAddress[i]);
-  if (indx>-1){//remove: canvasScale
+  var thelabelID = "nodelabel"+i;
+
+  if (indx>-1){
    // found this label in the "before" and "after" sets of nodes, so animate it:
    startPosition = canvasScale(nodePosition[i]);
    endPosition = canvasScale(nodePosition[indx]);
-   if (debug) console.log(" ANIMATE address \""+previousNodeAddress[i]+"\" from ("+startPosition[0]+","+startPosition[1]+") to ("+endPosition[0]+","+endPosition[1]+")");
 
    // helper variables
    var ABS_PATH = 0;
    var RELATIVE_PATH = 1;
-   var USE_OFFSET = -1; // -1 gives default curves
+   var USE_OFFSET = -1; // -1 gives default curves in createPath()
 
-   // get the ID:
-   var thelabelID = "nodelabel"+indx;
-   // generate the path that we want
-   var thepathAbs = createPath(endPosition[0],endPosition[1],startPosition[0],startPosition[1],USE_OFFSET,ABS_PATH);
-   // the animation motion was wrong, try this: (the path from A to B was being applied to B instead of A):
-   var thepathRel = createPath(endPosition[0],endPosition[1],startPosition[0],startPosition[1],USE_OFFSET,RELATIVE_PATH);
+   // generate the path that we want to draw:
+   var thepathAbs = createPath(startPosition[0],startPosition[1],endPosition[0],endPosition[1],USE_OFFSET,ABS_PATH);
+   // generate the path that we want the label to follow:
+   var thepathRel = createPath(startPosition[0],startPosition[1],endPosition[0],endPosition[1],USE_OFFSET,RELATIVE_PATH);
+
    // add the path to the admin group (and so drawing it on the screen; need absolute path):
-   addPath(thepathAbs,"admingroup");
+   addPath(thepathAbs,"admingroup",previousNodeAddress[i],previousNodeAddress[indx]);
    // add the (relative) animation path to the label and run the animation:
    addAnimateMotion(thelabelID,thepathRel);
    // run it!
    document.getElementById("animate_"+thelabelID).beginElement();
   } else {
    // this address doesn't appear after the automorphism is applied (?), so fade it out
-/*
+   var thefadelabel = document.getElementById(thelabelID);
+   // change colour to green for now:
+   thefadelabel.attributes.fill.value = "#00ff00";
+
+   // the animation isn't working this way
    $(document.createElementNS("http://www.w3.org/2000/svg","animate")).attr({
     attributeName:"fill",
     values:"red;blue;red",
     dur:"5s",
     repeatCount:"indefinite",
     id:"fademe",
-   }).appendTo("#nodelabel9");
-*/
+   }).appendTo(thefadelabel);
+   // need to get the new (child) animate element and call beginElement() on it?
+   //  -- not quite, still working on this
 
   }
  }
@@ -90,7 +100,7 @@ function euclideanDistance(p1,p2){
 /* **************************************************************************/
 /* **************************************************************************/
 /* **************************************************************************/
-function addPath(d,g="admingroup"){
+function addPath(d,g="admingroup",from="",to=""){
  // create an SVG path and add it to the nominated group
  // (note that this will draw the path, not just create an abstract SVG path object)
  // eg. d = 'M638 212 Q 573 299.5 508 387', g = 'admingroup'
@@ -101,6 +111,7 @@ function addPath(d,g="admingroup"){
    "stroke-width": 1,
    "d": d,
    "class": "animpath",
+   "fromto": from+" "+to,
   }).appendTo("#"+g);
 }
 
@@ -112,7 +123,6 @@ function addAnimateMotion(parentID,d){
   // create an SVG animateMotion element for a specific element (usually a node label)
   // d should be a "raw" path, eg. d = 'M638 212 Q 573 299.5 508 387'
   var theparent = document.getElementById(parentID);
-  console.log("Adding animation to "+parentID);
 
   $(document.createElementNS("http://www.w3.org/2000/svg","animateMotion")).attr({
    "dur": "2s", // animation duration, must match the "sleep"
@@ -173,7 +183,7 @@ function createPath(startX,startY,endX,endY,offset=0,relativePath=1){
 
  // location of control point:
  var c1x = Math.round(mpx + offset * Math.cos(theta));
- var c1y = Math.round(mpy + offset * Math.sin(theta));
+ var c1y = Math.round(mpy - offset * Math.sin(theta)); // fixed
  p1x = Math.round(p1x);
  p1y = Math.round(p1y);
  p2x = Math.round(p2x);
