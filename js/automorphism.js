@@ -56,9 +56,11 @@ async function automorphism(){
   } else {
    // this address doesn't appear after the automorphism is applied (?), so fade it out
    var thefadelabel = document.getElementById(thelabelID);
-   // change colour to green for now:
-   thefadelabel.attributes.fill.value = "#00ff00";
+   // change colour to white (the CSS transition rule for .alabel will make it fade:
+   // (NOTE: there is no control over speed, though, without changing the CSS)
+   thefadelabel.attributes.fill.value = "#ffffff";
 
+/*
    // the animation isn't working this way
    $(document.createElementNS("http://www.w3.org/2000/svg","animate")).attr({
     attributeName:"fill",
@@ -69,7 +71,7 @@ async function automorphism(){
    }).appendTo(thefadelabel);
    // need to get the new (child) animate element and call beginElement() on it?
    //  -- not quite, still working on this
-
+*/
   }
  }
 
