@@ -50,6 +50,7 @@ function demoTwo(rundemo = false){
  // same example as demoOne() but using the FocusModel class
  var demo2 = new FocusModel();
  demo2.themodeltype = "edge";
+ demo2.initialfocus = ["","a"];
  demo2.thevalency = 4;
  demo2.thelevels = 5;
  demo2.theedgescaling = 0.8;
