@@ -4,7 +4,7 @@ hr {margin: 10px 0;}
 .mybutton {font-size: 24px; background-color: #0003; padding: 2px; box-shadow:1px 1px 1px #0007, -1px -1px 1px #000f;}
 
 .thecontrols {position: absolute; right: 10px; text-align: right; top: 10px; font-size: 14px; color:#900;}
-.thecontrols {scrollbar-width: thin; overflow-y: scroll; height: 94vh; top: 3vh; background: #eee; padding: 5px 8px; width: 15%;}
+.thecontrols {scrollbar-width: thin; overflow-y: scroll; height: 94vh; top: 3vh; background: #eee; padding: 5px 8px; width: 20%;}
 .thecontrols .somebuttons {text-align: center;}
 .thecontrols .somebuttons button {width: 140px;}
 .thecontrols p {position: initial; width: 200px; text-align: left;}
@@ -18,7 +18,7 @@ svg {cursor: pointer;}
 .showinfo .debug {color:#b00; font-size: 0.7em; padding-left: 20px;}
 .showinfo {display: none;}
 
-#theframe {width: 83%; height: 90vh; margin: 10px auto; box-shadow: inset 5px 5px 23px #666;}
+#theframe {width: 83%; height: 90vh; margin: 10px auto; margin-right: 20%; box-shadow: inset 5px 5px 23px #666;}
 .showgraph {background-color: #fff;}
 input, output {display: inline-block; vertical-align: middle;}
 .disabledcontrol {color:#999; cursor:not-allowed!important;}
@@ -79,3 +79,5 @@ input, output {display: inline-block; vertical-align: middle;}
 .demobutton {font-size: 12px; border-radius:4px;}
 
 .instructions {font-size: 12px; color:#777; float:right;}
+
+.alabel {transition: fill 2s ease;} /* allows us to fade out labels (see automorphism.js) */

@@ -200,7 +200,7 @@ function axismodel(initialVertex){
          alphaMultiplier = nodeKK[newnode];
         } else {
          alphaMultiplier = nodeKK[newnode]-1;
-         error('oops'); // should not actually ever get to here...
+         console.log('error: oops'); // should not actually ever get to here... [but we do, for automorphisms which seem to break the axis(i) model...?]
         }
         nodeAngle[newnode] = pi/2 + alphaMultiplier*alpha1 + gamma2 + delta1; // alpha1 applies when the parent *is* on-axis xxx
        }

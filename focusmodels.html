@@ -196,7 +196,7 @@
     <input type="range" style="width:80px;" min="0" max="10" step="0.1" value="0.2" id="theaxislinewidth" oninput="theaxislinewidthOutput.value = theaxislinewidth.value; drawgraph();" />
     <output style="width:20px;vertical-align:middle;" name="theaxislinewidthOutputName" id="theaxislinewidthOutput">999</output><br/>
 
-    <label for="nodesontopbutton" id="nodesontopbuttonLabel">Nodes on top? <input type="checkbox" id="nodesontopbutton" checked="checked" onclick="drawgraph();" /></label><br/>
+    <label for="nodesontopbutton" id="nodesontopbuttonLabel">Nodes on top of edges? <input type="checkbox" id="nodesontopbutton" checked="checked" onclick="drawgraph();" /></label><br/>
 
     <span title="Click to reset" style="cursor:pointer;" onclick="theskipstart.value=0; theskipstartOutput.value = theskipstart.value; drawgraph();" id="theskipstartLabel">Skip start:</span>
     <input type="range" style="width:100px;" min="0" max="10" step="1" value="0" id="theskipstart" oninput="theskipstartOutput.value = theskipstart.value; drawgraph();" />
