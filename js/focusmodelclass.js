@@ -267,7 +267,8 @@ theaxislinewidth, nodesontopbutton, nodeLabel, edgeLabel, nodeLabelOffsets, edge
 // :testing:
     break;
    case "edge":
-    this.initialfocus = ["","a"];
+//    this.initialfocus = ["","a"];
+    this.initialfocus = ["",colournames[0]];
     this.thespread = 1.0; // float
     break;
    case "axis":

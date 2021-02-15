@@ -21,8 +21,6 @@ function axismodel(initialVertex){
 // gamma1 = 1*pi/3;
 // gamma2 = 0;
 
- var colournames = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
-
  if (initialVertex===undefined){
   initialVertex = Array(1);
   initialVertex[0] = ''; // was colournames[0];
