@@ -1,5 +1,6 @@
 
 debugdrag = false;
+//debugdrag = true;
 
 selectedLabel = null; // initialise
 selectedLabelPosition = [null,null]; // initialise
@@ -9,6 +10,7 @@ dragOffset = [0,0]; // initialise
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
 function setup(){
+ console.log(' -~-~-~-~- CALLING SETUP() -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-')
  var okay = false;
  wipeCanvas();
  var debug = false;
@@ -18,6 +20,9 @@ function setup(){
  edgeLabel = new Array;
  nodeLabelOffsets = new Array;
  edgeLabelOffsets = new Array;
+
+ // initialise variable used for positioning dragged labels
+ mouseDragDelta = [0,0];
 
  // edge-colouring way: pick a colour (https://medialab.github.io/iwanthue/) from the list
  colournames = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
@@ -174,7 +179,7 @@ function createEdgeLabels(){
  // make enough blank labels for every edge
  edgeLabel = new Array(edgeMidpointPosition.length); // this will hold the label strings
  edgeLabel.fill("");
- edgeLabelOffsets = new Array(edgeMidpointPosition.length); // this will hold the label strings
+ edgeLabelOffsets = new Array(edgeMidpointPosition.length); // this will hold the label string offsets
  edgeLabelOffsets.fill([0,0]);
 }
 
@@ -744,9 +749,8 @@ function drawgraph(){
    if (thislabel.length>0){ // don't create (empty) edge labels with blank text
     var newText = document.createElementNS("http://www.w3.org/2000/svg","text");
     var thisID = "edgelabel"+String(i);
-    var thisoffset = edgeLabelOffsets[i];
-    var thispositionX = Math.round(edgeMidpointPosition[i][0] + labelOffsetX + thisoffset[0]);
-    var thispositionY = Math.round(edgeMidpointPosition[i][1] + labelOffsetY + thisoffset[1]);
+    var thispositionX = Math.round(edgeMidpointPosition[i][0] + labelOffsetX + edgeLabelOffsets[i][0]);
+    var thispositionY = Math.round(edgeMidpointPosition[i][1] + labelOffsetY + edgeLabelOffsets[i][1]);
     $(newText).attr({
      "fill": labelColour,
      "font-size": fontSize,
@@ -1098,20 +1102,22 @@ function canvasClick(evt){
 
  } else if (evt.shiftKey) {
   if (debug) alert("Clicked while pressing SHIFT key");
+  if (debugdrag) alert("Clicked while pressing SHIFT key");
 
   //
   // SHIFT-click: set edge labels
   //
 
-  if (edgeLabel.length!=edgeMidpointPosition.length){ // need to initialise the edge labels
-   createEdgeLabels();
-  }
+//  if (edgeLabel.length!=edgeMidpointPosition.length){ // need to initialise the edge labels
+//   createEdgeLabels();
+//   console.log('Created edge labels');
+//  }
 
   var usemidpoint = nearestMidpoint(x,y,clickRadius);
   if (usemidpoint === null){
    //  No edge midpoint is within a distance of clickRadius
-   if (debug) console.log("Click was too far from any node to be used");
-   if (debugdrag) console.log("[2] Click was too far from any node to be used");
+   if (debug) console.log("Click was too far from any edge midpoint to be used");
+   if (debugdrag) console.log("[2] Click was too far from any edge midpoint to be used");
   } else {
 
    //
@@ -1149,9 +1155,9 @@ function canvasClick(evt){
    var currentaddress = nodeAddress[usenode];
    if (currentaddress.length==0) currentaddress="\u{d8}";
 
-   if (nodeLabel.length!=nodePosition.length){ // need to initialise the node custom labels
-    createNodeLabels();
-   }
+//   if (nodeLabel.length!=nodePosition.length){ // need to initialise the node custom labels
+//    createNodeLabels();
+//   }
 
    var currentlabel = nodeLabel[usenode];
    // request the new label; give the current custom label (if any) as default, and tell the user the node's address
@@ -1363,13 +1369,6 @@ function makeLabelsDraggable(){
   event.preventDefault();
   event.stopPropagation();
 
-/*
-  // disable the canvas's onclick
-  var thecanvas = $("#thecanvas")[0];
-//  thecanvas.addEventListener('onclick', null);
-  thecanvas.setAttribute("onclick",null)
-*/
-
   if (selectedLabel===null){
    // where are we?
    var dx = document.getElementById("thecanvas").getBoundingClientRect().x;
@@ -1390,7 +1389,8 @@ if (debugdrag) console.log("DRAG ORIGINAL POSITION = "+selectedLabelPosition[0]+
     var mouseX = Math.round(event.clientX-dx);
     var mouseY = Math.round(event.clientY-dy);
 
-    // check the "local" offset of the mouse position from the svg element (drags start where the mouse is, not at the element's position)
+    // check the "local" offset of the mouse position from the svg element which is being dragged
+    // NOTE: a drag starts from where the *mouse* is, not at the element's position
     dragOffset[0] = Math.round(event.clientX - document.getElementById(selectedLabel).getBoundingClientRect().x);
     dragOffset[1] = Math.round(event.clientY - document.getElementById(selectedLabel).getBoundingClientRect().y);
 if (debugdrag) console.log("DRAG START OFFSET = "+dragOffset[0]+","+dragOffset[1]);
@@ -1412,39 +1412,34 @@ if (debugdrag) console.log("DRAG START OFFSET = "+dragOffset[0]+","+dragOffset[1
    document.getElementById(selectedLabel).setAttribute("x",mouseX);
    document.getElementById(selectedLabel).setAttribute("y",mouseY);
 
-   var saveOffset = [0,0];
-   saveOffset[0] = Math.round(mouseX-selectedLabelPosition[0]);
-   saveOffset[1] = Math.round(mouseY-selectedLabelPosition[1]);
-
-   // store the new offset for this label
-   var labeltype = selectedLabel.substring(0,4);
-   var thislabel = parseInt(selectedLabel.substring(9)); // both types of label have IDs which are 8 characters followed by digits
-   if (labeltype=='node'){
-    nodeLabelOffsets[thislabel] = saveOffset;
-   } else if (labeltype=='edge'){
-    edgeLabelOffsets[thislabel] = saveOffset;
-   } else {
-    console.log("WARNING: unknown label type encountered");
-   }
-
+   mouseDragDelta[0] = Math.round(mouseX-selectedLabelPosition[0]);
+   mouseDragDelta[1] = Math.round(mouseY-selectedLabelPosition[1]);
   }
  }
 
 
  function endLabelDrag(event){
-  selectedLabel = null; // reset
-  dragOffset = [0,0]; // reset
+   /* Set the new position and then reset the drag variables */
+
+   // store the new offset for this label
+   var labeltype = selectedLabel.substring(0,4); // 'node' or 'edge'
+   var thislabel = parseInt(selectedLabel.substring(9)); // both types of label have IDs which are 8 characters followed by digits
+   if (labeltype=='node'){
+    nodeLabelOffsets[thislabel][0] += mouseDragDelta[0];
+    nodeLabelOffsets[thislabel][1] += mouseDragDelta[1];
+   } else if (labeltype=='edge'){
+    edgeLabelOffsets[thislabel][0] += mouseDragDelta[0];
+    edgeLabelOffsets[thislabel][1] += mouseDragDelta[1];
+   } else {
+    console.log("WARNING: unknown label type encountered");
+   }
+
+  // reset for next time
+  selectedLabel = null;
+  dragOffset = [0,0];
 
   event.preventDefault();
   event.stopPropagation();
-
-/*
-  // reinstate the canvas's onclick
-  var thecanvas = $("#thecanvas")[0];
-//  thecanvas.addEventListener('onclick', canvasClick);
-  thecanvas.setAttribute("onclick","canvasClick(event);")
-if (debugdrag) console.log("reinstated canvas onclick")
-*/
 
 if (debugdrag) console.log("----------------------- END DRAG -----------------------------------------");
  }
