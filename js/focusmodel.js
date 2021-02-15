@@ -1421,6 +1421,7 @@ if (debugdrag) console.log("DRAG START OFFSET = "+dragOffset[0]+","+dragOffset[1
  function endLabelDrag(event){
    /* Set the new position and then reset the drag variables */
 
+  if (selectedLabel){
    // store the new offset for this label
    var labeltype = selectedLabel.substring(0,4); // 'node' or 'edge'
    var thislabel = parseInt(selectedLabel.substring(9)); // both types of label have IDs which are 8 characters followed by digits
@@ -1433,6 +1434,7 @@ if (debugdrag) console.log("DRAG START OFFSET = "+dragOffset[0]+","+dragOffset[1
    } else {
     console.log("WARNING: unknown label type encountered");
    }
+  }
 
   // reset for next time
   selectedLabel = null;
