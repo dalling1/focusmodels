@@ -568,7 +568,6 @@ function drawgraph(){
  var showlabels = params.whichlabel;
  var showarrows = params.showarrowsbutton;
  var showselectedonly = params.showselectedonly;
-console.log("showselectedonly = "+showselectedonly);
  // pen-related variables:
  var nodeRadius = params.thenodesize;
  var lineWidth = params.thelinewidth;
