@@ -567,6 +567,8 @@ function drawgraph(){
  var textAngle = params.thetextangle;
  var showlabels = params.whichlabel;
  var showarrows = params.showarrowsbutton;
+ var showselectedonly = params.showselectedonly;
+console.log("showselectedonly = "+showselectedonly);
  // pen-related variables:
  var nodeRadius = params.thenodesize;
  var lineWidth = params.thelinewidth;
@@ -729,11 +731,11 @@ function drawgraph(){
    }
 
    // check if the "show selected labels only" control is on, and honour it:
-//   if ($("#showselectedonly").val()){
-   if (1){
-    if (!nodeRightclicked[i]) thislabel = ""; // remove labels which have not been selected (via right-click)
+   if (showselectedonly){
+    if (!nodeRightclicked[i]) thislabel = ""; // remove labels which have not been selected via right-click
    }
 
+   // create the label if there is a string to show:
    if (thislabel.length>0){ // don't create (empty) node labels with blank text
     var newText = document.createElementNS("http://www.w3.org/2000/svg","text");
     var thisID = "nodelabel"+String(i);
@@ -1505,7 +1507,7 @@ function rightClick(evt){
  if (e.ownerSVGElement === null){ // clicked on the canvas
   var dim = e.getBoundingClientRect();
  } else { // clicked on an SVG element (node, line, etc.)
-  var dim = document.getElementById("thecanvas").getBoundingClientRect(); // use the canvas's rect
+  var dim = document.getElementById("thecanvas").getBoundingClientRect(); // use the canvas's rect, not the element's
  }
  var x = Math.round(evt.clientX - dim.left);
  var y = Math.round(evt.clientY - dim.top);
@@ -1516,7 +1518,7 @@ function rightClick(evt){
   if (debug) console.log("Normal right click triggered "+usenode);
  } else {
   evt.preventDefault();
-  console.log("Right click detected on or near node "+usenode);
+  if (debug) console.log("Right click detected on or near node "+usenode);
   nodeRightclicked[usenode] = !nodeRightclicked[usenode]; // toggle the state
   drawgraph();
  }

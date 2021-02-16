@@ -3,7 +3,8 @@ class FocusModel {
 edgepicker, nodepicker, whichlabel, labelpicker, axesbutton, axespicker, fadeleavesbutton, showarrowsbutton, theoffsetX,
 theoffsetY, thelabeloffsetX, thelabeloffsetY, thetextangle, thefontsize, thenodesize, thelinewidth, transparencybutton,
 automorph1, automorph2, thearrowsize, thearrowratio, thearrowoffset, filledarrowsbutton, reversedarrowsbutton, fadedarrowsbutton,
-theaxislinewidth, nodesontopbutton, nodeLabel, edgeLabel, nodeLabelOffsets, edgeLabelOffsets, theskipnodes, theskipstart, nodeRightclicked ){
+theaxislinewidth, nodesontopbutton, nodeLabel, edgeLabel, nodeLabelOffsets, edgeLabelOffsets, theskipnodes, theskipstart, nodeRightclicked,
+showselectedonly, ){
 
   this.name = 'FocusModel';
   this.themodeltype = themodeltype; // string, only one of {'vertex','edge','axis','newaxis','monoray'}
@@ -27,6 +28,7 @@ theaxislinewidth, nodesontopbutton, nodeLabel, edgeLabel, nodeLabelOffsets, edge
   this.theoffsetY = theoffsetY; // float
   this.thelabeloffsetX = thelabeloffsetX; // float
   this.thelabeloffsetY = thelabeloffsetY; // float
+  this.showselectedonly = showselectedonly; // boolean
   this.thetextangle = thetextangle;
   this.thefontsize = thefontsize; // int
   this.thenodesize = thenodesize; // float
@@ -106,6 +108,7 @@ theaxislinewidth, nodesontopbutton, nodeLabel, edgeLabel, nodeLabelOffsets, edge
   $("#thelabeloffsetXOutput").val(this.thelabeloffsetX); // float
   $("#thelabeloffsetY").val(this.thelabeloffsetY); // float
   $("#thelabeloffsetYOutput").val(this.thelabeloffsetY); // float
+  $("#showselectedonly").prop("checked",(this.showselectedonly?true:false)); // boolean
   $("#thetextangle").val(this.thetextangle); // float
   $("#thetextangleOutput").val(this.thetextangle); // float
   $("#thefontsize").val(this.thefontsize); // int
@@ -171,6 +174,7 @@ theaxislinewidth, nodesontopbutton, nodeLabel, edgeLabel, nodeLabelOffsets, edge
   this.theoffsetY = parseFloat($("#theoffsetY").val()); // float
   this.thelabeloffsetX = parseFloat($("#thelabeloffsetX").val()); // float
   this.thelabeloffsetY = parseFloat($("#thelabeloffsetY").val()); // float
+  this.showselectedonly = $("#showselectedonly").prop("checked"); // boolean
   this.thetextangle = parseFloat($("#thetextangle").val()); // float
   this.thefontsize = parseInt($("#thefontsize").val()); // int
   this.thenodesize = parseFloat($("#thenodesize").val()); // float
@@ -248,7 +252,8 @@ theaxislinewidth, nodesontopbutton, nodeLabel, edgeLabel, nodeLabelOffsets, edge
   this.theoffsetY = 0.0; // float
   this.thelabeloffsetX = 10.0; // float
   this.thelabeloffsetY = 10.0; // float
-  this.thetextangle = 0;
+  this.showselectedonly = false; // boolean
+  this.thetextangle = 0; // float
   this.thefontsize = 15; // int
   this.thenodesize = 3.0; // float
   this.thelinewidth = 0.2; // float
