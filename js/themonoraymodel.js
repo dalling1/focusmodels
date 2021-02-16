@@ -69,6 +69,7 @@ function monoraymodel(initialVertex){
  nodeK = new Array(width);
  var nodeKK = new Array(width);
  nodeIgnore = new Array(width); // used to stop drawing particular branches (create no child nodes of ignored nodes)
+ nodeRightclicked = new Array(Nroots);
  ellipsisCentre = new Array(width);
  ellipsisStart = new Array(width);
  ellipsisEnd = new Array(width);
@@ -92,6 +93,7 @@ function monoraymodel(initialVertex){
   nodeK[i] = i;
   nodeKK[i] = i;
   nodeIgnore[i] = false;
+  nodeRightclicked[i] = false;
  }
 
  // Make a list of the root nodes:
@@ -161,6 +163,7 @@ function monoraymodel(initialVertex){
     nodeK[newnode] = k;
     nodeKK[newnode] = k; // not needed?
     nodeIgnore[newnode] = (fadeleaves?true:false); // false, unless we are fading leaf nodes (user control): then, set this to true but make it false later if we add children
+    nodeRightclicked[thisnode] = false; // for selecting nodes (eg. to only show some labels)
 
    } // end skip test
 

@@ -96,6 +96,10 @@ function setup(){
   $(".midptlabel").css("display","none");
  });
 
+ // set a function to run when a right-click (contextmenu) is detected:
+ // (a right click and contextmenu are subtly different, but this will be sufficient for our purposes)
+ document.getElementById("thecanvas").addEventListener('contextmenu',rightClick);
+
  // turn off the "width" control (it will be enabled only for newaxis, monoray and newmonoray):
  disableWidthControl();
  // turn on the "levels" control (it will be disabled only for monoray and newmonoray):
@@ -1067,7 +1071,8 @@ function canvasClick(evt){
  if (e.ownerSVGElement === null){ // clicked on the canvas
   var dim = e.getBoundingClientRect();
  } else { // clicked on an SVG element (node, line, etc.)
-  var dim = e.parentElement.getBoundingClientRect();
+//  var dim = e.parentElement.getBoundingClientRect();
+  var dim = document.getElementById("thecanvas").getBoundingClientRect(); // use the canvas's rect instead of the parent's (since nodes etc have a parent g)
  }
 
  var x = Math.round(evt.clientX - dim.left);
@@ -1374,6 +1379,7 @@ function makeLabelsDraggable(){
   event.stopPropagation();
 
   if (selectedLabel===null){
+
    // where are we?
    var dx = document.getElementById("thecanvas").getBoundingClientRect().x;
    var dy = document.getElementById("thecanvas").getBoundingClientRect().y;
@@ -1424,8 +1430,8 @@ if (debugdrag) console.log("DRAG START OFFSET = "+dragOffset[0]+","+dragOffset[1
 
  function endLabelDrag(event){
    /* Set the new position and then reset the drag variables */
-
   if (selectedLabel){
+
    // store the new offset for this label
    var labeltype = selectedLabel.substring(0,4); // 'node' or 'edge'
    var thislabel = parseInt(selectedLabel.substring(9)); // both types of label have IDs which are 8 characters followed by digits
@@ -1450,6 +1456,7 @@ if (debugdrag) console.log("DRAG START OFFSET = "+dragOffset[0]+","+dragOffset[1
 if (debugdrag) console.log("----------------------- END DRAG -----------------------------------------");
  }
 
+
 }
 
 
@@ -1464,5 +1471,36 @@ function reset(){
  if (doreset){
   tmpmodel.setDefaults();
   tmpmodel.drawModel();
+ }
+}
+
+/* ********************************************************************************************* */
+/* ********************************************************************************************* */
+/* ********************************************************************************************* */
+function rightClick(evt){
+ // function to handle right-click events
+ var debug = false;
+
+ // test our distance from a node and if we are close enough, set nodeRightclicked to true for that node
+ var clickRadius = 10; // effective range of rightclicks (want this fairly small)
+
+ // get the details of the click location
+ var e = evt.target;
+ if (e.ownerSVGElement === null){ // clicked on the canvas
+  var dim = e.getBoundingClientRect();
+ } else { // clicked on an SVG element (node, line, etc.)
+  var dim = document.getElementById("thecanvas").getBoundingClientRect(); // use the canvas's rect
+ }
+ var x = Math.round(evt.clientX - dim.left);
+ var y = Math.round(evt.clientY - dim.top);
+
+ var usenode = nearestNode(x,y,clickRadius);
+ if (usenode === null){
+  // do nothing (shows the browser's context menu as usual)
+  if (debug) console.log("Normal right click triggered "+usenode);
+ } else {
+  evt.preventDefault();
+  console.log("Right click detected on or near node "+usenode);
+  nodeRightclicked[usenode] = !nodeRightclicked[usenode]; // toggle the state
  }
 }

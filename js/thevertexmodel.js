@@ -85,6 +85,7 @@ function vertexmodel(initialVertex){
  nodeOnAxis = new Array(Nroots);
  var nodeK = new Array(Nroots);
  nodeIgnore = new Array(Nroots); // used to stop drawing particular branches (create no child nodes of ignored nodes)
+ nodeRightclicked = new Array(Nroots);
  ellipsisCentre = new Array(Nroots);
  ellipsisStart = new Array(Nroots);
  ellipsisEnd = new Array(Nroots);
@@ -100,6 +101,7 @@ function vertexmodel(initialVertex){
   nodeOnAxis[i] = false; // no on-axis nodes in this model
   nodeK[i] = 0;
   nodeIgnore[i] = false; // false by default for root nodes
+  nodeRightclicked[i] = false;
  }
 
  //
@@ -133,6 +135,7 @@ function vertexmodel(initialVertex){
      nodeAddress[newnode] = collapseAddress(nodeAddress[nodeParent[newnode]] + colournames[nodeK[newnode]]);
      nodeAngle[newnode] = nodeAngle[nodeParent[newnode]]+pi + k*alpha; // not k-1 in javascript
      nodeIgnore[newnode] = (fadeleaves?true:false); // false, unless we are fading leaf nodes (user control): then, set this to true but make it false later if we add children
+     nodeRightclicked[thisnode] = false; // for selecting nodes (eg. to only show some labels)
 
      nodePosition[newnode]=new Array(2); // initialise
      nodePosition[newnode][0] = nodePosition[thisnode][0] + calcEdgeLength(nodeLevel[newnode],valency,edgelength,edgescaling)*Math.sin(nodeAngle[newnode])
