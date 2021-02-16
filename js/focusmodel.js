@@ -1152,16 +1152,20 @@ function canvasClick(evt){
    //
    // simple click: set a node's custom label
    //
-   var currentaddress = nodeAddress[usenode];
-   if (currentaddress.length==0) currentaddress="\u{d8}";
+   // use the node's address unless the current display for labels is "index":
+   var nodePromptName = nodeAddress[usenode]; // node address, the default
+   if (nodePromptName.length==0) nodePromptName="\u{d8}";
 
-//   if (nodeLabel.length!=nodePosition.length){ // need to initialise the node custom labels
-//    createNodeLabels();
-//   }
+   var labelshown = parseInt($("#whichlabel").val());
+   if (labelshown==2){ // ie. "index"
+    nodePromptName = nodeIndex[usenode]; // use the index instead, which is also equal to usenode
+   }
 
+   // get the current custom label (these start out empty)
    var currentlabel = nodeLabel[usenode];
-   // request the new label; give the current custom label (if any) as default, and tell the user the node's address
-   newlabel = prompt("Set node label for "+currentaddress,currentlabel);
+
+   // request the new label:
+   newlabel = prompt("Set custom node label for "+nodePromptName,currentlabel);
    if (newlabel===null){
     // don't change anything if the user clicked cancel
    } else {
