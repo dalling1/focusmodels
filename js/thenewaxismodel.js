@@ -90,7 +90,6 @@ function newaxismodel(initialVertex){
  nodeK = new Array(width);
  var nodeKK = new Array(width);
  nodeIgnore = new Array(width); // used to stop drawing particular branches (create no child nodes of ignored nodes)
- nodeRightclicked = new Array(Nroots);
  ellipsisCentre = new Array(width);
  ellipsisStart = new Array(width);
  ellipsisEnd = new Array(width);
@@ -109,7 +108,6 @@ function newaxismodel(initialVertex){
   nodeK[i] = i;
   nodeKK[i] = i;
   nodeIgnore[i] = false;
-  nodeRightclicked[i] = false;
  }
 
  // set up the spacing of nodes in the lower levels:
@@ -195,7 +193,6 @@ function newaxismodel(initialVertex){
     nodeK[newnode] = k;
     nodeKK[newnode] = k; // not needed?
     nodeIgnore[newnode] = (fadeleaves?true:false); // false, unless we are fading leaf nodes (user control): then, set this to true but make it false later if we add children
-    nodeRightclicked[thisnode] = false; // for selecting nodes (eg. to only show some labels)
 
    } // loop over valency (ie. kk), ie. loop over this group (children of one parent node in the level above)
   } // loop over this depth's parent nodes

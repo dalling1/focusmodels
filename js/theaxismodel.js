@@ -108,7 +108,6 @@ function axismodel(initialVertex){
  var nodeK = new Array(Nroots);
  var nodeKK = new Array(Nroots);
  nodeIgnore = new Array(Nroots); // used to stop drawing particular branches (create no child nodes of ignored nodes)
- nodeRightclicked = new Array(Nroots);
  ellipsisCentre = new Array(Nroots);
  ellipsisStart = new Array(Nroots);
  ellipsisEnd = new Array(Nroots);
@@ -126,7 +125,6 @@ function axismodel(initialVertex){
   nodeK[i] = 0;
   nodeKK[i] = 0;
   nodeIgnore[i] = false;
-  nodeRightclicked[i] = false;
  }
  // set up a list which we will permute
  var Klist = new Array(valency);
@@ -166,7 +164,6 @@ function axismodel(initialVertex){
      nodeKK[newnode] = kk;
      nodeAddress[newnode] = collapseAddress(nodeAddress[nodeParent[newnode]] + colournames[nodeK[newnode]]);
      nodeIgnore[newnode] = (fadeleaves?true:false); // false, unless we are fading leaf nodes (user control): then, set this to true but make it false later if we add children
-     nodeRightclicked[thisnode] = false; // for selecting nodes (eg. to only show some labels)
      nodeLevel[newnode] = nodeLevel[nodeParent[newnode]]+1; // "normal" (ie. non-root) vertex
      if (debug) console.log('DEBUG: making a child (kk='+kk+',k='+k+') with parent '+nodeParent[newnode]);
 

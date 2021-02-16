@@ -103,7 +103,6 @@ function edgemodel(initialEdge){
  var nodeK = new Array(Nroots);
  var nodeLevel = new Array(Nroots);
  nodeIgnore = new Array(Nroots); // used to stop drawing particular branches (create no child nodes of ignored nodes)
- nodeRightclicked = new Array(Nroots);
  ellipsisCentre = new Array(Nroots);
  ellipsisStart = new Array(Nroots);
  ellipsisEnd = new Array(Nroots);
@@ -119,7 +118,6 @@ function edgemodel(initialEdge){
   nodeAngle[i] = 0;
   nodeOnAxis[i] = false; // no on-axis nodes in this model
   nodeIgnore[i] = false;
-  nodeRightclicked[i] = false;
  }
  // set values for SECOND root nodes:
  for (var i=0;i<Nroots;i++){
@@ -167,7 +165,6 @@ function edgemodel(initialEdge){
       nodeAngle[newnode] = nodeAngle[nodeParent[newnode]] + pi/2 + pi + gamma2 + k*(alpha); // was (k-1)*alpha in the MATLAB code (1-indexed)
      }
      nodeIgnore[newnode] = (fadeleaves?true:false); // false, unless we are fading leaf nodes (user control): then, set this to true but make it false later if we add children
-     nodeRightclicked[thisnode] = false; // for selecting nodes (eg. to only show some labels)
 
      nodePosition[newnode]=new Array(2); // initialise
      nodePosition[newnode][0] = nodePosition[thisnode][0] + calcEdgeLength(1+nodeLevel[newnode],valency,edgelength,edgescaling)*Math.sin(nodeAngle[newnode])

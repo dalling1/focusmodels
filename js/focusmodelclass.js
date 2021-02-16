@@ -3,7 +3,7 @@ class FocusModel {
 edgepicker, nodepicker, whichlabel, labelpicker, axesbutton, axespicker, fadeleavesbutton, showarrowsbutton, theoffsetX,
 theoffsetY, thelabeloffsetX, thelabeloffsetY, thetextangle, thefontsize, thenodesize, thelinewidth, transparencybutton,
 automorph1, automorph2, thearrowsize, thearrowratio, thearrowoffset, filledarrowsbutton, reversedarrowsbutton, fadedarrowsbutton,
-theaxislinewidth, nodesontopbutton, nodeLabel, edgeLabel, nodeLabelOffsets, edgeLabelOffsets, theskipnodes, theskipstart ){
+theaxislinewidth, nodesontopbutton, nodeLabel, edgeLabel, nodeLabelOffsets, edgeLabelOffsets, theskipnodes, theskipstart, nodeRightclicked ){
 
   this.name = 'FocusModel';
   this.themodeltype = themodeltype; // string, only one of {'vertex','edge','axis','newaxis','monoray'}
@@ -58,12 +58,17 @@ theaxislinewidth, nodesontopbutton, nodeLabel, edgeLabel, nodeLabelOffsets, edge
   if (typeof nodeLabelOffsets == 'object'){ // check if the node label offsets array exists
    this.nodeLabelOffsets = nodeLabelOffsets; // array
   } else {
-   this.nodeLabel = new Array; // array
+   this.nodeLabelOffsets = new Array; // array
   }
   if (typeof edgeLabelOffsets == 'object'){ // check if the edge label offsets array exists
    this.edgeLabelOffsets = edgeLabelOffsets; // array
   } else {
    this.edgeLabelOffsets = new Array; // array
+  }
+  if (typeof nodeRightclicked == 'object'){ // check if the "node has been right-clicked" array exists
+   this.nodeRightclicked = nodeRightclicked; // array
+  } else {
+   this.nodeRightclicked = new Array; // array
   }
 
  }
@@ -136,6 +141,7 @@ theaxislinewidth, nodesontopbutton, nodeLabel, edgeLabel, nodeLabelOffsets, edge
   edgeLabel = this.edgeLabel;
   nodeLabelOffsets = this.nodeLabelOffsets;
   edgeLabelOffsets = this.edgeLabelOffsets;
+  nodeRightclicked = this.nodeRightclicked;
  }
 
  drawModel(){
@@ -196,12 +202,17 @@ theaxislinewidth, nodesontopbutton, nodeLabel, edgeLabel, nodeLabelOffsets, edge
   if (typeof nodeLabelOffsets == 'object'){ // check if the node label offsets array exists
    this.nodeLabelOffsets = nodeLabelOffsets; // array
   } else {
-   this.nodeLabel = new Array; // array
+   this.nodeLabelOffsets = new Array; // array
   }
   if (typeof edgeLabelOffsets == 'object'){ // check if the edge label offsets array exists
    this.edgeLabelOffsets = edgeLabelOffsets; // array
   } else {
    this.edgeLabelOffsets = new Array; // array
+  }
+  if (typeof nodeRightclicked == 'object'){ // check if the "node has been right-clicked" array exists
+   this.nodeRightclicked = nodeRightclicked; // array
+  } else {
+   this.nodeRightclicked = new Array; // array
   }
 
   this.initialfocus = [$("#initialfocus1").val(), $("#initialfocus2").val()]; // 2-tuple of strings

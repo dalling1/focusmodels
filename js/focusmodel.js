@@ -20,6 +20,7 @@ function setup(){
  edgeLabel = new Array;
  nodeLabelOffsets = new Array;
  edgeLabelOffsets = new Array;
+ nodeRightclicked = new Array;
 
  // initialise variable used for positioning dragged labels
  mouseDragDelta = [0,0];
@@ -156,6 +157,7 @@ function setup(){
  if (okay){ // previously we were testing the models before running drawgraph(), but not anymore
   createNodeLabels();
   createEdgeLabels();
+  createNodeRightclicks();
   drawgraph();
  } else {
   alert("Graph set-up failed");
@@ -187,6 +189,13 @@ function createEdgeLabels(){
  edgeLabelOffsets.fill([0,0]);
 }
 
+/* ********************************************************************************************* */
+/* ********************************************************************************************* */
+/* ********************************************************************************************* */
+function createNodeRightclicks(){
+ nodeRightclicked = new Array(nodeIndex.length);
+ nodeRightclicked.fill(false);
+}
 
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
@@ -537,6 +546,7 @@ function drawgraph(){
  // make sure the custom node and edge labels are up to date with the number of nodes and edges:
  if (nodeLabel.length != nodeIndex.length) createNodeLabels();
  if (edgeLabel.length != edgeMidpointPosition.length) createEdgeLabels();
+ if (nodeRightclicked.length != nodeIndex.length) createNodeRightclicks();
 
  // Set some default values (which the user might change with the controls):
  var ignoreNodeColour = ''; // set empty to not draw ignored nodes; was '#0f0'
@@ -716,6 +726,12 @@ function drawgraph(){
      break;
     default:
      thislabel = "";
+   }
+
+   // check if the "show selected labels only" control is on, and honour it:
+//   if ($("#showselectedonly").val()){
+   if (1){
+    if (!nodeRightclicked[i]) thislabel = ""; // remove labels which have not been selected (via right-click)
    }
 
    if (thislabel.length>0){ // don't create (empty) node labels with blank text
@@ -1502,5 +1518,6 @@ function rightClick(evt){
   evt.preventDefault();
   console.log("Right click detected on or near node "+usenode);
   nodeRightclicked[usenode] = !nodeRightclicked[usenode]; // toggle the state
+  drawgraph();
  }
 }
