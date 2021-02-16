@@ -224,7 +224,7 @@ theaxislinewidth, nodesontopbutton, nodeLabel, edgeLabel, nodeLabelOffsets, edge
   this.theedgescaling = 0.5; // float
   this.theoverallscale = 1.0; // float
   this.thespread = 0.5; // float
-  this.plainedgesbutton = true; // boolean
+  this.plainedgesbutton = false; // boolean
   this.edgepicker = "#000000"; // colour, eg "#990000"
   this.nodepicker = "#000000"; // colour
   this.whichlabel = 0; // int
@@ -259,9 +259,16 @@ theaxislinewidth, nodesontopbutton, nodeLabel, edgeLabel, nodeLabelOffsets, edge
   switch (this.themodeltype){
    case "vertex":
     this.thevalency = 3; // int
+// testing
+    this.thelevels = 3;
+    this.whichlabel = 1;
+    this.theedgescaling = 0.6;
+    this.thelinewidth = 2.7;
+// :testing:
     break;
    case "edge":
-    this.initialfocus = ["","a"];
+//    this.initialfocus = ["","a"];
+    this.initialfocus = ["",colournames[0]];
     this.thespread = 1.0; // float
     break;
    case "axis":

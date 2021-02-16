@@ -11,7 +11,6 @@ function edgemodel(initialEdge){
  var edgescaling = 1; // base edge scaling (from one level to another)
  var gamma1 = pi; // branch spread angle
  var gamma2 = 0;
- var colournames = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
 
  if (initialEdge===undefined){
   // set the default edge to focus on
