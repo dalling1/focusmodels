@@ -1,19 +1,16 @@
-
-debugdrag = false;
-//debugdrag = true;
-
-selectedLabel = null; // initialise
-selectedLabelPosition = [null,null]; // initialise
-dragOffset = [0,0]; // initialise
-
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
 /* ********************************************************************************************* */
 function setup(){
  console.log(' -~-~-~-~- CALLING SETUP() -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-')
- var okay = false;
- wipeCanvas();
+ var okayToProceed = false;
  var debug = false;
+ wipeCanvas();
+
+ debugdrag = false;
+ selectedLabel = null; // initialise
+ selectedLabelPosition = [null,null]; // initialise
+ dragOffset = [0,0]; // initialise
 
  // initialise labels for the purposes of creating the FocusModel objects
  nodeLabel = new Array;
@@ -118,43 +115,43 @@ function setup(){
  switch (params.themodeltype){
   case "vertex":
    console.log("graph type = "+params.themodeltype);
-   if (vertexmodel(params.initialfocus)) okay = true;
+   if (vertexmodel(params.initialfocus)) okayToProceed = true;
    disableAxisLineWidthControl();
    disableSpreadControl();
    break;
   case "edge":
    console.log("graph type = "+params.themodeltype);
-   if (edgemodel(params.initialfocus)) okay = true;
+   if (edgemodel(params.initialfocus)) okayToProceed = true;
    disableAxisLineWidthControl();
    break;
   case "axis":
    console.log("graph type = "+params.themodeltype);
-   if (axismodel(params.initialfocus)) okay = true;
+   if (axismodel(params.initialfocus)) okayToProceed = true;
    break;
   case "newaxis":
    console.log("graph type = "+params.themodeltype);
-   if (newaxismodel(params.initialfocus)) okay = true;
+   if (newaxismodel(params.initialfocus)) okayToProceed = true;
    enableWidthControl();
    break;
   case "monoray":
    console.log("graph type = "+params.themodeltype);
-   if (monoraymodel(params.initialfocus)) okay = true;
+   if (monoraymodel(params.initialfocus)) okayToProceed = true;
    enableWidthControl();
    disableLevelsControl();
    break;
   case "newmonoray":
    console.log("graph type = "+params.themodeltype);
-   if (newmonoraymodel(params.initialfocus)) okay = true;
+   if (newmonoraymodel(params.initialfocus)) okayToProceed = true;
    enableWidthControl();
    disableLevelsControl();
    break;
   default:
    console.log("graph type = "+params.themodeltype);
    alert("Set-up must be called with an allowed focus model type");
-   okay = false;
+   okayToProceed = false;
  }
 
- if (okay){ // previously we were testing the models before running drawgraph(), but not anymore
+ if (okayToProceed){ // previously we were testing the models before running drawgraph(), but not anymore
   createNodeLabels();
   createEdgeLabels();
   createNodeRightclicks();
@@ -173,10 +170,9 @@ function setup(){
 /* ********************************************************************************************* */
 function createNodeLabels(){
  // make enough blank labels for every node
- nodeLabel = new Array(nodeIndex.length); // this will hold the label strings
- nodeLabel.fill("");
- nodeLabelOffsets = new Array(nodeIndex.length); // this will hold the label strings
- nodeLabelOffsets.fill([0,0]);
+ nodeLabel = new Array(nodeIndex.length).fill(""); // this will hold the label strings
+ nodeLabelOffsets = new Array(nodeIndex.length); // this will hold the label strings (nb. we can't use fill for objects, ie. array [0,0])
+ for (var i=0;i<nodeLabelOffsets.length;i++) nodeLabelOffsets[i] = [0,0];
 }
 
 /* ********************************************************************************************* */
@@ -184,10 +180,9 @@ function createNodeLabels(){
 /* ********************************************************************************************* */
 function createEdgeLabels(){
  // make enough blank labels for every edge
- edgeLabel = new Array(edgeMidpointPosition.length); // this will hold the label strings
- edgeLabel.fill("");
- edgeLabelOffsets = new Array(edgeMidpointPosition.length); // this will hold the label string offsets
- edgeLabelOffsets.fill([0,0]);
+ edgeLabel = new Array(edgeMidpointPosition.length).fill(""); // this will hold the label strings
+ edgeLabelOffsets = new Array(edgeMidpointPosition.length); // this will hold the label string offsets (nb. we can't use fill for objects, ie. array [0,0])
+ for (var i=0;i<edgeLabelOffsets.length;i++) edgeLabelOffsets[i] = [0,0];
 }
 
 /* ********************************************************************************************* */
@@ -495,38 +490,38 @@ function drawgraph(){
  enableLevelsControl();
  switch (params.themodeltype){
   case "vertex":
-   if (vertexmodel(params.initialfocus)) okay = true;
+   if (vertexmodel(params.initialfocus)) okayToProceed = true;
    disableWidthControl();
    disableAxisLineWidthControl();
    disableSpreadControl();
    break;
   case "edge":
-   if (edgemodel(params.initialfocus)) okay = true;
+   if (edgemodel(params.initialfocus)) okayToProceed = true;
    disableWidthControl();
    disableAxisLineWidthControl();
    enableSpreadControl();
    break;
   case "axis":
-   if (axismodel(params.initialfocus)) okay = true;
+   if (axismodel(params.initialfocus)) okayToProceed = true;
    disableWidthControl();
    enableAxisLineWidthControl();
    enableSpreadControl();
    break;
   case "newaxis":
-   if (newaxismodel(params.initialfocus)) okay = true;
+   if (newaxismodel(params.initialfocus)) okayToProceed = true;
    enableWidthControl();
    enableAxisLineWidthControl();
    enableSpreadControl();
    break;
   case "monoray":
-   if (monoraymodel(params.initialfocus)) okay = true;
+   if (monoraymodel(params.initialfocus)) okayToProceed = true;
    enableWidthControl();
    disableLevelsControl();
    enableAxisLineWidthControl();
    enableSpreadControl();
    break;
   case "newmonoray":
-   if (newmonoraymodel(params.initialfocus)) okay = true;
+   if (newmonoraymodel(params.initialfocus)) okayToProceed = true;
    enableWidthControl();
    disableLevelsControl();
    enableAxisLineWidthControl();
@@ -534,7 +529,7 @@ function drawgraph(){
    break;
   default:
    alert("Set-up must be called with a focus type");
-   okay = false;
+   okayToProceed = false;
    return 0;
  }
 
