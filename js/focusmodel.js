@@ -158,6 +158,7 @@ function setup(){
   createNodeLabels();
   createEdgeLabels();
   createNodeRightclicks();
+  makeLabelsDraggable();
   drawgraph();
  } else {
   alert("Graph set-up failed");
@@ -539,7 +540,6 @@ function drawgraph(){
 
  // clear the canvas:
  wipeCanvas();
- makeLabelsDraggable();
 
  if (debug) $('#info').append('Drawing the graph....');
 
