@@ -6,6 +6,7 @@ function setup(){
  var okayToProceed = false;
  var debug = false;
  wipeCanvas();
+ theautom = [];
 
  debugdrag = false;
  selectedLabel = null; // initialise

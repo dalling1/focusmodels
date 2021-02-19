@@ -41,9 +41,9 @@ var CSV = {
                 }
             }
 
-            if (end === c-1) { // deal with end-of-line commas
-                row.push(reviver(table.length-1, row.length, ''));
-            }
+//            if (end === c-1) { // deal with end-of-line commas // not working, adds an empty field to every line...
+//                row.push(reviver(table.length-1, row.length, ''));
+//            }
             if ('\r' === chars[c]) {
                 ++c;
             }

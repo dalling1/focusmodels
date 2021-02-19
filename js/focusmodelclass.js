@@ -368,27 +368,34 @@ function readAutomFromFile(e){
  if (fileList.length==1){
   thefile = fileList[0];
   // read the contents
-//  if (thefile.type && thefile.type=="application/json"){
-//   console.log("JSON file found");
+  if (thefile.type) { // probably application/vnd.ms-excel (but, in general, is that a csv file or an Excel file?)
    var reader = new FileReader;
    reader.readAsText(thefile);
    // wait for the load to complete (https://stackoverflow.com/questions/28658388/):
    reader.onload = function(e) {
-    var rawLoadModel = JSON.parse(reader.result);
-    // COPY THE LOADED VALUES INTO THE FocusModel OBJECT TO BE DRAWN, then
-    var loadModel = Object.assign(new FocusModel, rawLoadModel);
-    loadModel.drawModel();
+    var rawLoadAutom = reader.result;
+    // remove consecutive newlines (okay for our purposes but not necessarily valid in general CSV files, which might have a single field (ie. no commas)...):
+    rawLoadAutom = rawLoadAutom.replace(/[\n|\r]+/g,'\n');
+    // parse the CSV format:
+    theautom = CSV.parse(rawLoadAutom); // extract an array of comma-separated entries
+    // This would be the place to test the file contents and ensure that the automorphism is sane:
+    // -- each element of theautom should have two elements (the "from" and "to" addresses)
+    // -- the "from" and "to" address do not need to match in length (eg. (0,1,2) could move to (1,2,1,2,1,2,1,2) etc.)
+    // test for and/or remove duplicates?
+    // -- better to give a warning/error that the file is not valid
+    // ...
+    // ...
+    // ...
+    // ...
+    // ...
    };
-
-//  } else {
-//   // wrong type
-//   return -1;
-//  }
-
-
+  } else {
+   // wrong type (not actually tested for at the moment)
+   return false;
+  }
 
  } else {
   // don't handle multiple files
-  return -2;
+  return false;
  }
 }
