@@ -152,6 +152,9 @@ function setup(){
  }
 
  if (okayToProceed){ // previously we were testing the models before running drawgraph(), but not anymore
+  // set the page to redraw the graph if the window size changes
+  window.addEventListener('resize', drawgraph); // this could cause slowness for large valency or levels
+
   createNodeLabels();
   createEdgeLabels();
   createNodeRightclicks();
