@@ -197,3 +197,136 @@ function createPath(startX,startY,endX,endY,offset=0,relativePath=1){
 
  return thepath;
 }
+
+
+/* **************************************************************************/
+/* **************************************************************************/
+/* **************************************************************************/
+function readAutomFromFile(e){
+ /*
+   Read an automorphism from a CSV text file.
+
+   Currently this reads the file and puts the resulting array into the variable 'theautom'.
+
+   This is then passed to the function extractAutomorphism(), which tests it and converts node addresses to those used by the focus models.
+ */
+ var fileList = e.target.files;
+ for (var i=0;i<fileList.length;i++){
+  console.log(fileList[i].type); // want application/json
+ }
+
+ if (fileList.length==1){
+  thefile = fileList[0];
+  // read the contents
+  if (thefile.type) { // probably application/vnd.ms-excel (but, in general, is that a csv file or an Excel file?)
+   var reader = new FileReader;
+   reader.readAsText(thefile);
+   // wait for the load to complete (https://stackoverflow.com/questions/28658388/):
+   reader.onload = function(e) {
+    var rawLoadAutom = reader.result;
+    // remove consecutive newlines (okay for our purposes but not necessarily valid in general CSV files, which might have a single field (ie. no commas)...):
+    rawLoadAutom = rawLoadAutom.replace(/[\n|\r]+/g,'\n');
+    // parse the CSV format:
+    theautom = CSV.parse(rawLoadAutom); // extract an array of comma-separated entries
+    // This would be the place to test the file contents and ensure that the automorphism is sane:
+    // -- each element of theautom should have two elements (the "from" and "to" addresses)
+    // -- the "from" and "to" address do not need to match in length (eg. (0,1,2) could move to (1,2,1,2,1,2,1,2) etc.)
+    // test for and/or remove duplicates?
+    // -- better to give a warning/error that the file is not valid
+    // ...
+    // ...
+    // ...
+    // ...
+    // ...
+   };
+  } else {
+   // wrong type (not actually tested for at the moment)
+   return false;
+  }
+
+ } else {
+  // don't handle multiple files
+  return false;
+ }
+}
+
+
+/* **************************************************************************/
+/* **************************************************************************/
+/* **************************************************************************/
+function extractAutomorphism(automIn){
+ /*
+   Function which takes the input (read from a CSV file) and
+     (i) tests it
+    (ii) converts the addresses to those used by the focus models.
+
+   The input format is specific to our input files, which are comma-separated pairs
+   of addresses in parentheses inside quotation marks,
+
+      eg. "(1, 0, 2)", "(2, 1, 2)"
+
+   Note that some entries have a comma inside the parentheses after the last entry,
+   such as "(1,)", "(2,)", or no commas at all such as "()", "()".  These indicate
+   the presence of the "empty label".
+
+   Not all of the input addresses will necessarily be show on the currently drawn
+   graph, and not all of the currently drawn addresses will be present in the input.
+   This is fine: we want to handle the case of a fairly general automorphism (the
+   effect of the automorphism on nodes in some finite subset of the infinite tree is
+   specified in the input).
+
+   We could change the number of levels drawn according to the input, but it is
+   probably more instructive to leave that setting as the user has chosen it.
+
+   The main thing to test is that the valency in the input is compatible with that
+   drawn by the focus model.
+ */
+
+ // Loop through the input and convert each address to a focus model address
+ //  -- eg. "(1, 0, 2)", "(2, 1, 2)" becomes "bac", "cbc"
+ //  -- keep track of the longest address given -> no. of levels
+ //  -- keep track of the highest element value -> valency
+
+ debug = false;
+ focusAutom = [];
+ automFrom = [];
+ automTo = [];
+
+ for (var i=0;i<automIn.length;i++){
+  var from = automIn[i][0];
+  var to = automIn[i][1];
+  parethesesRegex = RegExp(/\(.*\)/);
+
+  var formatOkay = true;
+  formatRegex = RegExp(/\(( *\d+ *, *)*\d* *\)/); // regex for testing the format (comma-separated numbers (multiple digits) with optional spaces; ",)" allowed only at the end)
+
+  if (formatRegex.test(from) && formatRegex.test(to)){
+   if (debug) console.log(" Correct format in entry "+i+": from = "+from+", to = "+to);
+   // this entry is okay, form an address
+   fromSplit = from.slice(1,-1).trim().split(/ *, */); // remove parentheses and split the automorphism entry into its parts (removing spare spaces along the way)
+   toSplit = to.slice(1,-1).trim().split(/ *, */);
+
+   if (fromSplit.length == toSplit.length){
+    if (debug) console.log("   ... and entry lengths agree");
+    automFrom[i] = "";
+    automTo[i] = "";
+    for (j=0;j<fromSplit.length;j++){
+     if (fromSplit[j].length) automFrom[i] += colournames[fromSplit[j]]; // append this character to the address
+     if (toSplit[j].length) automTo[i] += colournames[toSplit[j]]; // append this character to the address
+    }
+   } else {
+    formatOkay = false;
+    console.log(" From and To entries differ in length for entry "+i+": from = "+from+", to = "+to);
+   }
+  } else {
+   formatOkay = false;
+   console.log(" Incorrect format in entry "+i+": from = "+from+", to = "+to);
+  }
+
+ }
+
+ if (!formatOkay){
+  alert('Format of input file is incorrect (see console for details)');
+ }
+
+}
