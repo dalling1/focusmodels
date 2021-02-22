@@ -228,16 +228,16 @@ function readAutomFromFile(e){
     rawLoadAutom = rawLoadAutom.replace(/[\n|\r]+/g,'\n');
     // parse the CSV format:
     theautom = CSV.parse(rawLoadAutom); // extract an array of comma-separated entries
+
     // This would be the place to test the file contents and ensure that the automorphism is sane:
     // -- each element of theautom should have two elements (the "from" and "to" addresses)
     // -- the "from" and "to" address do not need to match in length (eg. (0,1,2) could move to (1,2,1,2,1,2,1,2) etc.)
     // test for and/or remove duplicates?
     // -- better to give a warning/error that the file is not valid
-    // ...
-    // ...
-    // ...
-    // ...
-    // ...
+
+    // Run the extractor, which tests the format and converts to the address structure used by the focus models:
+    extractAutomorphism(theautom);
+
    };
   } else {
    // wrong type (not actually tested for at the moment)
@@ -291,10 +291,12 @@ function extractAutomorphism(automIn){
  focusAutom = [];
  automFrom = [];
  automTo = [];
+ inputValency = -1;
+ inputLevels = -1;
 
  for (var i=0;i<automIn.length;i++){
   var from = automIn[i][0];
-  var to = automIn[i][1];
+  var to = automIn[i][1]; // extra entries are ignored!
   parethesesRegex = RegExp(/\(.*\)/);
 
   var formatOkay = true;
@@ -303,21 +305,28 @@ function extractAutomorphism(automIn){
   if (formatRegex.test(from) && formatRegex.test(to)){
    if (debug) console.log(" Correct format in entry "+i+": from = "+from+", to = "+to);
    // this entry is okay, form an address
-   fromSplit = from.slice(1,-1).trim().split(/ *, */); // remove parentheses and split the automorphism entry into its parts (removing spare spaces along the way)
-   toSplit = to.slice(1,-1).trim().split(/ *, */);
+   var fromSplit = from.slice(1,-1).trim().split(/ *, */); // remove parentheses and split the automorphism entry into its parts (removing spare spaces along the way)
+   var toSplit = to.slice(1,-1).trim().split(/ *, */);
 
-   if (fromSplit.length == toSplit.length){
-    if (debug) console.log("   ... and entry lengths agree");
-    automFrom[i] = "";
-    automTo[i] = "";
-    for (j=0;j<fromSplit.length;j++){
-     if (fromSplit[j].length) automFrom[i] += colournames[fromSplit[j]]; // append this character to the address
-     if (toSplit[j].length) automTo[i] += colournames[toSplit[j]]; // append this character to the address
-    }
-   } else {
-    formatOkay = false;
-    console.log(" From and To entries differ in length for entry "+i+": from = "+from+", to = "+to);
+   // Note: the "from" and "to" address do not need to match in length (eg. (0,1,2) could move to (1,2,1,2,1,2,1,2) etc.)
+
+   // initialise
+   automFrom[i] = "";
+   automTo[i] = "";
+
+   // split the entries up to convert to the focus model addressing scheme
+   for (j=0;j<fromSplit.length;j++){
+    if (fromSplit[j].length) automFrom[i] += colournames[fromSplit[j]]; // append this character to the address
+    if (toSplit[j].length) automTo[i] += colournames[toSplit[j]]; // append this character to the address
+
+    if (fromSplit[j]>inputValency) inputValency = fromSplit[j]; // assume a 0-based scheme (plus the empty label), check the implicit valency in the input
+    if (toSplit[j]>inputValency) inputValency = toSplit[j]; // assume a 0-based scheme (plus the empty label), check the implicit valency in the input
+
    }
+
+   if (fromSplit.length>inputLevels) inputLevels = fromSplit.length; // check the implicit number of levels in the input
+   if (toSplit.length>inputLevels) inputLevels = toSplit.length; // check the implicit number of levels in the input
+
   } else {
    formatOkay = false;
    console.log(" Incorrect format in entry "+i+": from = "+from+", to = "+to);
@@ -327,6 +336,9 @@ function extractAutomorphism(automIn){
 
  if (!formatOkay){
   alert('Format of input file is incorrect (see console for details)');
+ } else {
+  inputValency++; // highest value in input, but zero-indexed, so add on to get the valency
+  // quick report:
+  console.log("Input automorphism file had an implicit valency of "+inputValency+", and "+inputLevels+" level"+(inputLevels===1?"":"s"));
  }
-
 }
