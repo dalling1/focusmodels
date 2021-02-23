@@ -169,7 +169,8 @@
 
   <div id="autodiv" class="somebuttons">
    <button style="width:auto;" for="autom-file-selector" onClick='$("#autom-file-selector").click()'>Load automorphism:</button><br/>
-   <input type="file" id="autom-file-selector" accept=".csv" onchange="theautom = readAutomFromFile(event);" />
+   <input type="file" id="autom-file-selector" accept=".csv" onchange="theautom = readAutomFromFile(event);" /><br/>
+   <button id="neoautomorphismbutton" onclick="neoautomorphism();" disabled="disabled">Neo-Automorphism</button><br/>
   </div>
 
  </div>

@@ -1,6 +1,102 @@
 /* **************************************************************************/
 /* **************************************************************************/
 /* **************************************************************************/
+async function neoautomorphism(){
+ /*
+    Perform re-labelling of a tree based on the automorphism loaded from a file.
+ */
+ var debug = false;
+
+ previousNodeAddress = [];
+ var newaddr = [];
+
+ // save the old addresses, and then set them to 'x' (to denote nodes which are not present in the automorphism file)
+ for (var i=0;i<nodeAddress.length;i++){
+  previousNodeAddress[i] = nodeAddress[i];
+  newaddr[i] = "x";
+ }
+ // perform the relabelling:
+ for (var i=0;i<automFrom.length;i++){
+  indx = nodeAddress.indexOf(automFrom[i]);
+  newaddr[i] = automTo[indx];
+ }
+
+ // set the new addresses as the node addresses
+ nodeAddress = newaddr;
+
+ // animate the movement of labels
+ // -- ideally the style of animation (linear or rotational) will depend on the type of automorphism being performed
+ // move any label in previousNodeAddress which is also in newaddr
+ for (var i=0;i<previousNodeAddress.length;i++){
+  indx = nodeAddress.indexOf(previousNodeAddress[i]);
+
+  var thelabelID = "nodelabel"+i;
+
+  if (indx>-1){
+   // found this label in the "before" and "after" sets of nodes, so animate it:
+   startPosition = canvasScale(nodePosition[i]);
+   endPosition = canvasScale(nodePosition[indx]);
+
+   // helper variables
+   var ABS_PATH = 0;
+   var RELATIVE_PATH = 1;
+   var USE_OFFSET = -1; // -1 gives default curves in createPath()
+
+   // generate the path that we want to draw:
+   var thepathAbs = createPath(startPosition[0],startPosition[1],endPosition[0],endPosition[1],USE_OFFSET,ABS_PATH);
+   // generate the path that we want the label to follow:
+   var thepathRel = createPath(startPosition[0],startPosition[1],endPosition[0],endPosition[1],USE_OFFSET,RELATIVE_PATH);
+
+   // add the path to the admin group (and so drawing it on the screen; need absolute path):
+   addPath(thepathAbs,"admingroup",previousNodeAddress[i],previousNodeAddress[indx]);
+   // add the (relative) animation path to the label and run the animation:
+   addAnimateMotion(thelabelID,thepathRel);
+   // run it!
+   document.getElementById("animate_"+thelabelID).beginElement();
+  } else {
+   // this address doesn't appear after the automorphism is applied (?), so fade it out
+   var thefadelabel = document.getElementById(thelabelID);
+   // change colour to white (the CSS transition rule for .alabel will make it fade:
+   // (NOTE: there is no control over speed, though, without changing the CSS)
+   thefadelabel.attributes.fill.value = "#ffffff";
+
+/*
+   // the animation isn't working this way
+   $(document.createElementNS("http://www.w3.org/2000/svg","animate")).attr({
+    attributeName:"fill",
+    values:"red;blue;red",
+    dur:"5s",
+    repeatCount:"indefinite",
+    id:"fademe",
+   }).appendTo(thefadelabel);
+   // need to get the new (child) animate element and call beginElement() on it?
+   //  -- not quite, still working on this
+*/
+  }
+ }
+
+
+console.log('previousNodeAddress[5] = '+previousNodeAddress[5]);
+console.log('nodeAddress[5] = '+nodeAddress[5]);
+
+/*
+ var params = new FocusModel;
+ params.getCurrent();
+ params.initialfocus[0] = nodeAddress[0];
+ if (params.themodeltype=="edge"){
+  params.initialfocus[1] = nodeAddress[1];
+ }
+ params.setCurrent();
+*/
+
+ await new Promise(r => setTimeout(r, 2000)); // "sleep" while the animation runs
+// drawgraph();
+ return 1;
+}
+
+/* **************************************************************************/
+/* **************************************************************************/
+/* **************************************************************************/
 async function automorphism(){
  /*
     Perform re-labelling of a tree based on moving node1 to node2 [need async to use await]
@@ -302,7 +398,7 @@ function extractAutomorphism(automIn){
   var formatOkay = true;
   formatRegex = RegExp(/\(( *\d+ *, *)*\d* *\)/); // regex for testing the format (comma-separated numbers (multiple digits) with optional spaces; ",)" allowed only at the end)
 
-  if (formatRegex.test(from) && formatRegex.test(to)){
+  if (formatRegex.test(from) && formatRegex.test(to) && from.length==to.length){
    if (debug) console.log(" Correct format in entry "+i+": from = "+from+", to = "+to);
    // this entry is okay, form an address
    var fromSplit = from.slice(1,-1).trim().split(/ *, */); // remove parentheses and split the automorphism entry into its parts (removing spare spaces along the way)
@@ -340,5 +436,7 @@ function extractAutomorphism(automIn){
   inputValency++; // highest value in input, but zero-indexed, so add on to get the valency
   // quick report:
   console.log("Input automorphism file had an implicit valency of "+inputValency+", and "+inputLevels+" level"+(inputLevels===1?"":"s"));
+  // enable the button to run the (neo)automorphism:
+  $("#neoautomorphismbutton").prop("disabled",false);
  }
 }
