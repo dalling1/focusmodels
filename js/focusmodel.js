@@ -108,6 +108,9 @@ function setup(){
  // turn on the "branch spread" control (it will be disabled for vertex):
  enableSpreadControl();
 
+ // enable the click-to-edit objects (the displayed control values):
+ setupClickToEdit();
+
  if (urlmodel.length & urlmodel!=params.themodeltype){
   console.log("URL model anchor ("+urlmodel+") and user controls ("+params.themodeltype+") do not agree");
  }
@@ -1379,6 +1382,44 @@ function enableSpreadControl(){
  $("#thespread").removeClass("disabledcontrol");
  $("#thespreadLabel").removeClass("disabledcontrol");
  $("#thespreadOutput").removeClass("disabledcontrol");
+}
+function setupClickToEdit(){
+ // add a click function to the displayed control values to that you can type in a value directly:
+ $(".clicktoedit").click(function(){
+  var tochange = $(this).attr("for");
+  if (!$("#"+tochange).hasClass("disabledcontrol")){
+   console.log("Changing "+tochange);
+   // ask the user for a new value (prompt by the preceeding (span) element to the control being edited):
+   var newvalue = Number(prompt($("#"+tochange).prev().text(),$("#"+tochange).value));
+   if (newvalue){
+    // restrict different controls to different precisions
+    switch (tochange){
+     case "theedgescaling":
+     case "theoverallscale":
+     case "thespread":
+     case "thelinewidth":
+     case "theaxislinewidth":
+      newvalue = newvalue.toFixed(1);
+      break;
+     case "thearrowratio":
+     case "thearrowoffset":
+      newvalue = newvalue.toFixed(2);
+      break;
+     default:
+      newvalue = newvalue.toFixed(0);
+    }
+    // make sure the updated newvalue is okay:
+    if (newvalue){
+     $("#"+tochange).val(newvalue);
+     $("#"+tochange+"Output").val(newvalue);
+     console.log("new "+tochange+" = "+newvalue)
+     drawgraph();
+    }
+   } else {
+    // cancelled
+   }
+  }
+ });
 }
 
 /* ********************************************************************************************* */
