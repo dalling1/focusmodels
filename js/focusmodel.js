@@ -725,7 +725,7 @@ function drawgraph(){
      thislabel = String(nodeIndex[i]); // convert to a string
      break;
     case 3: // label is some custom text which the user can change
-     thislabel = String(nodeLabel[i]); // covert to a string
+     thislabel = latexLabel(String(nodeLabel[i])); // covert to a string
      break;
     default:
      thislabel = "";
@@ -767,7 +767,7 @@ function drawgraph(){
  var showedgelabels = true; // make this a user control? Edge labels are blank by default and on if the user adds text to them.
  if (showedgelabels){
   for (var i=0;i<edgeLabel.length;i++){
-   var thislabel = String(edgeLabel[i]);
+   var thislabel = latexLabel(String(edgeLabel[i]));
 
    if (thislabel.length>0){ // don't create (empty) edge labels with blank text
     var newText = document.createElementNS("http://www.w3.org/2000/svg","text");
@@ -1155,6 +1155,7 @@ function canvasClick(evt){
     $("#thecanvas").css("cursor", "pointer");
     $(".midptlabel").css("display","none");
    } else {
+//    newlabel = latexLabel(newlabel);
     edgeLabel[usemidpoint] = newlabel;
     drawgraph();
    }
@@ -1193,6 +1194,7 @@ function canvasClick(evt){
    if (newlabel===null){
     // don't change anything if the user clicked cancel
    } else {
+//    newlabel = latexLabel(newlabel);
     nodeLabel[usenode] = newlabel;
     drawgraph();
    }
@@ -1383,6 +1385,7 @@ function enableSpreadControl(){
  $("#thespreadLabel").removeClass("disabledcontrol");
  $("#thespreadOutput").removeClass("disabledcontrol");
 }
+
 function setupClickToEdit(){
  // add a click function to the displayed control values to that you can type in a value directly:
  $(".clicktoedit").click(function(){
@@ -1561,4 +1564,75 @@ function rightClick(evt){
   nodeRightclicked[usenode] = !nodeRightclicked[usenode]; // toggle the state
   drawgraph();
  }
+}
+
+/* ********************************************************************************************* */
+/* ********************************************************************************************* */
+/* ********************************************************************************************* */
+function latexLabel(inputtext=''){
+ // function to insert some unicode characters into node/edge labels using Latex commands
+ // eg. \alpha -> U+03B1
+ latexDictionary = {
+  '\\Alpha': '\u{0391}',
+  '\\Beta': '\u{0392}',
+  '\\Gamma': '\u{0393}',
+  '\\Delta': '\u{0394}',
+  '\\Epsilon': '\u{0395}',
+  '\\Zeta': '\u{0396}',
+  '\\Eta': '\u{0397}',
+  '\\Theta': '\u{0398}',
+  '\\Iota': '\u{0399}',
+  '\\Kappa': '\u{039a}',
+  '\\Lambda': '\u{039b}',
+  '\\Mu': '\u{039c}',
+  '\\Nu': '\u{039d}',
+  '\\Xi': '\u{039e}',
+  '\\Omicron': '\u{039f}',
+  '\\Pi': '\u{03a0}',
+  '\\Rho': '\u{03a1}',
+  '\\Sigma': '\u{03a3}',
+  '\\Tau': '\u{03a4}',
+  '\\Upsilon': '\u{03a5}',
+  '\\Phi': '\u{03a6}',
+  '\\Chi': '\u{03a7}',
+  '\\Psi': '\u{03a8}',
+  '\\Omega': '\u{03a9}',
+  '\\alpha': '\u{03b1}',
+  '\\\\beta': '\u{03b2}', // needs extra backslash to avoid being the backspace character \b
+  '\\gamma': '\u{03b3}',
+  '\\delta': '\u{03b4}',
+  '\\epsilon': '\u{03b5}',
+  '\\zeta': '\u{03b6}',
+  '\\eta': '\u{03b7}',
+  '\\\\thetasym': '\u{03d1}', // needs extra backslash to avoid being the tab character \t; process before \theta
+  '\\\\theta': '\u{03b8}', // needs extra backslash to avoid being the tab character \t
+  '\\iota': '\u{03b9}',
+  '\\kappa': '\u{03ba}',
+  '\\lambda': '\u{03bb}',
+  '\\mu': '\u{03bc}',
+  '\\\\nu': '\u{03bd}', // needs extra backslash to avoid being the newline character \n
+  '\\xi': '\u{03be}',
+  '\\omicron': '\u{03bf}',
+  '\\piv': '\u{03d6}', // substring of another entry, process it first
+  '\\pi': '\u{03c0}',
+  '\\rho': '\u{03c1}',
+  '\\sigmaf': '\u{03c2}',
+  '\\sigma': '\u{03c3}',
+  '\\\\tau': '\u{03c4}', // needs extra backslash to avoid being the tab character \t
+  '\\upsilon': '\u{03c5}',
+  '\\phi': '\u{03c6}',
+  '\\chi': '\u{03c7}',
+  '\\psi': '\u{03c8}',
+  '\\omega': '\u{03c9}',
+  '\\upsih': '\u{03d2}',
+ };
+
+ if (inputtext.length){
+  for (var key in latexDictionary){
+   if (inputtext.match(key)){
+    inputtext = inputtext.replaceAll(key,latexDictionary[key])
+   }
+  }
+ }
+ return inputtext;
 }
