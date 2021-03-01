@@ -1579,6 +1579,7 @@ function latexLabel(inputtext=''){
   '\\\\theta': '\u{03b8}', // needs extra backslash to avoid being the tab character \t
   '\\\\nu': '\u{03bd}', // needs extra backslash to avoid being the newline character \n
   '\\\\tau': '\u{03c4}', // needs extra backslash to avoid being the tab character \t
+  '\\\\rho': '\u{03c1}', // needs extra backslash to avoid being the carriage return character \r
 
   '\\Alpha': '\u{0391}',
   '\\Beta': '\u{0392}',
@@ -1618,7 +1619,6 @@ function latexLabel(inputtext=''){
   '\\omicron': '\u{03bf}',
   '\\piv': '\u{03d6}', // substring of another entry, process it first
   '\\pi': '\u{03c0}',
-  '\\rho': '\u{03c1}',
   '\\sigmaf': '\u{03c2}',
   '\\sigma': '\u{03c3}',
   '\\upsilon': '\u{03c5}',
@@ -1638,6 +1638,7 @@ function latexLabel(inputtext=''){
     case '\\\\thetasym':
     case '\\\\theta':
     case '\\\\nu':
+    case '\\\\rho':
      inputtext = inputtext.replaceAll(key.substr(1),latexDictionary[key]);
      break;
     default:
