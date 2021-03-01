@@ -1573,6 +1573,13 @@ function latexLabel(inputtext=''){
  // function to insert some unicode characters into node/edge labels using Latex commands
  // eg. \alpha -> U+03B1
  latexDictionary = {
+  // first, list those cases which need careful handling (since they start with a usual escape string like \t):
+  '\\\\beta': '\u{03b2}', // needs extra backslash to avoid being the backspace character \b
+  '\\\\thetasym': '\u{03d1}', // needs extra backslash to avoid being the tab character \t; process before \theta
+  '\\\\theta': '\u{03b8}', // needs extra backslash to avoid being the tab character \t
+  '\\\\nu': '\u{03bd}', // needs extra backslash to avoid being the newline character \n
+  '\\\\tau': '\u{03c4}', // needs extra backslash to avoid being the tab character \t
+
   '\\Alpha': '\u{0391}',
   '\\Beta': '\u{0392}',
   '\\Gamma': '\u{0393}',
@@ -1598,19 +1605,15 @@ function latexLabel(inputtext=''){
   '\\Psi': '\u{03a8}',
   '\\Omega': '\u{03a9}',
   '\\alpha': '\u{03b1}',
-  '\\\\beta': '\u{03b2}', // needs extra backslash to avoid being the backspace character \b
   '\\gamma': '\u{03b3}',
   '\\delta': '\u{03b4}',
   '\\epsilon': '\u{03b5}',
   '\\zeta': '\u{03b6}',
   '\\eta': '\u{03b7}',
-  '\\\\thetasym': '\u{03d1}', // needs extra backslash to avoid being the tab character \t; process before \theta
-  '\\\\theta': '\u{03b8}', // needs extra backslash to avoid being the tab character \t
   '\\iota': '\u{03b9}',
   '\\kappa': '\u{03ba}',
   '\\lambda': '\u{03bb}',
   '\\mu': '\u{03bc}',
-  '\\\\nu': '\u{03bd}', // needs extra backslash to avoid being the newline character \n
   '\\xi': '\u{03be}',
   '\\omicron': '\u{03bf}',
   '\\piv': '\u{03d6}', // substring of another entry, process it first
@@ -1618,7 +1621,6 @@ function latexLabel(inputtext=''){
   '\\rho': '\u{03c1}',
   '\\sigmaf': '\u{03c2}',
   '\\sigma': '\u{03c3}',
-  '\\\\tau': '\u{03c4}', // needs extra backslash to avoid being the tab character \t
   '\\upsilon': '\u{03c5}',
   '\\phi': '\u{03c6}',
   '\\chi': '\u{03c7}',
@@ -1629,8 +1631,19 @@ function latexLabel(inputtext=''){
 
  if (inputtext.length){
   for (var key in latexDictionary){
-   if (inputtext.match(key)){
-    inputtext = inputtext.replaceAll(key,latexDictionary[key])
+   // deal with some special cases specially:
+   switch (key){
+    case '\\\\beta':
+    case '\\\\tau':
+    case '\\\\thetasym':
+    case '\\\\theta':
+    case '\\\\nu':
+     inputtext = inputtext.replaceAll(key.substr(1),latexDictionary[key]);
+     break;
+    default:
+     if (inputtext.match(key)){
+      inputtext = inputtext.replaceAll(key,latexDictionary[key])
+     }
    }
   }
  }
