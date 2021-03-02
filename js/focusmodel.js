@@ -1586,6 +1586,7 @@ function latexLabel(inputtext=''){
   '\\\\nu': '\u{03bd}', // needs extra backslash to avoid being the newline character \n
   '\\\\tau': '\u{03c4}', // needs extra backslash to avoid being the tab character \t
   '\\\\rho': '\u{03c1}', // needs extra backslash to avoid being the carriage return character \r
+  '\\\\0': '\u{d8}',
 
   '\\Alpha': '\u{0391}',
   '\\Beta': '\u{0392}',
@@ -1646,6 +1647,7 @@ function latexLabel(inputtext=''){
     case '\\\\theta':
     case '\\\\nu':
     case '\\\\rho':
+    case '\\\\0':
      inputtext = inputtext.replaceAll(key.substr(1),latexDictionary[key]);
      break;
     default:
