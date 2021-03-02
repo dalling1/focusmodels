@@ -755,8 +755,10 @@ function drawgraph(){
      "id": thisID,
     });
     // the text node has been created, so insert the node's label
-    var textNode = document.createTextNode(thislabel);
-    newText.appendChild(textNode);
+//    var textNode = document.createTextNode(thislabel);
+//    newText.appendChild(textNode);
+    // append as innerHTML so that "thislabel" can include SVG tags (such as result from latexLabel())
+    newText.innerHTML = thislabel;
     document.getElementById("nodelabelgroup").appendChild(newText); // formerly appended to thecanvas instead of nodelabelgroup
    }
   } // end if showlabels
@@ -785,8 +787,10 @@ function drawgraph(){
      "id": "edgelabel"+String(i),
     });
     // the text node has been created, so insert the node's label
-    var textNode = document.createTextNode(thislabel);
-    newText.appendChild(textNode);
+//    var textNode = document.createTextNode(thislabel);
+//    newText.appendChild(textNode);
+    // append as innerHTML so that "thislabel" can include SVG tags (such as result from latexLabel())
+    newText.innerHTML = thislabel;
     document.getElementById("edgelabelgroup").appendChild(newText); // formerly appended to thecanvas instead of nodelabelgroup
    }
 
@@ -1630,6 +1634,7 @@ function latexLabel(inputtext=''){
  };
 
  if (inputtext.length){
+  // step 1: replace special characters (upper- and lower-case Greek letters)
   for (var key in latexDictionary){
    // deal with some special cases specially:
    switch (key){
@@ -1647,6 +1652,28 @@ function latexLabel(inputtext=''){
      }
    }
   }
+  var params = new FocusModel;
+  params.getCurrent();
+  var dy = Math.round(params.thefontsize*0.4);
+  // step 2: sub- and super-scripts
+  var subscriptregex = RegExp(/_({.*?}|.)/g);
+  // the baseline-shift approach does not work very well (the sub/super offsets are not very good)
+//  inputtext = inputtext.replaceAll(subscriptregex,'<tspan baseline-shift="sub"><tspan font-size="0.6em">$1</tspan></tspan>');
+//  inputtext = inputtext.replaceAll(subscriptregex,'<tspan baseline-shift="sub"><tspan font-size="0.8em">$1</tspan></tspan>');
+//  inputtext = inputtext.replaceAll(subscriptregex,'<tspan baseline-shift="sub"><tspan font-size="0.8em">$1</tspan></tspan>'); // allow three sub-sub scripts
+  inputtext = inputtext.replaceAll(subscriptregex,'<tspan dy="'+dy*0.6+'"><tspan font-size="0.6em">$1</tspan></tspan><tspan dy="-'+dy*0.6+'">\u200b</tspan>');
+  inputtext = inputtext.replaceAll(subscriptregex,'<tspan dy="'+dy*0.4+'"><tspan font-size="0.8em">$1</tspan></tspan><tspan dy="-'+dy*0.4+'">\u200b</tspan>');
+  inputtext = inputtext.replaceAll(subscriptregex,'<tspan dy="'+dy*0.4+'"><tspan font-size="0.8em">$1</tspan></tspan><tspan dy="-'+dy*0.4+'">\u200b</tspan>'); // allow three sub-sub scripts
+
+  var superscriptregex = RegExp(/\^({.*?}|.)/g);
+  inputtext = inputtext.replaceAll(superscriptregex,'<tspan dy="-'+dy+'"><tspan font-size="0.6em">$1</tspan></tspan><tspan dy="'+dy+'">\u200b</tspan>');
+  inputtext = inputtext.replaceAll(superscriptregex,'<tspan dy="-'+dy*0.75+'"><tspan font-size="0.8em">$1</tspan></tspan><tspan dy="'+dy*0.75+'">\u200b</tspan>');
+  inputtext = inputtext.replaceAll(superscriptregex,'<tspan dy="-'+dy*0.5+'"><tspan font-size="0.8em">$1</tspan></tspan><tspan dy="'+dy*0.5+'">\u200b</tspan>'); // allow three super-super scripts
+
+  // clean up braces:
+  inputtext = inputtext.replaceAll("{","");
+  inputtext = inputtext.replaceAll("}","");
+
  }
  return inputtext;
 }
