@@ -4,7 +4,7 @@ edgepicker, nodepicker, whichlabel, labelpicker, axesbutton, axespicker, fadelea
 theoffsetY, thelabeloffsetX, thelabeloffsetY, thetextangle, thefontsize, thenodesize, thelinewidth, transparencybutton,
 automorph1, automorph2, thearrowsize, thearrowratio, thearrowoffset, filledarrowsbutton, reversedarrowsbutton, fadedarrowsbutton,
 theaxislinewidth, nodesontopbutton, nodeLabel, edgeLabel, nodeLabelOffsets, edgeLabelOffsets, theskipnodes, theskipstart, nodeRightclicked,
-showselectedonly, ){
+showselectedonly, edgelabelpicker, ){
 
   this.name = 'FocusModel';
   this.themodeltype = themodeltype; // string, only one of {'vertex','edge','axis','newaxis','monoray'}
@@ -46,6 +46,7 @@ showselectedonly, ){
   this.nodesontopbutton = nodesontopbutton; // boolean
   this.theskipstart = theskipstart; // int
   this.theskipnodes = theskipnodes; // int
+  this.edgelabelpicker = edgelabelpicker; // colour
 
   if (typeof nodeLabel == 'object'){ // check if the custom label array exists
    this.nodeLabel = nodeLabel; // array
@@ -136,6 +137,7 @@ showselectedonly, ){
   $("#theskipstartOutput").val(this.theskipstart); // int
   $("#theskipnodes").val(this.theskipnodes); // int
   $("#theskipnodesOutput").val(this.theskipnodes); // int
+  $("#edgelabelpicker").spectrum("set",this.edgelabelpicker); // colour
 
   $("#initialfocus1").val(this.initialfocus[0]); // string
   $("#initialfocus2").val(this.initialfocus[1]); // string
@@ -192,6 +194,7 @@ showselectedonly, ){
   this.nodesontopbutton = $("#nodesontopbutton").prop("checked"); // boolean
   this.theskipstart = parseInt($("#theskipstart").val()); // int
   this.theskipnodes = parseInt($("#theskipnodes").val()); // int
+  this.edgelabelpicker = $("#edgelabelpicker").spectrum("get").toHexString(); // colour
 
   if (typeof nodeLabel == 'object'){ // check if the custom label array exists
    this.nodeLabel = nodeLabel; // array
@@ -270,6 +273,7 @@ showselectedonly, ){
   this.nodesontopbutton = true; // boolean
   this.theskipstart = 0; // int
   this.theskipnodes = 0; // int
+  this.labelpicker = "#0000ff"; // colour
 
   // make some conditional changes to the default values:
   switch (this.themodeltype){

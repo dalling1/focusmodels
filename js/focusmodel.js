@@ -564,6 +564,7 @@ function drawgraph(){
  var labelColour = params.labelpicker;
  var edgeColour = params.edgepicker;
  var nodeColour = params.nodepicker;
+ var edgeLabelColour = params.edgelabelpicker;
  // label-related variables:
  var fontSize = params.thefontsize;
  var textAngle = params.thetextangle;
@@ -777,7 +778,7 @@ function drawgraph(){
     var thispositionX = Math.round(edgeMidpointPosition[i][0] + labelOffsetX + edgeLabelOffsets[i][0]);
     var thispositionY = Math.round(edgeMidpointPosition[i][1] + labelOffsetY + edgeLabelOffsets[i][1]);
     $(newText).attr({
-     "fill": labelColour,
+     "fill": edgeLabelColour,
      "font-size": fontSize,
      "x": thispositionX,
      "y": thispositionY,
@@ -1200,6 +1201,7 @@ function canvasClick(evt){
    } else {
 //    newlabel = latexLabel(newlabel);
     nodeLabel[usenode] = newlabel;
+    whichlabel.value = 3; // switch labelling to "custom"
     drawgraph();
    }
   } // end check for null node

@@ -86,7 +86,7 @@
   <input type="text" class="basicpicker controlpicker" id="edgepicker" onchange="drawgraph();" value="#000000" /><br/>
   Node colour: <input type="text" class="basicpicker controlpicker" id="nodepicker" onchange="drawgraph();" value="#000000" /><br/>
 
-  <span title="Click to reset" style="cursor:pointer;" onclick="whichlabel.value=1; drawgraph();" id="whichlabelLabel">Labels</span>
+  <span title="Click to reset" style="cursor:pointer;" onclick="whichlabel.value=0; drawgraph();" id="whichlabelLabel">Labels</span>
   <select style="width:80px;" id="whichlabel" oninput="drawgraph();" />
    <option value="0">None</option>
    <option value="1">Address</option>
@@ -217,6 +217,8 @@
     <span title="Click to reset" style="cursor:pointer;" onclick="theskipnodes.value=0; theskipnodesOutput.value = theskipnodes.value; drawgraph();" id="theskipnodesLabel">Skip nodes:</span>
     <input type="range" style="width:100px;" min="0" max="10" step="1" value="0" id="theskipnodes" oninput="theskipnodesOutput.value = theskipnodes.value; drawgraph();" />
     <output style="width:20px;vertical-align:middle;" name="theskipnodesOutputName" id="theskipnodesOutput" for="theskipnodes" class="clicktoedit">999</output><br/>
+
+    Edge label colour: <input type="text" class="basicpicker controlpicker" id="edgelabelpicker" onchange="drawgraph();" value="#0000ff" /><br/>
    </div>
 
 <!--
