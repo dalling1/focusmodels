@@ -74,9 +74,10 @@ input, output {display: inline-block; vertical-align: middle;}
 
 .extracontrolpanel {display:inline-block; width:230px;}
 .midptlabel {display:none;}
-.nodelabel {font-family:initial;}
-.edgelabel {font-family:initial;}
+.nodelabel {font-family:'Noto Serif', serif;}
+.edgelabel {font-family:'Noto Serif', serif;}
 .demobutton {font-size: 12px; border-radius:4px;}
+#neoautomorphismbutton {font-size: 1em;}
 
 .instructions {font-size: 12px; color:#777; float:right;}
 

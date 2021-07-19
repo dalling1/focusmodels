@@ -90,7 +90,7 @@ console.log('nodeAddress[5] = '+nodeAddress[5]);
 */
 
  await new Promise(r => setTimeout(r, 2000)); // "sleep" while the animation runs
-// drawgraph();
+ drawgraph();
  return 1;
 }
 

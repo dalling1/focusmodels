@@ -313,6 +313,10 @@ function wipeCanvas(){
  </marker>\
  <path id="rayarrowbase" d="M-'+arrowSize+',0 L0,'+(arrowSize*arrowratio)+' L'+arrowSize+',0'+(filledarrows?' z" fill="'+edgeColour+'"':'"')+' stroke-width="0.5" fill="none" stroke="'+edgeColour+'" />\
  <path id="rayarrowbasefaded" d="M-'+arrowSize+',0 L0,'+(arrowSize*arrowratio)+' L'+arrowSize+',0'+(filledarrows?' z" fill="'+edgeColour+'55"':'"')+' stroke-width="0.5" fill="none" stroke="'+edgeColour+'55" />\
+ <style type="text/css">\
+  @import url("https://fonts.googleapis.com/css2?family=Noto+Serif");\
+<!--  @import url("https://fonts.googleapis.com/css2?family=Oi"); -->\
+ </style>\
 </defs>');
 
  // Create the groups which will hold some of the drawn elements.
@@ -753,6 +757,8 @@ function drawgraph(){
      "transform": "rotate("+textAngle+","+String(thispositionX)+","+String(thispositionY)+")",
      "style": "dominant-baseline:middle; text-anchor:"+(showlabels==3?"left":"middle")+";",
      "class": "nodelabel alabel",
+     "font-family": "NotoSerif",
+//     "font-family": "Oi",
      "id": thisID,
     });
     // the text node has been created, so insert the node's label
@@ -942,10 +948,17 @@ function savePDF(){
  var layout = "portrait";
 
  if (pdfwidth>pdfheight) layout="landscape";
- var thepdf = new jsPDF(layout, "pt", [pdfheight, pdfwidth]);
+ var thepdf = new jsPDF({
+        orientation: layout,
+        unit: "pt",
+        format: [pdfheight, pdfwidth],
+        putOnlyUsedFonts: true,
+        filters: ["ASCIIHexEncode"]
+ });
 
- // This produces a PDF which is approx. 33% larger than on screen;
- // changing "scale" to 75% broke the offsets and/or width-height.
+// thepdf = putFont(thepdf,"Oi");
+ thepdf = putFont(thepdf,"NotoSerif");
+
  svg2pdf(document.getElementById("thecanvas"), thepdf, {
        xOffset: xoff,
        yOffset: yoff,
@@ -1634,6 +1647,8 @@ function latexLabel(inputtext=''){
   '\\psi': '\u{03c8}',
   '\\omega': '\u{03c9}',
   '\\upsih': '\u{03d2}',
+
+//  '\\R': '\u{211c}', // commented out: this character is not present in Noto Serif (the typeface we are using for unicode purposes)
  };
 
  if (inputtext.length){
