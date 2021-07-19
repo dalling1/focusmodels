@@ -234,7 +234,7 @@ showselectedonly, edgelabelpicker, ){
    this.themodeltype = 'vertex'; // make it a vertex-focused model then
   }
 
-  this.initialfocus = [""]; // modified below for the edge model
+  this.initialfocus = ["",""]; // modified below for the edge model; setting this to a 2-element array in all cases
 
   this.thevalency = 3; // int
   this.thewidth = 3; // int
@@ -287,8 +287,7 @@ showselectedonly, edgelabelpicker, ){
 // :testing:
     break;
    case "edge":
-//    this.initialfocus = ["","a"];
-    this.initialfocus = ["",colournames[0]];
+    this.initialfocus = ["",colournames[0]]; // was ["","a"]
     this.thespread = 1.0; // float
     break;
    case "axis":
